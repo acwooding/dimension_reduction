@@ -1,0 +1,12 @@
+name: fix_conda
+channels:
+  - conda-forge
+dependencies:
+  - flake8
+  - sphinx
+  - click
+  - coverage
+  - awscli
+  - python-dotenv>=0.5.1
+  - python=3
+
