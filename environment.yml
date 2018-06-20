@@ -1,4 +1,4 @@
-name: fix_conda
+name: dimension_reduction
 channels:
   - conda-forge
 dependencies:
@@ -9,4 +9,9 @@ dependencies:
   - awscli
   - python-dotenv>=0.5.1
   - python=3
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - jupyter
+  - nb_conda
 
