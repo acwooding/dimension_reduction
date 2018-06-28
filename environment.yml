@@ -14,4 +14,9 @@ dependencies:
   - seaborn
   - jupyter
   - nb_conda
+  - pytest
+  - nbval
+  - nbdime
+  - pip
+  - pip:
 
