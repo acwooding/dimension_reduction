@@ -1,7 +1,22 @@
-dimension_reduction
+Dimension Reduction
 ==============================
 
 Does your dimension reduction do what you think it does? Let's find out.
+
+Setting Up the Environment
+------------
+Create a conda environment named `dimension_reduction` by running:
+
+`make create_environment`
+
+This environment will contain everything necessary to run anythign in the project.
+
+If you find later on that you're missing something in your environment, run
+
+`make requirements`
+
+to update the `dimension_reduction` environment based on the latest `environment.yml`.
+
 
 Project Organization
 ------------
