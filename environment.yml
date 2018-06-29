@@ -16,3 +16,9 @@ dependencies:
   - nb_conda
   - pytest
   - hypothesis
+  - nbval
+  - nbdime
+  - imageio
+  - opencv
+  - pip
+  - pip:
