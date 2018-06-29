@@ -4,7 +4,7 @@ setup(
     name='src',
     packages=find_packages(),
     version='0.0.1',
-    description='Does your dimension reduction do what you think it does? Let's find out.',
+    description="Does your dimension reduction do what you think it does? Let's find out.",
     author='Amy Wooding, John Healy, Kjell Wooding',
     license='MIT',
 )
