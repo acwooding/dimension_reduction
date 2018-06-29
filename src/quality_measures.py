@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import pairwise_distances
+from sklearn.metrics import pairwise_distances as sk_pairwise_distances
 
 
 # Helper functions
@@ -13,7 +13,8 @@ def square_matrix_entries(matrix):
 def pairwise_distances(high_distances=None, low_distances=None,
                        high_data=None, low_data=None, metric='euclidean'):
     '''
-    Computes $d_{ij}-||x_{i}-x_{j}||$
+    Computes $d_{ij}-||x_{i}-x_{j}||$. Computes pairwise distances in the
+    high space and low space if they weren't passed in.
 
     Returns: (high_distances, low_distances, distance_difference)
     -------
@@ -21,15 +22,19 @@ def pairwise_distances(high_distances=None, low_distances=None,
     low_distances: np array of pairwise distances between low_data points
     distance_difference: np array high_distances - low_distances
     '''
+
+    
     if (high_distances is None) and (high_data is None):
         raise ValueError("One of high_distances or high_data is required")
-    elif (low_distances is None) and (low_data is None):
+    if (low_distances is None) and (low_data is None):
         raise ValueError("One of low_distances or low_data is required")
     if low_distances is None:
-        low_distances = pairwise_distances(low_data, metric=metric)
+        low_distances = sk_pairwise_distances(low_data, metric=metric)
     if high_distances is None:
-        high_distances = pairwise_distances(high_data, metric=metric)
-        difference_distances = high_distances-low_distances
+        high_distances = sk_pairwise_distances(high_data, metric=metric)
+        
+    difference_distances = high_distances-low_distances
+
     return high_distances, low_distances, difference_distances
 
 # Stress
