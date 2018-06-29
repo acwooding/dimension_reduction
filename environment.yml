@@ -17,6 +17,8 @@ dependencies:
   - pytest
   - nbval
   - nbdime
+  - imageio
+  - opencv
   - pip
   - pip:
 

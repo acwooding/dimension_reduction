@@ -25,8 +25,10 @@ else
 endif
 
 ## Make Dataset
-data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py
+data: requirements fetch_and_unpack
+
+fetch_and_unpack:
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py $(PROJECT_DIR)
 
 ## Delete all compiled Python files
 clean:
