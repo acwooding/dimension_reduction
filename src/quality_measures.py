@@ -10,7 +10,8 @@ def square_matrix_entries(matrix):
     matrix = np.array(matrix)
     return matrix**2
 
-def pairwise_distances(high_distances=None, low_distances=None, high_data=None, low_data=None, metric='euclidean'):
+def pairwise_distances(high_distances=None, low_distances=None,
+                       high_data=None, low_data=None, metric='euclidean'):
     '''
     Computes $d_{ij}-||x_{i}-x_{j}||$
 
@@ -32,7 +33,8 @@ def pairwise_distances(high_distances=None, low_distances=None, high_data=None, 
     return high_distances, low_distances, difference_distances
 
 # Stress
-def stress(high_distances=None, low_distances=None, high_data=None, low_data=None, metric='euclidean'):
+def stress(high_distances=None, low_distances=None,
+           high_data=None, low_data=None, metric='euclidean'):
     '''
     Compute the stress as defined in Metric MDS given $d_{ij}-||x_{i}-x_{j}||$.
     '''
@@ -42,7 +44,8 @@ def stress(high_distances=None, low_distances=None, high_data=None, low_data=Non
     stress = np.sqrt(np.sum(s_difference_distances))
     return stress
 
-def point_stress(high_distances=None, low_distances=None, high_data=None, low_data=None, metric='euclidean'):
+def point_stress(high_distances=None, low_distances=None,
+                 high_data=None, low_data=None, metric='euclidean'):
     '''
     Attempt at defining a notion of the contribution to stress by point.
     
