@@ -42,7 +42,19 @@ def fetch_and_unpack(dataset_name, data_dir=None):
     return interim_data_dir
 
 def load_coil_20():
-    raise Exception("Unimplemented")
+    c20 = Bunch()
+    feature_vectors = []
+    glob_path = paths.interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
+    filelist = glob.glob(str(glob_path))
+    for filename in filelist:
+        im = cv2.imread(filename)
+        feature_vectors.append(im.flatten())
+
+    c20['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
+    c20['data'] = np.vstack(feature_vectors)
+    with open(_module_dir / 'coil-20.txt') as fd:
+        c20['DESCR'] = fd.read()
+    return c20
 
 def load_coil_100():
     c100 = Bunch()
