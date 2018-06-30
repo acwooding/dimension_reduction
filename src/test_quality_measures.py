@@ -17,7 +17,7 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO,
 logger = logging.getLogger()
 
 
-## old functions to test against while refactoring
+# old functions to test against while refactoring
 
 def old_centering_matrix(N):
     '''
@@ -56,7 +56,7 @@ def old_point_strain(high_distances, low_distances):
     return result
 
 
-## Start of tests
+# Start of tests
 
 
 @given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
@@ -105,6 +105,8 @@ def test_old_new_point_strain(high_distances, low_distances):
     if not (high_distances == 0).all():
         assert (qm.point_strain(high_distances, low_distances) ==
                 old_point_strain(high_distances, low_distances)).all()
+
+# TODO: Test various input styles.
 
 
 class TestEncoding(unittest.TestCase):
