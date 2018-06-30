@@ -32,7 +32,8 @@ def hash_file(fname, algorithm="sha1", block_size=4096):
 def fetch_file(url,
                raw_file=None, dst_dir=None,
                force=False,
-               hash_type="sha1", hash_value=None):
+               hash_type="sha1", hash_value=None,
+               **kwargs):
     '''Fetch a remote file via URL
 
     url:
