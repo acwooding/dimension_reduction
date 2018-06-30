@@ -1,0 +1,59 @@
+Columbia University Image Library (COIL-100)
+============================================
+
+Notes
+-----
+Data Set Characteristics:
+    :Number of Instances: 7200
+    :Number of Attributes: 49152
+    :Attribute Information: 128x128 image of 3 channels (16-bit RGB values)
+    :Missing Attribute Values: None
+    :Creator: Sameer A Nene, Shree K. Nayar and Hiroshi Murase
+    :Date: 1995
+
+This is a copy of the Columbia Object Image Library (COIL-100) data:
+http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.zip
+
+Columbia Object Image Library (COIL-100) is a database of color images of 100 objects.
+
+This dataset consists of 7,200 color images of 100 objects (72 images per object) where the objects
+have been placed on a motorized turntable against a black background. Images were taken at 5 degree rotations,
+giving 72 images per object. The resulting images were then size and intensity-normalized.
+
+Size normalization involved first clipping to a rectangual bounding box and resized (with aspect
+ratio preserved) to 128x128 using interpolation-decimation filters to minimize aliasing [Oppenheim and Schafer-1989].
+
+To normalize intensity, every image was histogram stretched, i.e. the intensity
+of the brightest pixel was made 65535 and intensities of the other pixels were scaled accordingly.
+The images were saved as 16-bit PPM (portable pixmap) color images.
+
+Raw data files are named according to object and rotation; e.g.  `obj7__10.ppm`.
+The prefix "obj7" identifies the object, and "10" indicates the rotation in degrees.
+
+A greyscale version of this dataset is also available (COIL-20)
+
+References
+----------
+  - [Murase and Nayar, 1995] H. Murase and S. K. Nayar. Visual Learning and Recognition
+of 3D Objects from Appearance. International Journal of Computer Vision , 14(1):5{24,
+January 1995.
+  - [Nayar and Poggio, 1996] S. K. Nayar and T. Poggio. Early Visual Learning. In S. K. Nayar
+and T. Poggio, editors, Early Visual Learning . Oxford University Press, March 1996.
+  - [Nayar et al. , 1996a] S. K. Nayar, H. Murase and S. A. Nene. Parametric Appearance Repre-
+sentation. In S. K. Nayar and T. Poggio, editors, Early Visual Learning . Oxford University
+Press, March 1996.
+  - [Nayar et al. , 1996b] S. K. Nayar, S. A. Nene and H. Murase. Real-Time 100 Object Recog-
+nition System. In Proceedings of ARPA Image Understanding Workshop , Palm Springs,
+February 1996.
+  - [Nayar et al. , 1996c] S. K. Nayar, S. A. Nene and H. Murase. Real-Time 100 Object Recog-
+nition System. In Proceedings of IEEE International Conference on Robotics and Automa-
+tion , Minneapolis, April 1996.
+  - [Nene and Nayar, 1994] S. A. Nene and S. K. Nayar. SLAM: A Software Library for Ap-
+pearance Matching. In Proceedings of ARPA Image Understanding Workshop , Monterey,
+November 1994. Also Technical Report CUCS-019-94.
+  - [Nene et al. , 1996] S. A. Nene, S. K. Nayar and H. Murase. Columbia Object Image Library:
+COIL-20. Technical Report CUCS-005-96, Department of Computer Science, Columbia
+University, February 1996.
+  - [Oppenheim and Schafer, 1989] A. V. Oppenheim and R. W. Schafer. Discrete-Time Signal
+Processing , chapter 3, pages 111{130. Prentice Hall, 1989.
+
