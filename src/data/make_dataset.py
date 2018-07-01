@@ -3,7 +3,7 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-from datasets import fetch_and_unpack
+from .datasets import fetch_and_unpack, available_datasets
 
 @click.command()
 @click.argument('project_dir', type=click.Path(exists=True))
@@ -19,7 +19,7 @@ def main(project_dir, datasets=None):
     logger.info('making final data set from raw data')
 
     if datasets is None:
-        datasets = ['coil-100', 'coil-20']
+        datasets = available_datasets
 
     data_dir = Path(project_dir) / 'data'
 
