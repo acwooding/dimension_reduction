@@ -21,8 +21,9 @@ def centering_matrix(N):
     return J
 
 
-def pairwise_distances(high_distances=None, low_distances=None,
-                       high_data=None, low_data=None, metric='euclidean'):
+def pairwise_distance_differences(high_distances=None, low_distances=None,
+                                  high_data=None, low_data=None,
+                                  metric='euclidean'):
     '''
     Computes $d_{ij}-||x_{i}-x_{j}||$. Computes pairwise distances in the
     high space and low space if they weren't passed in.
@@ -54,11 +55,11 @@ def stress(high_distances=None, low_distances=None,
     '''
     Compute the stress as defined in Metric MDS given $d_{ij}-||x_{i}-x_{j}||$.
     '''
-    _, _, difference_distances = pairwise_distances(high_distances=high_distances,
+    difference_distances = pairwise_distance_differences(high_distances=high_distances,
                                                     low_distances=low_distances,
                                                     high_data=high_data,
                                                     low_data=low_data,
-                                                    metric=metric)
+                                                    metric=metric)[2]
     s_difference_distances = square_matrix_entries(difference_distances)
     stress = np.sqrt(np.sum(s_difference_distances))
     return stress
@@ -69,15 +70,16 @@ def point_stress(high_distances=None, low_distances=None,
     '''
     Attempt at defining a notion of the contribution to stress by point.
 
-    Do this by taking the row sums of  $(d_{ij}-||x_{i}-x_{j}||)^2$
+    Do this by taking the square root of the row sums of  $(d_{ij}-||x_{i}-x_{j}||)^2$
     '''
-    _, _, difference_distances = pairwise_distances(high_distances=high_distances,
+    difference_distances = pairwise_distance_differences(high_distances=high_distances,
                                                     low_distances=low_distances,
                                                     high_data=high_data,
                                                     low_data=low_data,
-                                                    metric=metric)
+                                                    metric=metric)[2]
+
     s_difference_distances = square_matrix_entries(difference_distances)
-    point_stress = np.sum(s_difference_distances, axis=1)
+    point_stress = np.sqrt(np.sum(s_difference_distances, axis=1))
     return point_stress
 
 
@@ -100,7 +102,7 @@ def strain(high_distances=None, low_distances=None,
     '''
     Compute the strain as defined in Classical MDS.
     '''
-    high_distances, low_distances, _ = pairwise_distances(high_distances=high_distances,
+    high_distances, low_distances, _ = pairwise_distance_differences(high_distances=high_distances,
                                                           low_distances=low_distances,
                                                           high_data=high_data,
                                                           low_data=low_data,
@@ -121,7 +123,7 @@ def point_strain(high_distances=None, low_distances=None,
     over the corresponding row sum of the denominator.
     '''
 
-    high_distances, low_distances, _ = pairwise_distances(high_distances=high_distances,
+    high_distances, low_distances, _ = pairwise_distance_differences(high_distances=high_distances,
                                                           low_distances=low_distances,
                                                           high_data=high_data,
                                                           low_data=low_data,
