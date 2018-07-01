@@ -1,11 +1,8 @@
-import hashlib
+import cv2
+import glob
+import logging
 import os
 import pathlib
-import tarfile
-import requests
-import logging
-import glob
-import cv2
 import pandas as pd
 import numpy as np
 from sklearn.datasets.base import Bunch
@@ -13,7 +10,7 @@ from src import paths
 from .utils import fetch_file, unpack, fetch_files
 
 
-_module_dir = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
+_MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger(__name__)
 
 
@@ -65,7 +62,7 @@ def load_coil_20():
 
     c20['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
     c20['data'] = np.vstack(feature_vectors)
-    with open(_module_dir / 'coil-20.txt') as fd:
+    with open(_MODULE_DIR / 'coil-20.txt') as fd:
         c20['DESCR'] = fd.read()
     return c20
 
@@ -80,32 +77,42 @@ def load_coil_100():
 
     c100['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
     c100['data'] = np.vstack(feature_vectors)
-    with open(_module_dir / 'coil-100.txt') as fd:
+    with open(_MODULE_DIR / 'coil-100.txt') as fd:
         c100['DESCR'] = fd.read()
     return c100
 
-def load_fmnist():
+def load_fmnist(kind='train'):
+    '''
+    Load the fashion-MNIST dataset
+    kind: {'train', 'test'}
+        Dataset comes pre-split into training and test data.
+        Indicates which dataset to load
+
+    '''
     fmnist = Bunch()
-    feature_vectors = []
-    glob_path = paths.interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
-    filelist = glob.glob(str(glob_path))
-    for filename in filelist:
-        im = cv2.imread(filename)
-        feature_vectors.append(im.flatten())
 
-    c100['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
-    c100['data'] = np.vstack(feature_vectors)
-    with open(_module_dir / 'coil-100.txt') as fd:
-        c100['DESCR'] = fd.read()
-    return c100
+    if kind == 'test':
+        kind = 't10k'
 
-def load_dataset(dataset_name):
+    label_path = paths.interim_data_path / 'f-mnist' / f"{kind}-labels-idx1-ubyte"
+    with open(label_path, 'rb') as fd:
+        fmnist['target'] = np.frombuffer(fd.read(), dtype=np.uint8, offset=8)
+    data_path = paths.interim_data_path / 'f-mnist' / f"{kind}-images-idx3-ubyte"
+    with open(data_path, 'rb') as fd:
+        fmnist['data'] = np.frombuffer(fd.read(), dtype=np.uint8,
+                                       offset=16).reshape(len(fmnist['target']), 784)
+    with open(_MODULE_DIR / 'f-mnist.txt') as fd:
+        fmnist['DESCR'] = fd.read()
+
+    return fmnist
+
+def load_dataset(dataset_name, **kwargs):
     '''Loads a scikit-learn style dataset'''
 
     if dataset_name not in _datasets:
         raise Exception(f'Unknown Dataset: {dataset_name}')
 
-    return _datasets[dataset_name]['load_function']()
+    return _datasets[dataset_name]['load_function'](**kwargs)
 
 _datasets = {
     'f-mnist': {
