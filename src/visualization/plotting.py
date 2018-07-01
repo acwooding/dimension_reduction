@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 from mpl_toolkits.axes_grid1 import ImageGrid
+import numpy as np
+
 import math
 
 import logging
@@ -50,3 +52,50 @@ def two_dim_multiplot(data, labels_list, titles, ncols=2,
             two_dim_label_viz(d, labels_list[i], cmap=cmap,
                               s=s, **kwargs)
         plt.title(titles[i])
+
+def plot_3d_dataset(data, color_data, title='3d plot', figsize=(8,8), dim_list=None, cmap=None, **kwargs):
+    '''Display a basic (colored) 3d plot
+    dim_list:
+        indices to use for each of the 3 dimensions of the plot
+    title:
+        title for the plot
+    data:
+        multidimensional data
+    color_data:
+        labels to use for coloring the points
+    s: ??
+    '''
+    if dim_list is None:
+        dim_list = [0, 1, 2]
+    if cmap is None:
+        cmap = plt.cm.Spectral
+        
+    fig = plt.figure(figsize=figsize)
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
+             c=color_data, cmap=cmap)
+    ax.view_init(10)
+    plt.title(title)
+    plt.show()
+
+def sphere_plot(data, color_data, wireframe=False, s=50, zorder=10, dim_list=None, cmap=None,
+                figsize=(8,8), **kwargs):
+    '''
+    '''
+    if dim_list is None:
+        dim_list = [0, 1, 2]
+    if cmap is None:
+        cmap = plt.cm.Spectral
+    
+    fig = plt.figure(figsize=figsize)
+    ax = fig.add_subplot(111, projection='3d', aspect='equal')
+    if wireframe:
+        phi = np.linspace(0, np.pi, 20)
+        theta = np.linspace(0, 2*np.pi, 40)
+        x = np.outer(np.sin(theta), np.cos(phi))
+        y = np.outer(np.sin(theta), np.sin(phi))
+        z = np.outer(np.cos(theta), np.ones_like(phi))
+        ax.plot_wireframe(x, y, z, color='k', rstride=1, cstride=1, linewidth=1)
+    ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
+             c=color_data, cmap=cmap, s=s, zorder=zorder, **kwargs)
+
