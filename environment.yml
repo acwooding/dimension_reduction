@@ -15,6 +15,7 @@ dependencies:
   - jupyter
   - nb_conda
   - pytest
+  - hypothesis
   - nbval
   - nbdime
   - imageio
