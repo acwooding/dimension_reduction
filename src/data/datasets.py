@@ -106,13 +106,24 @@ def load_fmnist(kind='train'):
 
     return fmnist
 
-def load_dataset(dataset_name, **kwargs):
-    '''Loads a scikit-learn style dataset'''
+def load_dataset(dataset_name, return_X_y=False, **kwargs):
+    '''Loads a scikit-learn style dataset
+    
+    dataset_name:
+        Name of dataset to load
+    return_X_y: boolean, default=False
+        if True, returns (data, target) instead of a Bunch object
+    '''
 
     if dataset_name not in _datasets:
         raise Exception(f'Unknown Dataset: {dataset_name}')
 
-    return _datasets[dataset_name]['load_function'](**kwargs)
+    dset = _datasets[dataset_name]['load_function'](**kwargs)
+    
+    if return_X_y:
+        return dset.data, dset.target
+    else:
+        return dset
 
 _datasets = {
     'f-mnist': {
