@@ -106,7 +106,7 @@ def read_embedding(basefilename, run_number=0, data_path=None):
 
     metadata = load_metadata(metadata_filename)
 
-    logger.info(f"Reading embedding {embedding_filename}")
+    logger.info(f"Reading embedding {os.path.basename(embedding_filename)}")
     embedding = np.load(embedding_filename)
     labels = np.load(labels_filename)
 
@@ -196,7 +196,7 @@ def create_embedding(basefilename, algorithm_object=None,
     metadata_filename = os.path.join(data_path, filename + ".metadata")
 
     if os.path.exists(metadata_filename):
-        logger.info(f"Existing metatdata file {metadata_filename} found.")
+        logger.info(f"Existing metatdata file {os.path.basename(metadata_filename)} found.")
         try:
             metadata = load_metadata(metadata_filename)
         except:
