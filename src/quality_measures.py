@@ -118,9 +118,9 @@ def strain(high_distances=None, low_distances=None,
 def point_strain(high_distances=None, low_distances=None,
                  high_data=None, low_data=None, metric='euclidean'):
     '''
-    Compute the contribution of each point towards strain (as defined 
+    Compute the contribution of each point towards strain (as defined
     in Classical MDS). This is done by taking row sums of the numerator
-    over the corresponding row sum of the denominator.
+    over the normalization factor.
     '''
 
     high_distances, low_distances, _ = pairwise_distance_differences(high_distances=high_distances,
@@ -132,5 +132,5 @@ def point_strain(high_distances=None, low_distances=None,
         raise ValueError("high_distances can't be the zero matrix")
     B = doubly_center_matrix(square_matrix_entries(high_distances))
     top = square_matrix_entries(B - square_matrix_entries(low_distances))
-    result = np.sum(top, axis=1)/np.sum(square_matrix_entries(B), axis=1)
+    result = np.sum(top, axis=1)/np.sum(square_matrix_entries(B))
     return result
