@@ -8,7 +8,7 @@ import shutil
 import zipfile
 import gzip
 
-from ..paths import interim_data_path
+from ..paths import interim_data_path, raw_data_path
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ def fetch_files(force=False, dst_dir=None, **kwargs):
     '''
     url_list = kwargs.get('url_list', None)
     if not url_list:
-        raise Exception(f"url_list is a required keyword argument: {kwargs}")
+        return fetch_file(force=force, dst_dir=dst_dir, **kwargs)
     result_list = []
     for url_dict in url_list:
         name = url_dict.get('name', 'dataset')
@@ -100,17 +100,17 @@ def fetch_file(url,
     if `raw_file` already exists, compute the hash of the on-disk file,
     '''
     if dst_dir is None:
-        dst_dir = pathlib.Path(".")
+        dst_dir = raw_data_path
     if raw_file is None:
         raw_file = url.split("/")[-1]
-    raw_data_path = pathlib.Path(dst_dir)
+    dl_data_path = pathlib.Path(dst_dir)
 
-    if not os.path.exists(raw_data_path):
-        os.makedirs(raw_data_path)
+    if not os.path.exists(dl_data_path):
+        os.makedirs(dl_data_path)
 
-    raw_data_file = raw_data_path / raw_file
+    raw_data_file = dl_data_path / raw_file
 
-    if os.path.exists(raw_data_file):
+    if raw_data_file.exists():
         raw_file_hash = hash_file(raw_data_file, algorithm=hash_type).hexdigest()
         if hash_value is not None:
             if raw_file_hash == hash_value:

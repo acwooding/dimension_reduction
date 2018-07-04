@@ -1,0 +1,33 @@
+MNIST
+=====
+
+Notes
+-----
+Data Set Characteristics:
+    :Number of Instances: 70000
+    :Number of Attributes: 728
+    :Attribute Information: 28x28 8-bit greyscale image
+    :Missing Attribute Values: None
+    :Creator: LeCun et al
+    :Date: 1998
+
+This is a copy of the well-known MNIST database of handwritten digits,
+available from http://yann.lecun.com/exdb/mnist/
+
+The MNIST database of handwritten digits consists of a training set of
+60,000 examples, and a test set of 10,000 examples. It is a subset of
+a larger set available from NIST. The digits have been size-normalized
+and centered in a fixed-size image.
+
+The original black and white (bilevel) images from NIST were size
+normalized to fit in a 20x20 pixel box while preserving their aspect
+ratio. The resulting images contain grey levels as a result of the
+anti-aliasing technique used by the normalization algorithm. the
+images were centered in a 28x28 image by computing the center of mass
+of the pixels, and translating the image so as to position this point
+at the center of the 28x28 field.
+
+
+References
+
+[LeCun et al., 1998a]  Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner. "Gradient-based learning applied to document recognition." Proceedings of the IEEE, 86(11):2278-2324, November 1998.
