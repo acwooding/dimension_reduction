@@ -109,7 +109,6 @@ def sample_ball(n_points, n_dim=3, random_state=0):
 
     Use rejection sampling on the unit cube
     '''
-
     np.random.seed(random_state)
     points = []
     labels = []
