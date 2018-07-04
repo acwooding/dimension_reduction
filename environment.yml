@@ -20,7 +20,7 @@ dependencies:
   - nbdime
   - imageio
   - opencv
-  - umap-learn
   - pip
   - pip:
     - -e .
+    - git+https://github.com/lmcinnes/umap.git@0.3dev
