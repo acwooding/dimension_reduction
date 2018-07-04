@@ -119,7 +119,7 @@ def sample_ball(n_points, n_dim=3, random_state=0):
             points.append(pt)
             labels.append(np.linalg.norm(pt))
     X = np.array(points)
-    t = np.array(points)
+    t = np.array(labels)
     return X, t
 
 def helix(n_points=1000, random_state=None, noise=None,
