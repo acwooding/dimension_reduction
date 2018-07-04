@@ -31,7 +31,7 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
 
     Parameters
     ----------
-    kind: {'unit_square', 'broken_swiss_roll', 'difficult'}
+    kind: {'unit_cube', 'broken_swiss_roll', 'difficult'}
         The type of synthetic dataset
     n_points : int, optional (default=1000)
         The total number of points generated.
@@ -118,7 +118,9 @@ def sample_ball(n_points, n_dim=3, random_state=0):
         if np.linalg.norm(pt) < 1.0:
             points.append(pt)
             labels.append(np.linalg.norm(pt))
-    return np.array(points), np.array(labels)
+    X = np.array(points)
+    t = np.array(points)
+    return X, t
 
 def helix(n_points=1000, random_state=None, noise=None,
           n_twists=8, major_radius=2.0, minor_radius=1.0):
