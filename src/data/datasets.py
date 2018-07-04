@@ -81,7 +81,7 @@ def load_coil_100():
         c100['DESCR'] = fd.read()
     return c100
 
-def load_fmnist(kind='train'):
+def load_fmnist(kind='train', return_X_y=False):
     '''
     Load the fashion-MNIST dataset
     kind: {'train', 'test'}
@@ -104,7 +104,10 @@ def load_fmnist(kind='train'):
     with open(_MODULE_DIR / 'f-mnist.txt') as fd:
         fmnist['DESCR'] = fd.read()
 
-    return fmnist
+    if return_X_y:
+        return fmnist.data, fmnist.target
+    else:
+        return fmnist
 
 def load_dataset(dataset_name, return_X_y=False, **kwargs):
     '''Loads a scikit-learn style dataset
