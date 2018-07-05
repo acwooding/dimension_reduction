@@ -22,5 +22,5 @@ dependencies:
   - opencv
   - umap-learn
   - pip
-  - pip:
-    - -e .
+  - setuptools
+  - wheel
