@@ -11,7 +11,7 @@ from scipy.io import loadmat
 from functools import partial
 import sys
 
-from src import paths
+from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
 from .utils import fetch_file, unpack, fetch_files
 
 
@@ -23,21 +23,8 @@ _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger(__name__)
 
 
-def fetch(dataset_name, data_dir=None, **kwargs):
-    '''Fetch a dataset
-
-
-    '''
-    return fetch_and_unpack(dataset_name, data_dir=data_dir, do_unpack=False)
-
-def fetch_and_unpack(dataset_name, data_dir=None, do_unpack=True):
-    '''Fetch and unpack a dataset
-
-    data_dir: string or None
-        root location of data directories.
-        Raw files will be downloaded to `data_dir`/raw_data_dir
-        Unpacked files will be placed in `data_dir`/interim
-        if None, the values in src.paths will be used
+def fetch_and_process(dataset_name, do_unpack=True):
+    '''Fetch and process datasets to their usable form
 
     dataset_name:
         Name of dataset. Must be in `datasets.available_datasets`
@@ -46,21 +33,13 @@ def fetch_and_unpack(dataset_name, data_dir=None, do_unpack=True):
     if dataset_name not in datasets:
         raise Exception(f"Unknown Dataset: {dataset_name}")
 
-    if data_dir is None:
-        data_dir = paths.data_path
-        raw_data_dir = paths.raw_data_path
-        interim_data_dir = paths.interim_data_path
-    else:
-        data_dir = pathlib.Path(data_dir)
-        raw_data_dir = data_dir / 'raw'
-        interim_data_dir = data_dir / 'interim'
 
-    interim_dataset_dir = interim_data_dir / dataset_name
+    interim_dataset_path = interim_data_path / dataset_name
 
     logger.info(f"Checking for {dataset_name}")
     if datasets[dataset_name].get('url_list', None):
         single_file = False
-        status, results = fetch_files(dst_dir=raw_data_dir,
+        status, results = fetch_files(dst_dir=raw_data_path,
                                       **datasets[dataset_name])
         if status:
             logger.info(f"Retrieved Dataset successfully")
@@ -69,11 +48,10 @@ def fetch_and_unpack(dataset_name, data_dir=None, do_unpack=True):
             raise Exception("Failed to retrieve all data files")
         if do_unpack:
             for _, filename, _ in results:
-                logger.info(f"Unpacking {dataset_name}")
-                unpack(filename, dst_dir=interim_dataset_dir)
+                unpack(filename, dst_dir=interim_dataset_path)
     else:
         single_file = True
-        status, filename, hashval = fetch_file(dst_dir=raw_data_dir,
+        status, filename, hashval = fetch_file(dst_dir=raw_data_path,
                                                **datasets[dataset_name])
         hashtype = datasets[dataset_name].get('hash_type', None)
         if status:
@@ -84,15 +62,14 @@ def fetch_and_unpack(dataset_name, data_dir=None, do_unpack=True):
                          f"Status: {status}")
             raise Exception(f"Failed to download raw data: {filename}")
         if do_unpack:
-            logger.info(f"Unpacking {dataset_name}")
-            unpack(filename, dst_dir=interim_dataset_dir)
+            unpack(filename, dst_dir=interim_dataset_path)
     if do_unpack:
-        return interim_dataset_dir
+        return interim_dataset_path
     else:
         if single_file:
             return filename
         else:
-            return raw_data_dir
+            return raw_data_path
 
 def load_coil_20():
     c20 = Bunch()

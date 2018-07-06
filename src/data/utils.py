@@ -176,7 +176,9 @@ def unpack(filename, dst_dir=None, create_dst=True):
         opener, mode = gzip.open, 'rb'
         outfile, outmode = path[:-3], 'wb'
     else:
-        raise ValueError(f"Could not extract {path} as no appropriate extractor is found")
+        opener, mode = open, 'rb'
+        outfile, outmode = path, 'wb'
+        logger.info("No compression detected. Copying...")
 
     with opener(filename, mode) as f_in:
         if archive:

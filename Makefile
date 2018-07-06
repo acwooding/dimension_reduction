@@ -25,11 +25,14 @@ else
 endif
 
 ## Make Dataset
-data: requirements fetch_data
+data: requirements process_data
 
 ## Fetch and unpack the data
 fetch_data:
-	$(PYTHON_INTERPRETER) -m src.data.make_dataset $(PROJECT_DIR)
+	$(PYTHON_INTERPRETER) -m src.data.make_dataset fetch
+
+process_data:
+	$(PYTHON_INTERPRETER) -m src.data.make_dataset process
 
 ## Delete all compiled Python files
 clean:
