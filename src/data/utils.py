@@ -18,7 +18,6 @@ hash_function = {
     'md5': hashlib.md5,
 }
 
-
 def hash_file(fname, algorithm="sha1", block_size=4096):
     '''Compute the hash of an on-disk file
 
@@ -188,3 +187,13 @@ def unpack(filename, dst_dir=None, create_dst=True):
             logger.info(f"Decompresing {outfile}")
             with open(pathlib.Path(dst_dir) / outfile, outmode) as f_out:
                 shutil.copyfileobj(f_in, f_out)
+
+def build_dataset_dict(hash_type='sha1', hash_value=None, url=None, name=None):
+    """fetch a URL, return a dataset dictionary entry"""
+    fetch_dict = {'url': url, 'hash_type':hash_type, 'hash_value':hash_value, 'name': name}
+    status, path, hash_value = fetch_files(**fetch_dict)
+    if status:
+        fetch_dict['hash_value'] = hash_value
+        return fetch_dict
+
+    raise Exception(f"fetch of {url} returned status: {status}")

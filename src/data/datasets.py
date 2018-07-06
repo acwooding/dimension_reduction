@@ -5,12 +5,18 @@ import os
 import pathlib
 import pandas as pd
 import numpy as np
+import json
 from sklearn.datasets.base import Bunch
 from scipy.io import loadmat
 from functools import partial
+import sys
 
 from src import paths
 from .utils import fetch_file, unpack, fetch_files
+
+
+
+_MODULE = sys.modules[__name__]
 
 
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
@@ -20,14 +26,14 @@ logger = logging.getLogger(__name__)
 def fetch(dataset_name, data_dir=None, **kwargs):
     '''Fetch a dataset
 
-    
+
     '''
     return fetch_and_unpack(dataset_name, data_dir=data_dir, do_unpack=False)
 
 def fetch_and_unpack(dataset_name, data_dir=None, do_unpack=True):
     '''Fetch and unpack a dataset
 
-    data_dir: string or None 
+    data_dir: string or None
         root location of data directories.
         Raw files will be downloaded to `data_dir`/raw_data_dir
         Unpacked files will be placed in `data_dir`/interim
@@ -48,9 +54,9 @@ def fetch_and_unpack(dataset_name, data_dir=None, do_unpack=True):
         data_dir = pathlib.Path(data_dir)
         raw_data_dir = data_dir / 'raw'
         interim_data_dir = data_dir / 'interim'
-        
+
     interim_dataset_dir = interim_data_dir / dataset_name
-    
+
     logger.info(f"Checking for {dataset_name}")
     if datasets[dataset_name].get('url_list', None):
         single_file = False
@@ -84,7 +90,7 @@ def fetch_and_unpack(dataset_name, data_dir=None, do_unpack=True):
         return interim_dataset_dir
     else:
         if single_file:
-            return filename 
+            return filename
         else:
             return raw_data_dir
 
@@ -180,7 +186,7 @@ def load_mnist(kind='train', variant='mnist', return_X_y=False):
 
 def load_dataset(dataset_name, return_X_y=False, **kwargs):
     '''Loads a scikit-learn style dataset
-    
+
     dataset_name:
         Name of dataset to load
     return_X_y: boolean, default=False
@@ -191,7 +197,7 @@ def load_dataset(dataset_name, return_X_y=False, **kwargs):
         raise Exception(f'Unknown Dataset: {dataset_name}')
 
     dset = datasets[dataset_name]['load_function'](**kwargs)
-    
+
     if return_X_y:
         return dset.data, dset.target
     else:
@@ -205,7 +211,7 @@ def load_frey_faces(return_X_y=False):
     `target` is a vector of all zeros
     '''
     frey_file = fetch('frey-faces')
-    
+
     dset = Bunch()
     ff = loadmat(frey_file, squeeze_me=True, struct_as_record=False)
     ff = ff["ff"].T
@@ -215,82 +221,51 @@ def load_frey_faces(return_X_y=False):
 
     dset.data = ff
     dset.target = np.zeros(ff.shape[0])
-    
+
     if return_X_y:
         return dset.data, dset.target
     else:
         return dset
-    
-    
-datasets = {
-    'frey-faces': {
-        'url': 'https://cs.nyu.edu/~roweis/data/frey_rawface.mat',
-        'hash_type': 'sha1',
-        'hash_value': '32c4bc7a947721c46df32d4f4973f31daf5d3946',
-        'load_function': load_frey_faces,
-        },
-    'f-mnist': {
-        'url_list': [
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-images-idx3-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': '8d4fb7e6c68d591d4c3dfef9ec88bf0d',
-                'name': 'training_data',
-            },
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-labels-idx1-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': '25c81989df183df01b3e8a0aad5dffbe',
-                'name': 'training_labels',
-            },
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-images-idx3-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': 'bef4ecab320f06d8554ea6380940ec79',
-                'name': 'test_data'
-            },
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-labels-idx1-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': 'bb300cfdad3c16e7a12a480ee83cd310',
-                'name': 'test_labels'
-            },
-        ],
-        'load_function': partial(load_mnist, variant='f-mnist'),
-    },
-    'mnist': {
-        'url_list': [
-            {
-                'url': 'http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz',
-                'name': 'training_data',
-            },
-            {
-                'url': 'http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz',
-                'name': 'training_labels',
-            },
-            {
-                'url': 'http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz',
-                'name': 'test_data'
-            },
-            {
-                'url': 'http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz',
-                'name': 'test_labels'
-            },
-        ],
-        'load_function': load_mnist,
-    },
-    'coil-20': {
-        'url': 'http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.tar.gz',
-        'hash_type': 'sha1',
-        'hash_value': 'e5d518fa9ef1d81aef7dfa24b398e4a509b2ffd5',
-        'load_function': load_coil_20,
-    },
-    'coil-100': {
-        'url': 'http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.tar.gz',
-        'hash_type': 'sha1',
-        'hash_value': 'b58920394780e1c224a39004e74bd3574fbed85a',
-        'load_function': load_coil_100,
-    },
-}
+
+def write_dataset(path=None, filename="datasets.json", indent=4, sort_keys=True):
+    if path is None:
+        path = _MODULE_DIR
+    else:
+        path = pathlib.Path(path)
+
+    ds = datasets.copy()
+    # copy, adjusting non-serializable items
+    for key, entry in ds.items():
+        func = entry['load_function']
+        del(entry['load_function'])
+        entry['load_function_name'] = func.func.__name__
+        entry['load_function_options'] = func.keywords
+    print(ds)
+    with open(path / filename, 'w') as fw:
+        json.dump(ds, fw, indent=indent, sort_keys=sort_keys)
+
+def read_dataset(path=None, filename="datasets.json"):
+    if path is None:
+        path = _MODULE_DIR
+    else:
+        path = pathlib.Path(path)
+
+    with open(path / filename, 'r') as fr:
+        ds = json.load(fr)
+
+    # make the functions callable
+    for dset_name, dset_opts in ds.items():
+        opts = dset_opts.get('load_function_options', {})
+        fail_func = partial(unknown_function, dset_opts['load_function_name'])
+        func = getattr(_MODULE, dset_opts['load_function_name'], fail_func)
+        dset_opts['load_function'] = partial(func, **opts)
+
+    return ds
+
+def unknown_function(args, **kwargs):
+    """Placeholder for unknown function_name"""
+    raise Exception("Unknown function: {args}, {kwargs}")
+
+datasets = read_dataset()
 
 available_datasets = tuple(datasets.keys())
