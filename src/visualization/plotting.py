@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import AxesGrid
-from mpl_toolkits.axes_grid1 import ImageGrid
 import numpy as np
+from io import BytesIO
+from PIL import Image
+import base64
+import bokeh
 
 import math
 
@@ -99,3 +101,15 @@ def sphere_plot(data, color_data, wireframe=False, s=50, zorder=10, dim_list=Non
     ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
              c=color_data, cmap=cmap, s=s, zorder=zorder, **kwargs)
 
+
+
+
+def embeddable_image(filename):
+    '''
+    Downsample an image to make it embeddable into bokeh plot.
+    '''
+    image = Image.open(filename)
+    buffer = BytesIO()
+    image.save(buffer, format='png')
+    for_encoding = buffer.getvalue()
+    return 'data:image/png;base64,' + base64.b64encode(for_encoding).decode()

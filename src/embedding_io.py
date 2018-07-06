@@ -3,6 +3,7 @@ import os
 import json
 import logging
 import time
+import pathlib
 
 from src.data.utils import hash_file as _hash_file
 from src.utils import record_time_interval
@@ -41,6 +42,9 @@ def save_embedding(basefilename, embedding=None, algorithm_object=None,
         raise ValueError("embedding, algorithm_object"
                          "dataset_name, and data_path are all required")
 
+    if type(data_path) != pathlib.PosixPath:
+        data_path = pathlib.Path(data_path)
+
     metadata = create_metadata_dict(basefilename,
                                     algorithm_object=algorithm_object,
                                     algorithm_name=algorithm_name,
@@ -49,33 +53,35 @@ def save_embedding(basefilename, embedding=None, algorithm_object=None,
                                     run_number=run_number,
                                     hash_type=hash_type,
                                     data_path=data_path)
+
     raw_labels_filename = metadata["Labels File"].rstrip(".npy")
     raw_embedding_filename = metadata["Embedding File"].rstrip(".npy")
 
     filename = basefilename + "_" + str(run_number)
-    metadata_filename = os.path.join(data_path, filename + ".metadata")
+    metadata_filename = filename + ".metadata"
 
     embedding_shape = embedding.shape
     assert(len(embedding_shape) == 2)
 
     if labels is not None:
         assert(embedding_shape[0] == labels.shape[0])
-        np.save(raw_labels_filename, labels)
     else:
         logger.info("No labels were given")
-    labels_hashval = _hash_file(metadata["Labels File"],
+    np.save(data_path / raw_labels_filename, labels)
+
+    labels_hashval = _hash_file(data_path / metadata["Labels File"],
                                 algorithm=hash_type).hexdigest()
     metadata["Labels Hash Value"] = labels_hashval
 
-    np.save(raw_embedding_filename, embedding)
+    np.save(data_path / raw_embedding_filename, embedding)
 
-    hashval = _hash_file(metadata["Embedding File"],
+    hashval = _hash_file(data_path / metadata["Embedding File"],
                          algorithm=hash_type).hexdigest()
 
     metadata["Embedding Hash Value"] = hashval
 
     # save metadata
-    with open(metadata_filename, "w") as outfile:
+    with open(data_path / metadata_filename, "w") as outfile:
         outfile.write(json.dumps(metadata, indent=4))
 
 
@@ -99,33 +105,41 @@ def read_embedding(basefilename, run_number=0, data_path=None):
     -------
     (embedding, labels, metdata)
     """
-    filename = basefilename + "_" + str(run_number)
-    embedding_filename = os.path.join(data_path, filename + ".embedding.npy")
-    labels_filename = os.path.join(data_path, filename + ".labels.npy")
-    metadata_filename = os.path.join(data_path, filename + ".metadata")
+    if type(data_path) != pathlib.PosixPath:
+        data_path = pathlib.Path(data_path)
 
-    metadata = load_metadata(metadata_filename)
+    filename = basefilename + "_" + str(run_number)
+    metadata_filename = filename + ".metadata"
+
+    metadata = load_metadata(metadata_filename, data_path=data_path)
+    embedding_filename = metadata['Embedding File']
+    labels_filename = metadata['Labels File']
 
     logger.info(f"Reading embedding {os.path.basename(embedding_filename)}")
-    embedding = np.load(embedding_filename)
-    labels = np.load(labels_filename)
+    embedding = np.load(data_path / embedding_filename)
+    labels = np.load(data_path / labels_filename)
 
     assert(metadata['Run Number'] == str(run_number))
 
     return embedding, labels, metadata
 
 
-def load_metadata(metadata_filename):
+def load_metadata(metadata_filename, data_path=None):
     '''
     Load a metadata file and test that the hash values match.
     '''
+    if data_path is None:
+        raise ValueError("data_path is required")
 
-    with open(metadata_filename, "r") as infile:
+    if type(data_path) != pathlib.PosixPath:
+        data_path = pathlib.Path(data_path)
+
+    with open(data_path / metadata_filename, "r") as infile:
         metadata = json.load(infile)
 
-    hashval = _hash_file(metadata["Embedding File"],
+    hashval = _hash_file(data_path / metadata["Embedding File"],
                          algorithm=metadata['Hash Type']).hexdigest()
-    labels_hashval = _hash_file(metadata["Labels File"],
+    labels_hashval = _hash_file(data_path / metadata["Labels File"],
                                 algorithm=metadata['Hash Type']).hexdigest()
 
     if metadata['Embedding Hash Value'] != hashval:
@@ -166,15 +180,15 @@ def create_metadata_dict(basefilename, algorithm_object=None,
         algorithm_name = str(algorithm_object.__repr__()).split('(')[0]
 
     filename = basefilename + "_" + str(run_number)
-    embedding_filename = os.path.join(data_path, filename + ".embedding")
-    labels_filename = os.path.join(data_path, filename + ".labels")
+    embedding_filename = filename + ".embedding.npy"
+    labels_filename = filename + ".labels.npy"
 
     metadata = {"Algorithm": algorithm_name, "Dataset": dataset_name,
                 "Run Number": str(run_number),
                 "Parameters": algorithm_object.__repr__(),
                 "Other Information": other_info,
-                "Embedding File": embedding_filename + ".npy",
-                "Labels File": labels_filename + ".npy",
+                "Embedding File": embedding_filename,
+                "Labels File": labels_filename,
                 "Hash Type": hash_type}
 
     return metadata
@@ -193,12 +207,12 @@ def create_embedding(basefilename, algorithm_object=None,
     (embeddings, labels, metadata)
     '''
     filename = basefilename + "_" + str(run_number)
-    metadata_filename = os.path.join(data_path, filename + ".metadata")
+    metadata_filename = filename + ".metadata"
 
-    if os.path.exists(metadata_filename):
-        logger.info(f"Existing metatdata file {os.path.basename(metadata_filename)} found.")
+    if (data_path / metadata_filename).exists():
+        logger.info(f"Existing metatdata file {os.path.basename(data_path / metadata_filename)} found.")
         try:
-            metadata = load_metadata(metadata_filename)
+            metadata = load_metadata(metadata_filename, data_path=data_path)
         except:
             metadata = None
     else:
@@ -218,7 +232,7 @@ def create_embedding(basefilename, algorithm_object=None,
         for key in new_metadata.keys():
             if new_metadata[key] != metadata[key]:
                 match = False
-                raise ValueError(f"Desired {key}: {new_metadata[key]}"
+                raise ValueError(f"Desired {key}: {new_metadata[key]} "
                                  f"does not match {metadata[key]}. "
                                  "Try again with matching parameters "
                                  "or change the run number.")
