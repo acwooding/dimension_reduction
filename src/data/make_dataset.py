@@ -3,7 +3,8 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-from .datasets import fetch_and_process, available_datasets
+from .utils import fetch_and_unpack
+from .datasets import available_datasets, load_dataset
 from ..paths import data_path
 
 @click.command()
@@ -11,7 +12,7 @@ from ..paths import data_path
 def main(action, datasets=None):
     """Fetch and/or process the raw data
 
-    Raw files are downloaded to 
+    Raw files are downloaded to
 Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
 
@@ -30,10 +31,9 @@ Runs data processing scripts to turn raw data from (../raw) into
     unpacked_datasets = {}
     for dataset_name in datasets:
         if action == 'fetch':
-            unpacked_datasets[dataset_name] = fetch_and_process(dataset_name, do_unpack=False)
+            unpacked_datasets[dataset_name] = fetch_and_unpack(dataset_name, do_unpack=False)
         elif action == 'process':
-            unpacked_datasets[dataset_name] = fetch_and_process(dataset_name, do_unpack=True)
-            
+            ds = load_dataset(dataset_name)
 
 
 if __name__ == '__main__':

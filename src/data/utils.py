@@ -199,3 +199,55 @@ def build_dataset_dict(hash_type='sha1', hash_value=None, url=None, name=None):
         return fetch_dict
 
     raise Exception(f"fetch of {url} returned status: {status}")
+
+def fetch_and_unpack(dataset_name, do_unpack=True):
+    '''Fetch and process datasets to their usable form
+
+    dataset_name: string
+        Name of dataset. Must be in `datasets.available_datasets`
+    do_unpack: boolean
+        If false, just download, don't process.
+
+'''
+    # This is here to avoid a circular import
+    from .datasets import dataset_raw_files
+    ds = dataset_raw_files
+    if dataset_name not in ds:
+        raise Exception(f"Unknown Dataset: {dataset_name}")
+
+    interim_dataset_path = interim_data_path / dataset_name
+
+    logger.info(f"Checking for {dataset_name}")
+    if ds[dataset_name].get('url_list', None):
+        single_file = False
+        status, results = fetch_files(dst_dir=raw_data_path,
+                                      **ds[dataset_name])
+        if status:
+            logger.info(f"Retrieved Dataset successfully")
+        else:
+            logger.error(f"Failed to retrieve all data files: {results}")
+            raise Exception("Failed to retrieve all data files")
+        if do_unpack:
+            for _, filename, _ in results:
+                unpack(filename, dst_dir=interim_dataset_path)
+    else:
+        single_file = True
+        status, filename, hashval = fetch_file(dst_dir=raw_data_path,
+                                               **ds[dataset_name])
+        hashtype = ds[dataset_name].get('hash_type', None)
+        if status:
+            logger.info(f"Retrieved Dataset: {dataset_name} "
+                        f"({hashtype}: {hashval})")
+        else:
+            logger.error(f"Unpack to {filename} failed (hash: {hashval}). "
+                         f"Status: {status}")
+            raise Exception(f"Failed to download raw data: {filename}")
+        if do_unpack:
+            unpack(filename, dst_dir=interim_dataset_path)
+    if do_unpack:
+        return interim_dataset_path
+    else:
+        if single_file:
+            return filename
+        else:
+            return raw_data_path
