@@ -19,7 +19,7 @@ _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger(__name__)
 
-jlmem = Memory(cachedir=str(interim_data_path), verbose=1000)
+jlmem = Memory(cachedir=str(interim_data_path))
 
 @jlmem.cache
 def load_coil_20():
