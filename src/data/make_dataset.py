@@ -12,14 +12,12 @@ from ..paths import data_path
 def main(action, datasets=None):
     """Fetch and/or process the raw data
 
-    Raw files are downloaded to
-Runs data processing scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed).
+    Runs data processing scripts to turn raw data from (../raw) into
 
     Raw files are downloaded into `project_dir`/data/raw
     Interim files are generated in `project_dir`/data/interim
 
-    action: {'fetch', 'unpack', 'process'}
+    action: {'fetch', 'process'}
 
     """
     logger = logging.getLogger(__name__)
