@@ -142,7 +142,6 @@ def load_dataset(dataset_name, return_X_y=False, **kwargs):
     if dataset_name not in dataset_raw_files:
         raise Exception(f'Unknown Dataset: {dataset_name}')
 
-    # XXX cache this
     dset = dataset_raw_files[dataset_name]['load_function'](**kwargs)
 
     if return_X_y:
