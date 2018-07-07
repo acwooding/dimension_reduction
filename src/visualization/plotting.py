@@ -69,7 +69,7 @@ def plot_3d_dataset(data, color_data, title='3d plot', figsize=(8,8), dim_list=N
         dim_list = [0, 1, 2]
     if cmap is None:
         cmap = plt.cm.Spectral
-        
+
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
@@ -87,7 +87,7 @@ def sphere_plot(data, color_data, wireframe=False, title='sphere plot',
         dim_list = [0, 1, 2]
     if cmap is None:
         cmap = plt.cm.Spectral
-    
+
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection='3d', aspect='equal')
     if wireframe:
