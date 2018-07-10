@@ -109,7 +109,6 @@ def sample_ball(n_points, n_dim=3, random_state=0):
 
     Use rejection sampling on the unit cube
     '''
-
     np.random.seed(random_state)
     points = []
     labels = []
@@ -156,8 +155,8 @@ def helix(n_points=1000, random_state=None, noise=None,
     y = (major_radius + minor_radius * cosnt) * np.sin(t)
     z = minor_radius * np.sin(n_twists * t)
     X = np.concatenate((x,y,z))
-    if noise:
-        X += noise * generator.randn(3, n_points)
     X = X.T
     t = np.linalg.norm(X, axis=1)
+    if noise:
+        X += noise * generator.randn(n_points, 3)
     return X, t

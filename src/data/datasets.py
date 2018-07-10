@@ -5,60 +5,38 @@ import os
 import pathlib
 import pandas as pd
 import numpy as np
+import json
 from sklearn.datasets.base import Bunch
-from src import paths
-from .utils import fetch_file, unpack, fetch_files
+from scipy.io import loadmat
+from functools import partial
+from joblib import Memory
+import sys
 
+from .utils import fetch_and_unpack
+from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
 
+_MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger(__name__)
 
+jlmem = Memory(cachedir=str(interim_data_path))
 
-def fetch_and_unpack(dataset_name, data_dir=None):
-    '''Fetch and unpack a dataset'''
-    if dataset_name not in _datasets:
-        raise Exception(f"Unknown Dataset: {dataset_name}")
-
-    if data_dir is None:
-        data_dir = pathlib.Path('.')
-
-    raw_data_dir = data_dir / 'raw'
-    interim_dataset_dir = data_dir / 'interim' / dataset_name
-    logger.info(f"Checking for {dataset_name}")
-    if _datasets[dataset_name].get('url_list', None):
-        status, results = fetch_files(dst_dir=raw_data_dir,
-                                      **_datasets[dataset_name])
-        if status:
-            logger.info(f"Retrieved Dataset successfully")
-        else:
-            logger.error(f"Failed to retrieve all data files: {results}")
-            raise Exception("Failed to retrieve all data files")
-        for _, filename, _ in results:
-            logger.info(f"Unpacking {dataset_name}")
-            unpack(filename, dst_dir=interim_dataset_dir)
-    else:
-        status, filename, hashval = fetch_file(dst_dir=raw_data_dir,
-                                               **_datasets[dataset_name])
-        if status:
-            logger.info(f"Retrieved Dataset: {dataset_name} "
-                        f"({_datasets[dataset_name]['hash_type']}: {hashval})")
-        else:
-            logger.error(f"Unpack to {filename} failed (hash: {hashval}). "
-                         f"Status: {status}")
-            raise Exception(f"Failed to download raw data: {filename}")
-        logger.info(f"Unpacking {dataset_name}")
-        unpack(filename, dst_dir=interim_dataset_dir)
-
-    return interim_dataset_dir
-
+@jlmem.cache
 def load_coil_20():
+
+    fetch_and_unpack('coil-20')
+
     c20 = Bunch()
+    c20['metadata'] = {}
+    c20.metadata['filenames'] = []
+
     feature_vectors = []
-    glob_path = paths.interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
+    glob_path = interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
     filelist = glob.glob(str(glob_path))
-    for filename in filelist:
+    for i, filename in enumerate(filelist):
         im = cv2.imread(filename)
         feature_vectors.append(im.flatten())
+        c20.metadata['filenames'].append(os.path.basename(filename))
 
     c20['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
     c20['data'] = np.vstack(feature_vectors)
@@ -66,10 +44,14 @@ def load_coil_20():
         c20['DESCR'] = fd.read()
     return c20
 
+@jlmem.cache
 def load_coil_100():
+
+    fetch_and_unpack('coil-100')
+
     c100 = Bunch()
     feature_vectors = []
-    glob_path = paths.interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
+    glob_path = interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
     filelist = glob.glob(str(glob_path))
     for filename in filelist:
         im = cv2.imread(filename)
@@ -81,6 +63,7 @@ def load_coil_100():
         c100['DESCR'] = fd.read()
     return c100
 
+@jlmem.cache
 def load_fmnist(kind='train', return_X_y=False):
     '''
     Load the fashion-MNIST dataset
@@ -89,15 +72,18 @@ def load_fmnist(kind='train', return_X_y=False):
         Indicates which dataset to load
 
     '''
+
+    fetch_and_unpack('f-mnist')
+
     fmnist = Bunch()
 
     if kind == 'test':
         kind = 't10k'
 
-    label_path = paths.interim_data_path / 'f-mnist' / f"{kind}-labels-idx1-ubyte"
+    label_path = interim_data_path / 'f-mnist' / f"{kind}-labels-idx1-ubyte"
     with open(label_path, 'rb') as fd:
         fmnist['target'] = np.frombuffer(fd.read(), dtype=np.uint8, offset=8)
-    data_path = paths.interim_data_path / 'f-mnist' / f"{kind}-images-idx3-ubyte"
+    data_path = interim_data_path / 'f-mnist' / f"{kind}-images-idx3-ubyte"
     with open(data_path, 'rb') as fd:
         fmnist['data'] = np.frombuffer(fd.read(), dtype=np.uint8,
                                        offset=16).reshape(len(fmnist['target']), 784)
@@ -109,67 +95,130 @@ def load_fmnist(kind='train', return_X_y=False):
     else:
         return fmnist
 
+@jlmem.cache
+def load_mnist(kind='train', variant='mnist', return_X_y=False):
+    '''
+    Load the MNIST dataset
+    variant: {'mnist', 'f-mnist'}
+        Which variant to load
+    kind: {'train', 'test'}
+        Dataset comes pre-split into training and test data.
+        Indicates which dataset to load
+
+    '''
+
+    fetch_and_unpack('mnist')
+
+    dset = Bunch()
+
+    if kind == 'test':
+        kind = 't10k'
+
+    label_path = interim_data_path / variant / f"{kind}-labels-idx1-ubyte"
+    with open(label_path, 'rb') as fd:
+        dset['target'] = np.frombuffer(fd.read(), dtype=np.uint8, offset=8)
+    data_path = interim_data_path / variant / f"{kind}-images-idx3-ubyte"
+    with open(data_path, 'rb') as fd:
+        dset['data'] = np.frombuffer(fd.read(), dtype=np.uint8,
+                                       offset=16).reshape(len(dset['target']), 784)
+    with open(_MODULE_DIR / f'{variant}.txt') as fd:
+        dset['DESCR'] = fd.read()
+
+    if return_X_y:
+        return dset.data, dset.target
+    else:
+        return dset
+
+@jlmem.cache
 def load_dataset(dataset_name, return_X_y=False, **kwargs):
     '''Loads a scikit-learn style dataset
-    
+
     dataset_name:
         Name of dataset to load
     return_X_y: boolean, default=False
         if True, returns (data, target) instead of a Bunch object
     '''
 
-    if dataset_name not in _datasets:
+    if dataset_name not in dataset_raw_files:
         raise Exception(f'Unknown Dataset: {dataset_name}')
 
-    dset = _datasets[dataset_name]['load_function'](**kwargs)
-    
+    dset = dataset_raw_files[dataset_name]['load_function'](**kwargs)
+
     if return_X_y:
         return dset.data, dset.target
     else:
         return dset
 
-_datasets = {
-    'f-mnist': {
-        'url_list': [
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-images-idx3-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': '8d4fb7e6c68d591d4c3dfef9ec88bf0d',
-                'name': 'training_data',
-            },
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-labels-idx1-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': '25c81989df183df01b3e8a0aad5dffbe',
-                'name': 'training_labels',
-            },
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-images-idx3-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': 'bef4ecab320f06d8554ea6380940ec79',
-                'name': 'test_data'
-            },
-            {
-                'url': 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-labels-idx1-ubyte.gz',
-                'hash_type': 'md5',
-                'hash_value': 'bb300cfdad3c16e7a12a480ee83cd310',
-                'name': 'test_labels'
-            },
-        ],
-        'load_function': load_fmnist,
-    },
-    'coil-20': {
-        'url': 'http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.tar.gz',
-        'hash_type': 'sha1',
-        'hash_value': 'e5d518fa9ef1d81aef7dfa24b398e4a509b2ffd5',
-        'load_function': load_coil_20,
-    },
-    'coil-100': {
-        'url': 'http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.tar.gz',
-        'hash_type': 'sha1',
-        'hash_value': 'b58920394780e1c224a39004e74bd3574fbed85a',
-        'load_function': load_coil_100,
-    },
-}
+@jlmem.cache
+def load_frey_faces(return_X_y=False, filename='frey_rawface.mat'):
+    '''
+    Load the Frey Faces dataset
 
-available_datasets = tuple(_datasets.keys())
+    Note, there are no labels associated with this dataset; i.e.
+    `target` is a vector of all zeros
+    '''
+
+    frey_file = pathlib.Path(fetch_and_unpack('frey-faces')) / filename
+
+    dset = Bunch()
+    ff = loadmat(frey_file, squeeze_me=True, struct_as_record=False)
+    ff = ff["ff"].T
+
+    with open(_MODULE_DIR / 'frey-faces.txt') as fd:
+        dset['DESCR'] = fd.read()
+
+    dset.data = ff
+    dset.target = np.zeros(ff.shape[0])
+
+    if return_X_y:
+        return dset.data, dset.target
+    else:
+        return dset
+
+def write_dataset(path=None, filename="datasets.json", indent=4, sort_keys=True):
+    """Write a serialized (JSON) dataset file"""
+    if path is None:
+        path = _MODULE_DIR
+    else:
+        path = pathlib.Path(path)
+
+    ds = dataset_raw_files.copy()
+    # copy, adjusting non-serializable items
+    for key, entry in ds.items():
+        func = entry['load_function']
+        del(entry['load_function'])
+        entry['load_function_name'] = func.func.__name__
+        entry['load_function_options'] = func.keywords
+    print(ds)
+    with open(path / filename, 'w') as fw:
+        json.dump(ds, fw, indent=indent, sort_keys=sort_keys)
+
+def read_datasets(path=None, filename="datasets.json"):
+    """Read the serialized (JSON) dataset list
+    """
+    if path is None:
+        path = _MODULE_DIR
+    else:
+        path = pathlib.Path(path)
+
+    with open(path / filename, 'r') as fr:
+        ds = json.load(fr)
+
+    # make the functions callable
+    for dset_name, dset_opts in ds.items():
+        opts = dset_opts.get('load_function_options', {})
+        fail_func = partial(unknown_function, dset_opts['load_function_name'])
+        func_name = getattr(_MODULE, dset_opts['load_function_name'], fail_func)
+        func = partial(func_name, **opts)
+        dset_opts['load_function'] = func
+
+    return ds
+
+
+def unknown_function(args, **kwargs):
+    """Placeholder for unknown function_name"""
+    raise Exception("Unknown function: {args}, {kwargs}")
+
+dataset_raw_files = read_datasets()
+
+available_datasets = tuple(dataset_raw_files.keys())

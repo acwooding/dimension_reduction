@@ -21,6 +21,7 @@ dependencies:
   - imageio
   - opencv
   - umap-learn
+  - joblib
   - pip
   - pip:
     - -e .

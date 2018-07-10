@@ -69,16 +69,17 @@ def plot_3d_dataset(data, color_data, title='3d plot', figsize=(8,8), dim_list=N
         dim_list = [0, 1, 2]
     if cmap is None:
         cmap = plt.cm.Spectral
-        
+
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
              c=color_data, cmap=cmap)
     ax.view_init(10)
     plt.title(title)
-    plt.show()
+    return ax
 
-def sphere_plot(data, color_data, wireframe=False, s=50, zorder=10, dim_list=None, cmap=None,
+def sphere_plot(data, color_data, wireframe=False, title='sphere plot',
+                s=50, zorder=10, dim_list=None, cmap=None,
                 figsize=(8,8), **kwargs):
     '''
     '''
@@ -86,7 +87,7 @@ def sphere_plot(data, color_data, wireframe=False, s=50, zorder=10, dim_list=Non
         dim_list = [0, 1, 2]
     if cmap is None:
         cmap = plt.cm.Spectral
-    
+
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection='3d', aspect='equal')
     if wireframe:
@@ -99,3 +100,5 @@ def sphere_plot(data, color_data, wireframe=False, s=50, zorder=10, dim_list=Non
     ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
              c=color_data, cmap=cmap, s=s, zorder=zorder, **kwargs)
 
+    plt.title(title)
+    return ax

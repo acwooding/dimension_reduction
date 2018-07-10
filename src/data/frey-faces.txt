@@ -1,0 +1,21 @@
+Frey Faces
+==========
+
+Notes
+-----
+Data Set Characteristics:
+    :Number of Instances: 1965
+    :Number of Attributes: 560
+    :Attribute Information: 20x28 8-bit greyscale image
+    :Missing Attribute Values: None
+    :Creator:
+    :Date: 2017
+
+1965 images of Brendan Frey's face, taken from sequential frames of a
+small video. Size: 20x28.
+
+Note, there is no target data associated with this dataset, so it is
+of use mainly in unsupervised algorithms.
+
+This is taken from
+https://cs.nyu.edu/~roweis/data.html
