@@ -9,7 +9,15 @@ Create a conda environment named `dimension_reduction` by running:
 
 `make create_environment`
 
-This environment will contain everything necessary to run anythign in the project.
+This environment will contain everything necessary to run the project.
+Next, activate it via
+
+`conda activate dimension_reduction`
+
+Now, fetch and prepare the datasets via:
+
+`make data`
+
 
 If you find later on that you're missing something in your environment, run
 
