@@ -21,8 +21,9 @@ ifeq (conda, $(VIRTUALENV))
 	conda env update --name $(PROJECT_NAME) -f environment.yml
 else
 	pip install -U pip setuptools wheel
-	pip install -r requirements.txt
 endif
+	pip install -r requirements.txt
+
 
 ## Perform the complete dataset generation pipeline
 data: requirements process_data

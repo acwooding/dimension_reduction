@@ -23,5 +23,5 @@ dependencies:
   - umap-learn
   - joblib
   - pip
-  - pip:
-    - -e .
+  - setuptools
+  - wheel
