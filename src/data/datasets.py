@@ -209,7 +209,32 @@ def load_orl_faces(dataset_name='orl-faces'):
 
     return dset
 
+def load_hiva(dataset_name='hiva', kind='train'):
+    """Load the HIVA dataset
 
+    kind: {'train', 'test', 'valid'}
+        if 'test' or 'valid', empty labels will be generated.
+        Labels are generated only if 'train' is specified
+    """
+    if kind not in ['train', 'test', 'valid']:
+        raise Exception(f"Unknown kind: {kind}")
+
+    hiva_dir = interim_data_path / dataset_name / 'HIVA'
+
+    dset = new_dataset(dataset_name=dataset_name)
+
+
+    # data is space-delimited
+    data = np.genfromtxt(hiva_dir / f'hiva_{kind}.data')
+
+    if kind == 'train':
+        labels = np.genfromtxt(hiva_dir / f'hiva_{kind}.labels')
+    else:
+        labels = np.zeros(data.shape[0])
+
+    dset['data'] = data
+    dset['target'] = labels
+    return dset
 
 def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
     '''Loads a scikit-learn style dataset
