@@ -90,7 +90,7 @@ def load_coil_20(dataset_name='coil-20'):
     dset.metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
 
     for i, filename in enumerate(filelist):
-        im = cv2.imread(filename)
+        im = cv2.imread(filename, cv2.COLORSPACE_GRAY)
         feature_vectors.append(im.flatten())
 
     dset['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)

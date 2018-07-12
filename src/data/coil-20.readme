@@ -5,7 +5,7 @@ Notes
 -----
 Data Set Characteristics:
     :Number of Instances: 1440
-    :Number of Attributes: 49152
+    :Number of Attributes: 16384
     :Attribute Information: 128x128 8-bit greyscale (PGM) image
     :Missing Attribute Values: None
     :Creator: Sameer A Nene, Shree K. Nayar and Hiroshi Murase
@@ -14,19 +14,25 @@ Data Set Characteristics:
 This is a copy of the Columbia Object Image Library [COIL-20] data:
 http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.tar.gz
 
-This dataset consists of 1,440 greyscale images of 20 objects (72 images per object) where the objects
-have been placed on a motorized turntable against a black background. Images were taken at 5 degree rotations,
-giving 72 images per object. The resulting images were then size and intensity-normalized.
+This dataset consists of 1,440 greyscale images of 20 objects (72
+images per object) where the objects have been placed on a motorized
+turntable against a black background. Images were taken at 5 degree
+rotations, giving 72 images per object. The resulting images were then
+size and intensity-normalized.
 
-Size normalization involved first clipping to a rectangual bounding box and resized (with aspect
-ratio preserved) to 128x128 using interpolation-decimation filters to minimize aliasing [Oppenheim and Schafer-1989].
+Size normalization involved first clipping to a rectangual bounding
+box and resized (with aspect ratio preserved) to 128x128 using
+interpolation-decimation filters to minimize aliasing [Oppenheim and
+Schafer-1989].
 
-To normalize intensity, every image was histogram stretched, i.e. the intensity
-of the brightest pixel was made 255 and intensities of the other pixels were scaled accordingly.
-The images were saved as 8-bit PGM (portable greymap) color images.
+To normalize intensity, every image was histogram stretched, i.e. the
+intensity of the brightest pixel was made 255 and intensities of the
+other pixels were scaled accordingly.  The images were saved as 8-bit
+PGM (portable greymap) color images.
 
-Raw data files are named according to object and rotation; e.g.  `obj7__10.pgm`.
-The prefix "obj7" identifies the object, and "10" indicates the rotation in degrees.
+Raw data files are named according to object and rotation; e.g.
+`obj7__10.pgm`.  The prefix "obj7" identifies the object, and "10"
+indicates the rotation in degrees.
 
 A color version of this library is also available: [COIL-100].
 
@@ -35,6 +41,9 @@ References
   - [COIL-20] S. A. Nene, S. K. Nayar and H. Murase. Columbia Object Image Library:
     COIL-20. Technical Report CUCS-005-96, Department of Computer Science, Columbia
     University, February 1996.
+  - [COIL-100] Columbia Object Image Library (COIL-100), S. A. Nene, S. K. Nayar and H. Murase, 
+    Technical Report CUCS-006-96, February 1996.
+    http://www.cs.columbia.edu/CAVE/databases/papers/nene/nene-nayar-murase-coil-100.ps.gz
   - [Murase and Nayar, 1995] H. Murase and S. K. Nayar. Visual Learning and Recognition
     of 3D Objects from Appearance. International Journal of Computer Vision , 14(1):5{24,
     January 1995.
