@@ -124,5 +124,34 @@
                 "url": "http://www.cl.cam.ac.uk/Research/DTG/attarchive/pub/data/att_faces.zip"
             }
         ]
+    },
+    "shuttle-statlog": {
+        "load_function_name": "load_shuttle_statlog",
+        "load_function_options": {
+            "dataset_name": "shuttle-statlog"
+        },
+        "url_list": [
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "a99d1aea52572c9e52782492d963274001bd2483",
+                "name": "train",
+                "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.trn.Z"
+            },
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "950e22e965625cf76f58da429b65554d51f99815",
+                "name": "test",
+                "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.tst"
+            },
+            {
+                "file_name": "shuttle-statlog.readme",
+                "hash_type": "sha1",
+                "hash_value": "dfa24359ee3dde44a86ff6d2171b0689d50b4863",
+                "name": "DESCR",
+                "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.doc"
+            }
+        ]
     }
 }

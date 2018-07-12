@@ -286,19 +286,25 @@ def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
 
     return dset
 
-def read_lvqpak_dat(filename, skiprows=None):
-    """Read an LVQ-PQK formatted file
+def read_space_delimited(filename, skiprows=None, class_labels=True):
+    """Read an space-delimited file
 
     skiprows: list of rows to skip when reading the file.
 
     Note: we can't use automatic comment detection, as
     `#` characters are also used as data labels.
+    class_labels: boolean
+        if true, the last column is treated as the class label
     """
     with open(filename, 'r') as fd:
         df = pd.read_table(fd, skiprows=skiprows, skip_blank_lines=True, comment=None, header=None, sep=' ', dtype=str)
         # targets are last column. Data is everything else
-        target = df.loc[:,df.columns[-1]].values
-        data = df.loc[:,df.columns[:-1]].values
+        if class_labels is True:
+            target = df.loc[:,df.columns[-1]].values
+            data = df.loc[:,df.columns[:-1]].values
+        else:
+            data = df.values
+            target = np.zeros(data.shape[0])
         return data, target
 
 def load_lvq_pak(dataset_name='lvq-pak', kind='all'):
@@ -313,16 +319,39 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all'):
     dset = new_dataset(dataset_name=dataset_name)
 
     if kind == 'train':
-        dset['data'], dset['target'] = read_lvqpak_dat(unpack_dir / 'ex1.dat', skiprows=[0,1])
+        dset['data'], dset['target'] = read_space_delimited(unpack_dir / 'ex1.dat', skiprows=[0,1])
     elif kind == 'test':
-        dset['data'], dset['target'] = read_lvqpak_dat(unpack_dir / 'ex2.dat', skiprows=[0])
+        dset['data'], dset['target'] = read_space_delimited(unpack_dir / 'ex2.dat', skiprows=[0])
     elif kind == 'all':
-        data, target = read_lvqpak_dat(unpack_dir / 'ex1.dat', skiprows=[0,1])
-        data2, target2 = read_lvqpak_dat(unpack_dir / 'ex2.dat', skiprows=[0])
+        data, target = read_space_delimited(unpack_dir / 'ex1.dat', skiprows=[0,1])
+        data2, target2 = read_space_delimited(unpack_dir / 'ex2.dat', skiprows=[0])
         dset['data'] = np.vstack((data, data2))
         dset['target'] = np.append(target, target2)
     else:
         raise Exception(f'Unknown kind: {kind}')
+
+    return dset
+
+def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train'):
+    """Load the shuttle dataset
+
+    This is a 9-dimensional dataset with class labels split into training and test sets
+
+    kind: {'train', 'test'}
+    """
+    filename_map = {
+        'train': f'shuttle.trn',
+        'test': f'shuttle.tst',
+    }
+
+    dset = new_dataset(dataset_name=dataset_name)
+
+    extract_dir = interim_data_path / dataset_name
+
+    data, target = read_space_delimited(extract_dir / filename_map[kind])
+
+    dset['data'] = data
+    dset['target'] = target
 
     return dset
 
