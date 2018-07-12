@@ -1,0 +1,31 @@
+LVQ-PAK Phoneme Dataset
+=======================
+
+Notes
+-----
+Data Set Characteristics:
+    :Number of Instances: 3924, optionally split into train (1962) and test (1962) sets
+    :Number of Attributes: 20
+    :Attribute Information: FFT coefficients
+    :Missing Attribute Values: None
+    :Creator: Teuvo Kohonen et al
+    :Date: 1995
+
+This is a copy of the [LVQ_PAK] phoneme dataset available as part of the LVQ-PAK
+software distrubution, available from:
+
+  http://www.cis.hut.fi/research/lvq_pak/
+
+The LVQ-PAK dataset consists of two data sets, training and testing
+respectively, each containing 1962 cepstral-coefficient vectors picked
+up from continuous Finnish speech, all from the same speaker.  Each
+vector has a dimensionality of 20 and has been labeled to represent
+one phoneme.
+
+References
+----------
+
+[LVQ_PAK] Kohonen, Teuvo, et al. "LVQ_PAK: A software package for the
+	  correct application of learning vector quantization
+	  algorithms."  Neural Networks, 1992. IJCNN., International
+	  Joint Conference on. Vol. 1. IEEE, 1992.

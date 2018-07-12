@@ -1,0 +1,34 @@
+************************************************************************
+*                                                                      *
+*                              LVQ_PAK                                 *
+*                                                                      *
+*                                The                                   *
+*                                                                      *
+*                   Learning  Vector  Quantization                     *
+*                                                                      *
+*                          Program  Package                            *
+*                                                                      *
+*                   Version 3.1 (April 7, 1995)                        *
+*                                                                      *
+*                          Prepared by the                             *
+*                    LVQ Programming Team of the                       *
+*                 Helsinki University of Technology                    *
+*           Laboratory of Computer and Information Science             *
+*                Rakentajanaukio 2 C, SF-02150 Espoo                   *
+*                              FINLAND                                 *
+*                                                                      *
+*                      Copyright (c) 1991-1995                         *
+*                                                                      *
+************************************************************************
+*                                                                      *
+*  NOTE: This program package is copyrighted in the sense that it      *
+*  may be used for scientific purposes. The package as a whole, or     *
+*  parts thereof, cannot be included or used in any commercial         *
+*  application without written permission granted by its producents.   *
+*  No programs contained in this package may be copied for commercial  *
+*  distribution.                                                       *
+*                                                                      *
+*  All comments concerning this program package may be sent to the     *
+*  e-mail address 'lvq@nucleus.hut.fi'.                                *
+*                                                                      *
+************************************************************************

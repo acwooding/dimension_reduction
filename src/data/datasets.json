@@ -16,7 +16,7 @@
     "f-mnist": {
         "load_function_name": "load_mnist",
         "load_function_options": {
-            "variant": "f-mnist"
+            "dataset_name": "f-mnist"
         },
         "url_list": [
             {
@@ -55,7 +55,6 @@
     "lvq-pak": {
         "load_function_name": "load_lvq_pak",
         "load_function_options": {
-            "dataset_name": "lvq-pak"
         },
         "url_list": [
             {
