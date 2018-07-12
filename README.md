@@ -6,12 +6,20 @@ Does your dimension reduction do what you think it does? Let's find out.
 
 GETTING STARTED
 ---------------
-* Create and switch to the  virtual environment:
+
+* Create and switch to the virtual environment. This environment will
+  contain everything necessary to run the project.
 
 ```
 make create environment
+```
+
+
+* Activate the environment
+```
 conda activate dimension_reduction
 ```
+
 * Fetch the raw data and process it into a usable form
 ```
 make data

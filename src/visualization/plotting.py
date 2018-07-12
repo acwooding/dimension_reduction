@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import AxesGrid
-from mpl_toolkits.axes_grid1 import ImageGrid
 import numpy as np
+from io import BytesIO
+from PIL import Image
+import base64
 
 import math
 
@@ -53,7 +54,10 @@ def two_dim_multiplot(data, labels_list, titles, ncols=2,
                               s=s, **kwargs)
         plt.title(titles[i])
 
-def plot_3d_dataset(data, color_data, title='3d plot', figsize=(8,8), dim_list=None, cmap=None, **kwargs):
+
+def plot_3d_dataset(data, color_data, title='3d plot',
+                    figsize=(8,8), dim_list=None,
+                    cmap=None, **kwargs):
     '''Display a basic (colored) 3d plot
     dim_list:
         indices to use for each of the 3 dimensions of the plot
@@ -72,11 +76,13 @@ def plot_3d_dataset(data, color_data, title='3d plot', figsize=(8,8), dim_list=N
 
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
-             c=color_data, cmap=cmap)
+    ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]],
+               data[:, dim_list[2]],
+               c=color_data, cmap=cmap)
     ax.view_init(10)
     plt.title(title)
-    return ax
+    return fig, ax
+
 
 def sphere_plot(data, color_data, wireframe=False, title='sphere plot',
                 s=50, zorder=10, dim_list=None, cmap=None,
@@ -96,9 +102,21 @@ def sphere_plot(data, color_data, wireframe=False, title='sphere plot',
         x = np.outer(np.sin(theta), np.cos(phi))
         y = np.outer(np.sin(theta), np.sin(phi))
         z = np.outer(np.cos(theta), np.ones_like(phi))
-        ax.plot_wireframe(x, y, z, color='k', rstride=1, cstride=1, linewidth=1)
-    ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]], data[:, dim_list[2]],
-             c=color_data, cmap=cmap, s=s, zorder=zorder, **kwargs)
-
+        ax.plot_wireframe(x, y, z, color='k', rstride=1,
+                          cstride=1, linewidth=1)
+    ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]],
+               data[:, dim_list[2]], c=color_data,
+               cmap=cmap, s=s, zorder=zorder, **kwargs)
     plt.title(title)
-    return ax
+    return fig, ax
+
+
+def embeddable_image(filename):
+    '''
+    Downsample an image to make it embeddable into bokeh plot.
+    '''
+    image = Image.open(filename)
+    buffer = BytesIO()
+    image.save(buffer, format='png')
+    for_encoding = buffer.getvalue()
+    return 'data:image/png;base64,' + base64.b64encode(for_encoding).decode()
