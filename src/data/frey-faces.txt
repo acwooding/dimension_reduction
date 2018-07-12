@@ -8,8 +8,8 @@ Data Set Characteristics:
     :Number of Attributes: 560
     :Attribute Information: 20x28 8-bit greyscale image
     :Missing Attribute Values: None
-    :Creator:
-    :Date: 2017
+    :Creator: Roweis and Saul
+    :Date: 2000
 
 1965 images of Brendan Frey's face, taken from sequential frames of a
 small video. Size: 20x28.
@@ -17,5 +17,10 @@ small video. Size: 20x28.
 Note, there is no target data associated with this dataset, so it is
 of use mainly in unsupervised algorithms.
 
-This is taken from
+The frey-faces dataset was first used in [RS2000] and is available from
 https://cs.nyu.edu/~roweis/data.html
+
+References
+----------
+[RS2000] Roweis, Sam T., and Lawrence K. Saul. "Nonlinear dimensionality reduction by
+	 locally linear embedding." Science 290.5500 (2000): 2323-2326. 

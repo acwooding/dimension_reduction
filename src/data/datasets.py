@@ -12,7 +12,7 @@ from functools import partial
 from joblib import Memory
 import sys
 
-from .utils import fetch_and_unpack
+from .utils import fetch_and_unpack, get_dataset_filename
 from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
 
 _MODULE = sys.modules[__name__]
@@ -20,6 +20,57 @@ _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger(__name__)
 
 jlmem = Memory(cachedir=str(interim_data_path))
+
+def new_dataset(*, dataset_name):
+    """Return an unpopulated dataset object.
+
+    Fills in LICENSE and DESCR if they are present.
+    Takes metadata from the url_list object if present. Otherwise, if 
+    `*.license` or `*.readme` files are present in the module directory,
+    these will be as LICENSE and DESCR respectively. 
+    """
+    global dataset_raw_files
+
+    dset = Bunch()
+    dset['metadata'] = {}
+    dset['LICENSE'] = None
+    dset['DESCR'] = None
+    filemap = {
+        'LICENSE': f'{dataset_name}.license',
+        'DESCR': f'{dataset_name}.readme'
+    }
+
+    # read metadata from disk if present
+    for metadata_type in filemap:
+        metadata_file = _MODULE_DIR / filemap[metadata_type]
+        if metadata_file.exists():
+            with open(metadata_file, 'r') as fd:
+                dset[metadata_type] = fd.read()
+
+    # Use downloaded metadata if available
+    ds = dataset_raw_files[dataset_name]
+    for fetch_dict in ds.get('url_list', []):
+        name = fetch_dict.get('name', None)
+        # if metadata is present in the URL list, use it
+        if name in ['DESCR', 'LICENSE']:
+            txtfile = get_dataset_filename(fetch_dict)
+            with open(raw_data_path / txtfile, 'r') as fr:
+                dset[name] = fr.read()
+
+    return dset
+
+def add_dataset_by_urllist(dataset_name, url_list):
+    """Add a new dataset by specifying a url_list
+
+    url_list is a list of dicts keyed by:
+        * url, hash_type, hash_value, name, file_name
+    """
+    global dataset_raw_files
+
+    dataset_raw_files[dataset_name] = {'url_list': url_list}
+    write_dataset()
+    dataset_raw_files = read_datasets()
+    return dataset_raw_files[dataset_name]
 
 @jlmem.cache
 def load_coil_20():
@@ -175,6 +226,50 @@ def load_frey_faces(return_X_y=False, filename='frey_rawface.mat'):
     else:
         return dset
 
+def read_lvqpak_dat(filename, skiprows=None):
+    """Read an LVQ-PQK formatted file
+    
+    skiprows: list of rows to skip when reading the file.
+    
+    Note: we can't use automatic comment detection, as
+    `#` characters are also used as data labels.
+    """
+    with open(filename, 'r') as fd:
+        df = pd.read_table(fd, skiprows=skiprows, skip_blank_lines=True, comment=None, header=None, sep=' ', dtype=str)
+        # targets are last column. Data is everything else
+        target = df.loc[:,df.columns[-1]].values
+        data = df.loc[:,df.columns[:-1]].values
+        return data, target
+
+@jlmem.cache
+def load_lvq_pak(kind='all', return_X_y=False):
+    """
+    kind: {'test', 'train', 'all'}, default 'all'
+    """
+
+    dataset_name = 'lvq-pak'
+    untar_dir = fetch_and_unpack(dataset_name)
+    unpack_dir = untar_dir / 'lvq_pak-3.1'
+    
+    dset = new_dataset(dataset_name=dataset_name)
+    
+    if kind == 'train':
+        dset['data'], dset['target'] = read_lvqpak_dat(unpack_dir / 'ex1.dat', skiprows=[0,1])
+    elif kind == 'test':
+        dset['data'], dset['target'] = read_lvqpak_dat(unpack_dir / 'ex2.dat', skiprows=[0])
+    elif kind == 'all':
+        data, target = read_lvqpak_dat(unpack_dir / 'ex1.dat', skiprows=[0,1])
+        data2, target2 = read_lvqpak_dat(unpack_dir / 'ex2.dat', skiprows=[0])
+        dset['data'] = np.vstack((data, data2))
+        dset['target'] = np.append(target, target2)
+    else:
+        raise Exception(f'Unknown kind: {kind}')
+    
+    if return_X_y:
+        return dset.data, dset.target
+    else:
+        return dset
+    
 def write_dataset(path=None, filename="datasets.json", indent=4, sort_keys=True):
     """Write a serialized (JSON) dataset file"""
     if path is None:
@@ -185,11 +280,13 @@ def write_dataset(path=None, filename="datasets.json", indent=4, sort_keys=True)
     ds = dataset_raw_files.copy()
     # copy, adjusting non-serializable items
     for key, entry in ds.items():
-        func = entry['load_function']
-        del(entry['load_function'])
+        func = entry.get('load_function', None)
+        if func is None:
+             func = partial(new_dataset, dataset_name=key)
+        else:
+            del(entry['load_function'])
         entry['load_function_name'] = func.func.__name__
         entry['load_function_options'] = func.keywords
-    print(ds)
     with open(path / filename, 'w') as fw:
         json.dump(ds, fw, indent=indent, sort_keys=sort_keys)
 

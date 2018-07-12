@@ -52,6 +52,21 @@
         "load_function_options": {},
         "url": "https://cs.nyu.edu/~roweis/data/frey_rawface.mat"
     },
+    "lvq-pak": {
+        "load_function_name": "load_lvq_pak",
+        "load_function_options": {
+            "dataset_name": "lvq-pak"
+        },
+        "url_list": [
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "86024a871724e521341da0ffb783956e39aadb6e",
+                "name": null,
+                "url": "http://www.cis.hut.fi/research/lvq_pak/lvq_pak-3.1.tar"
+            }
+        ]
+    },
     "mnist": {
         "load_function_name": "load_mnist",
         "load_function_options": {},
