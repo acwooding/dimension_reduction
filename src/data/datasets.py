@@ -70,6 +70,37 @@ def add_dataset_by_urllist(dataset_name, url_list):
     dataset_raw_files = read_datasets()
     return dataset_raw_files[dataset_name]
 
+def add_dataset_metadata(dataset_name, from_file=None, from_str=None, kind='DESCR'):
+    """Add metadata to a dataset
+
+    from_file: create metadata entry from contents of this file
+    from_str: create metadata entry from this string
+    kind: {'DESCR', 'LICENSE'}
+    """
+    global dataset_raw_files
+
+    filename_map = {
+        'DESCR': f'{dataset_name}.readme',
+        'LICENSE': f'{dataset_name}.license',
+    }
+
+    if dataset_name not in dataset_raw_files:
+        raise Exception(f'No such dataset: {dataset_name}')
+
+    if kind not in filename_map:
+        raise Exception(f'Unknown kind: {kind}. Must be one of {filename_map.keys()}')
+
+    if from_file is not None:
+        with open(from_file, 'r') as fd:
+            meta_txt = fd.read()
+    elif from_str is not None:
+        meta_txt = from_str
+    else:
+        raise Exception(f'One of `from_file` or `from_str` is required')
+
+    with open(_MODULE_DIR / filename_map[kind], 'w') as fw:
+        fw.write(meta_txt)
+
 def load_coil_20(dataset_name='coil-20'):
     """ Load the coil 20 dataset
 
@@ -149,6 +180,36 @@ def load_mnist(dataset_name='mnist', kind='train'):
         dset['data'] = np.frombuffer(fd.read(), dtype=np.uint8,
                                        offset=16).reshape(len(dset['target']), 784)
     return dset
+
+def load_orl_faces(dataset_name='orl-faces'):
+    """Load the ORL Faces dataset
+
+        Consists of 92x112, 8-bit greyscale images of 40 total subjects
+    """
+    dset = new_dataset(dataset_name=dataset_name)
+
+    dset['metadata'] = {}
+
+    extract_dir = interim_data_path / dataset_name
+
+    filename = []
+    target = []
+    feature_vectors = []
+    for subject_dir in extract_dir.iterdir():
+        if subject_dir.is_dir():
+            subject = subject_dir.name[1:]
+            for file in subject_dir.iterdir():
+                filename.append(file.name)
+                target.append(subject)
+                im = cv2.imread(str(file), cv2.COLORSPACE_GRAY)
+                feature_vectors.append(im.flatten())
+    dset['target'] = np.array(target)
+    dset['data'] = np.vstack(feature_vectors)
+    dset.metadata['filename'] = np.array(filename)
+
+    return dset
+
+
 
 def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
     '''Loads a scikit-learn style dataset

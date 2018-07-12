@@ -54,8 +54,7 @@
     },
     "lvq-pak": {
         "load_function_name": "load_lvq_pak",
-        "load_function_options": {
-        },
+        "load_function_options": {},
         "url_list": [
             {
                 "file_name": null,
@@ -93,6 +92,21 @@
                 "hash_value": "5edda96c6d8c36ff915115a0e8136d370a021576",
                 "name": "test_data",
                 "url": "http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz"
+            }
+        ]
+    },
+    "orl-faces": {
+        "load_function_name": "load_orl_faces",
+        "load_function_options": {
+            "dataset_name": "orl-faces"
+        },
+        "url_list": [
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "6c6d27116725c51910e639009c35117eaa8b0716",
+                "name": null,
+                "url": "http://www.cl.cam.ac.uk/Research/DTG/attarchive/pub/data/att_faces.zip"
             }
         ]
     }
