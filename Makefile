@@ -15,7 +15,7 @@ VIRTUALENV = conda
 # COMMANDS                                                                      #
 #################################################################################
 
-## Install Python Dependencies
+## Install or update Python Dependencies
 requirements: test_environment
 ifeq (conda, $(VIRTUALENV))
 	conda env update --name $(PROJECT_NAME) -f environment.yml
@@ -24,12 +24,16 @@ else
 	pip install -r requirements.txt
 endif
 
-## Make Dataset
-data: requirements fetch_data
+## Perform the complete dataset generation pipeline
+data: requirements process_data
 
-## Fetch and unpack the data
+## Fetch the data
 fetch_data:
-	$(PYTHON_INTERPRETER) -m src.data.make_dataset $(PROJECT_DIR)
+	$(PYTHON_INTERPRETER) -m src.data.make_dataset fetch
+
+## Fetch and process the data
+process_data:
+	$(PYTHON_INTERPRETER) -m src.data.make_dataset process
 
 ## Delete all compiled Python files
 clean:
