@@ -1,0 +1,33 @@
+HIVA is a chemoinformatics dataset
+
+Data type: non-sparse
+Number of features: 1617
+Number of examples and check-sums:
+     	Pos_ex	Neg_ex	Tot_ex	Check_sum
+Train	  135	 3710	 3845	564954.00
+Valid	   14	  370	  384	56056.00
+Test	 1354	37095	38449	5674217.00
+All  	 1503	41175	42678	6295227.0
+
+http://www.agnostic.inf.ethz.ch/datasets.php
+
+The task of HIVA is to predict which compounds are active against the
+AIDS HIV infection. The original data has 3 classes (active,
+moderately active, and inactive). We brought it back to a two-class
+classification problem (active vs. inactive). We represented the data
+as 1617 sparse binary input variables. The variables represent
+properties of the molecule inferred from its molecular structure. The
+problem is therefore to relate structure to activity (a
+QSAR=quantitative structure-activity relationship problem) to screen
+new compounds before actually testing them (a HTS=high-throughput
+screening problem).
+
+The original data were made available by The National Cancer Institute
+(USA). The 3d molecular structure was obtained by the CORINA software
+and the features were derived with the ChemTK software.  The HIVA
+dataset was used previously in the Performance Prediction challenge,
+the Model Selection game, and the Agnostic Learning vs. Prior
+Knowledge (ALvsPK) challenge. A variant of the HIVA dataset called
+SIDO was used in the Causation and Prediction challenge and the
+Pot-Luck challenge.
+

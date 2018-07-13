@@ -16,7 +16,7 @@
     "f-mnist": {
         "load_function_name": "load_mnist",
         "load_function_options": {
-            "variant": "f-mnist"
+            "dataset_name": "f-mnist"
         },
         "url_list": [
             {
@@ -52,6 +52,34 @@
         "load_function_options": {},
         "url": "https://cs.nyu.edu/~roweis/data/frey_rawface.mat"
     },
+    "hiva": {
+        "load_function_name": "load_hiva",
+        "load_function_options": {
+            "kind": "train"
+        },
+        "url_list": [
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "9f17e45343495466e7e766ee50905564b47b0a2a",
+                "name": null,
+                "url": "http://www.agnostic.inf.ethz.ch/datasets/DataAgnos/HIVA.zip"
+            }
+        ]
+    },
+    "lvq-pak": {
+        "load_function_name": "load_lvq_pak",
+        "load_function_options": {},
+        "url_list": [
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "86024a871724e521341da0ffb783956e39aadb6e",
+                "name": null,
+                "url": "http://www.cis.hut.fi/research/lvq_pak/lvq_pak-3.1.tar"
+            }
+        ]
+    },
     "mnist": {
         "load_function_name": "load_mnist",
         "load_function_options": {},
@@ -79,6 +107,50 @@
                 "hash_value": "5edda96c6d8c36ff915115a0e8136d370a021576",
                 "name": "test_data",
                 "url": "http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz"
+            }
+        ]
+    },
+    "orl-faces": {
+        "load_function_name": "load_orl_faces",
+        "load_function_options": {
+            "dataset_name": "orl-faces"
+        },
+        "url_list": [
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "6c6d27116725c51910e639009c35117eaa8b0716",
+                "name": null,
+                "url": "http://www.cl.cam.ac.uk/Research/DTG/attarchive/pub/data/att_faces.zip"
+            }
+        ]
+    },
+    "shuttle-statlog": {
+        "load_function_name": "load_shuttle_statlog",
+        "load_function_options": {
+            "dataset_name": "shuttle-statlog"
+        },
+        "url_list": [
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "a99d1aea52572c9e52782492d963274001bd2483",
+                "name": "train",
+                "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.trn.Z"
+            },
+            {
+                "file_name": null,
+                "hash_type": "sha1",
+                "hash_value": "950e22e965625cf76f58da429b65554d51f99815",
+                "name": "test",
+                "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.tst"
+            },
+            {
+                "file_name": "shuttle-statlog.readme",
+                "hash_type": "sha1",
+                "hash_value": "dfa24359ee3dde44a86ff6d2171b0689d50b4863",
+                "name": "DESCR",
+                "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.doc"
             }
         ]
     }
