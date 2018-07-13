@@ -6,8 +6,7 @@ import unittest
 import numpy as np
 import logging
 
-sys.path.append(".")
-import quality_measures as qm
+import src.quality_measures as qm
 
 LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
 DATE_FORMAT = "%m/%d/%Y %I:%M:%S %p"
@@ -52,7 +51,7 @@ def old_strain(high_distances, low_distances):
 def old_point_strain(high_distances, low_distances):
     B = qm.doubly_center_matrix(qm.square_matrix_entries(high_distances))
     top = qm.square_matrix_entries(B - qm.square_matrix_entries(low_distances))
-    result = np.sum(top, axis=1)/np.sum(qm.square_matrix_entries(B), axis=1)
+    result = np.sum(top, axis=1)/np.sum(qm.square_matrix_entries(B))
     return result
 
 
