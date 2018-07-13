@@ -234,7 +234,14 @@ def rank_to_knn(rank_matrix, n_neighbors=None):
     return np.array(knn)
 
 
-def _trustworthiness_normalizating_factor(K, N):
+def _trustworthiness_normalizating_factor(n_neighbors, n_points):
+    '''
+    Given the number of neighbors used in trustworthiness calculation,
+    and the total number of points, return the normalization factor
+    G_K for the trustworthiness calculation.
+    '''
+    K = n_neighbors
+    N = n_points
     if K < (N / 2):
         G_K = N*K*(2*N - 3*K - 1)
     else:
@@ -242,8 +249,14 @@ def _trustworthiness_normalizating_factor(K, N):
     return G_K
 
 
-def _knn_to_point_trustworthiness(high_knn, low_knn, n_neighbors=None,
-                                  high_rank=None):
+def _knn_to_point_untrustworthiness(high_knn, low_knn, n_neighbors=None,
+                                    high_rank=None):
+    '''
+    Given the n_neighbors nearest neighbors in high space and low space,
+    together with the rank matrix, compute the value of
+    "untrustworthiness" of a point (this is the factor that a point
+    contributes negatively to trustworthiness).
+    '''
     if n_neighbors is None or high_rank is None:
         raise ValueError("n_neighbors and high_rank are required")
     point_scores = []
@@ -258,9 +271,14 @@ def _knn_to_point_trustworthiness(high_knn, low_knn, n_neighbors=None,
     return np.array(point_scores)
 
 
-def point_trustworthiness(high_distances=None, low_distances=None,
-                          high_data=None, low_data=None,
-                          metric='euclidean', n_neighbors=None):
+def point_untrustworthiness(high_distances=None, low_distances=None,
+                            high_data=None, low_data=None,
+                            metric='euclidean', n_neighbors=None):
+    '''
+    Given high/low distances or data, compute the value of
+    "untrustworthiness" of a point (this is the factor that a point
+    contributes negatively to trustworthiness).
+    '''
     hd, ld, _ = pairwise_distance_differences(high_distances=high_distances,
                                               low_distances=low_distances,
                                               high_data=high_data,
@@ -273,9 +291,9 @@ def point_trustworthiness(high_distances=None, low_distances=None,
     low_rank = rank_matrix(ld)
     high_knn = rank_to_knn(high_rank, n_neighbors=n_neighbors)
     low_knn = rank_to_knn(low_rank, n_neighbors=n_neighbors)
-    point_scores = _knn_to_point_trustworthiness(high_knn, low_knn,
-                                                 n_neighbors=n_neighbors,
-                                                 high_rank=high_rank)
+    point_scores = _knn_to_point_untrustworthiness(high_knn, low_knn,
+                                                   n_neighbors=n_neighbors,
+                                                   high_rank=high_rank)
     return point_scores
 
 
@@ -284,13 +302,18 @@ def trustworthiness(high_distances=None, low_distances=None,
                     point_scores=None,
                     metric='euclidean',
                     n_neighbors=None):
+    '''
+    Given high/low distances or data, compute the value of
+    trustworthiness of an embedding. Alternately, pass in point_scores,
+    which should be the output from point_untrustworthiness.
+    '''
     if point_scores is None:
-        pt = point_trustworthiness(high_data=high_data,
-                                   low_data=low_data,
-                                   high_distances=high_distances,
-                                   low_distances=low_distances,
-                                   metric=metric,
-                                   n_neighbors=n_neighbors)
+        pt = point_untrustworthiness(high_data=high_data,
+                                     low_data=low_data,
+                                     high_distances=high_distances,
+                                     low_distances=low_distances,
+                                     metric=metric,
+                                     n_neighbors=n_neighbors)
     else:
         pt = point_scores
     return 1 - sum(pt)
