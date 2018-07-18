@@ -447,8 +447,19 @@ def labels_to_int(target):
 
     where:
         mapped_target: integer vector of same shape as target
-        label_map: dict mapping integers to original labels such that
-            `all(np.vectorize(label_map.get)(mapped_target) == target) == True`
+        label_map: dict mapping mapped_target integers to original labels
+
+    Examples
+    --------
+    >>> target = np.array(['a','b','c','a'])
+    >>> mapped_target, label_map = labels_to_int(target)
+    >>> mapped_target
+    array([0, 1, 2, 0])
+
+    The following should always be true
+
+    >>> all(np.vectorize(label_map.get)(mapped_target) == target)
+    True
     """
     label_map = {k:v for k, v in enumerate(np.unique(target))}
     label_map_inv = {v:k for k, v in label_map.items()}
