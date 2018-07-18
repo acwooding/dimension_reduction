@@ -42,7 +42,7 @@ clean:
 
 ## Run all Unit Tests and Doctests
 test:
-	cd src && pytest --doctest-modules --verbose
+	cd src && pytest --doctest-modules --verbose --cov
 
 ## Lint using flake8
 lint:
