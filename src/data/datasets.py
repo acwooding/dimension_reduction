@@ -63,6 +63,8 @@ def get_dataset_filename(ds_dict):
 
     if a `file_name` key is present, use this,
     otherwise, use the last component of the `url`
+
+    Returns the filename
     '''
 
     file_name = ds_dict.get('file_name', None)
@@ -411,7 +413,7 @@ def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
     '''Loads a scikit-learn style dataset
 
     dataset_name:
-        Name of dataset to load
+        Name of dataset to load. see `available_datasets.keys()` for the current list
     return_X_y: boolean, default=False
         if True, returns (data, target) instead of a Bunch object
     force: boolean
@@ -437,6 +439,35 @@ def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
         return dset.data, dset.target
     else:
         return dset
+
+def normalize_labels(target):
+    """Map an arbitary target vector to an integer vector
+
+    Returns
+    -------
+    tuple: (mapped_target, label_map)
+
+    where:
+        mapped_target: integer vector of same shape as target
+        label_map: dict mapping mapped_target integers to original labels
+
+    Examples
+    --------
+    >>> target = np.array(['a','b','c','a'])
+    >>> mapped_target, label_map = normalize_labels(target)
+    >>> mapped_target
+    array([0, 1, 2, 0])
+
+    The following should always be true
+
+    >>> all(np.vectorize(label_map.get)(mapped_target) == target)
+    True
+    """
+    label_map = {k:v for k, v in enumerate(np.unique(target))}
+    label_map_inv = {v:k for k, v in label_map.items()}
+    mapped_target = np.vectorize(label_map_inv.get)(target)
+
+    return mapped_target, label_map
 
 #############################################
 # Add project-specific import functions
@@ -564,8 +595,6 @@ def load_hiva(dataset_name='hiva', kind='train'):
 
     dset = new_dataset(dataset_name=dataset_name)
 
-
-    # data is space-delimited
     data = np.genfromtxt(hiva_dir / f'hiva_{kind}.data')
 
     if kind == 'train':
@@ -597,9 +626,12 @@ def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
 
     return dset
 
-def load_lvq_pak(dataset_name='lvq-pak', kind='all'):
+def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
     """
     kind: {'test', 'train', 'all'}, default 'all'
+    numeric_labels: boolean (default: True)
+        if set, target is a vector of integers, and label_map is created in the metadata
+        to reflect the mapping to the string targets
     """
 
     untar_dir = interim_data_path / dataset_name
@@ -619,6 +651,11 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all'):
         dset['target'] = np.append(target, target2)
     else:
         raise Exception(f'Unknown kind: {kind}')
+
+    if numeric_labels:
+        mapped_target, label_map = normalize_labels(dset.target)
+        dset.metadata['label_map'] = label_map
+        dset.target = mapped_target
 
     return dset
 
