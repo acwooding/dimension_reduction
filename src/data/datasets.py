@@ -411,7 +411,7 @@ def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
     '''Loads a scikit-learn style dataset
 
     dataset_name:
-        Name of dataset to load
+        Name of dataset to load. see `available_datasets.keys()` for the current list
     return_X_y: boolean, default=False
         if True, returns (data, target) instead of a Bunch object
     force: boolean
