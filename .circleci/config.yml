@@ -20,24 +20,30 @@ jobs:
     steps:
       - checkout
 
+      # Get latest Anaconda running
+      - run:
+          command: |
+            wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+            chmod +x ~/miniconda.sh;
+            ~/miniconda.sh -b -p ~/miniconda;
+            echo "export PATH=~/miniconda/bin:$PATH" >> $BASH_ENV;
+      - run:
+          command: |
+            conda update --yes --quiet conda;
+            conda env create --quiet -f environment.yml;
+            source activate dimension_reduction;
+            echo "source activate dimension_reduction" >> $BASH_ENV;
+
+      - save_cache:
+          key: pip-cache
+          paths:
+            - ~/.cache/pip
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+              - pip-cache
 
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
         
       # run tests!
       # this example uses Django's built-in test-runner
@@ -47,7 +53,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
+            source activate dimension_reduction
+            #. venv/bin/activate
             #python manage.py test
             cd src
             pytest --doctest-modules --doctest-continue-on-failure --verbose
