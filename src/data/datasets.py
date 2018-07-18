@@ -452,7 +452,7 @@ def labels_to_int(target):
     """
     label_map = {k:v for k, v in enumerate(np.unique(target))}
     label_map_inv = {v:k for k, v in label_map.items()}
-    mapped_target = np.vectorize(label_map.get)(target)
+    mapped_target = np.vectorize(label_map_inv.get)(target)
 
     return mapped_target, label_map
 
@@ -613,9 +613,12 @@ def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
 
     return dset
 
-def load_lvq_pak(dataset_name='lvq-pak', kind='all'):
+def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
     """
     kind: {'test', 'train', 'all'}, default 'all'
+    numeric_labels: boolean (default: True)
+        if set, target is a vector of integers, and label_map is created in the metadata
+        to reflect the mapping to the string targets
     """
 
     untar_dir = interim_data_path / dataset_name
@@ -636,9 +639,10 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all'):
     else:
         raise Exception(f'Unknown kind: {kind}')
 
-    mapped_target, label_map = labels_to_int(dset.target)
-    dset.metadata['label_map'] = label_map
-    dset.target = mapped_target
+    if numeric_labels:
+        mapped_target, label_map = labels_to_int(dset.target)
+        dset.metadata['label_map'] = label_map
+        dset.target = mapped_target
 
     return dset
 
