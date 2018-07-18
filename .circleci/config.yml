@@ -20,24 +20,24 @@ jobs:
     steps:
       - checkout
 
-        # Get latest Anaconda running
-        - run:
-            command: |
-              wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O ~/miniconda.sh;
-              chmod +x ~/miniconda.sh;
-              ~/miniconda.sh -b -p ~/miniconda;
-              echo "export PATH=~/miniconda/bin:$PATH" >> $BASH_ENV;
-        - run:
-            command: |
-              conda update --yes --quiet conda;
-              conda env create --quiet -f environment.yml;
-              source activate dimension_reduction;
-              echo "source activate dimension_reduction" >> $BASH_ENV;
+      # Get latest Anaconda running
+      - run:
+          command: |
+            wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+            chmod +x ~/miniconda.sh;
+            ~/miniconda.sh -b -p ~/miniconda;
+            echo "export PATH=~/miniconda/bin:$PATH" >> $BASH_ENV;
+      - run:
+          command: |
+            conda update --yes --quiet conda;
+            conda env create --quiet -f environment.yml;
+            source activate dimension_reduction;
+            echo "source activate dimension_reduction" >> $BASH_ENV;
 
-        - save_cache:
-            key: pip-cache
-            paths:
-              - ~/.cache/pip
+      - save_cache:
+          key: pip-cache
+          paths:
+            - ~/.cache/pip
 
       # Download and cache dependencies
       - restore_cache:
@@ -53,7 +53,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
+            source activate dimension_reduction
+            #. venv/bin/activate
             #python manage.py test
             cd src
             pytest --doctest-modules --doctest-continue-on-failure --verbose
