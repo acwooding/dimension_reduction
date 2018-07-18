@@ -63,6 +63,8 @@ def get_dataset_filename(ds_dict):
 
     if a `file_name` key is present, use this,
     otherwise, use the last component of the `url`
+
+    Returns the filename
     '''
 
     file_name = ds_dict.get('file_name', None)
