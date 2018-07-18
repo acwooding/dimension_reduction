@@ -438,6 +438,24 @@ def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
     else:
         return dset
 
+def labels_to_int(target):
+    """Map an arbitary target vector to an integer vector
+
+    Returns
+    -------
+    tuple: (mapped_target, label_map)
+
+    where:
+        mapped_target: integer vector of same shape as target
+        label_map: dict mapping integers to original labels such that
+            `all(np.vectorize(label_map.get)(mapped_target) == target) == True`
+    """
+    label_map = {k:v for k, v in enumerate(np.unique(target))}
+    label_map_inv = {v:k for k, v in label_map.items()}
+    mapped_target = np.vectorize(label_map.get)(target)
+
+    return mapped_target, label_map
+
 #############################################
 # Add project-specific import functions
 #############################################
@@ -564,8 +582,6 @@ def load_hiva(dataset_name='hiva', kind='train'):
 
     dset = new_dataset(dataset_name=dataset_name)
 
-
-    # data is space-delimited
     data = np.genfromtxt(hiva_dir / f'hiva_{kind}.data')
 
     if kind == 'train':
@@ -619,6 +635,10 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all'):
         dset['target'] = np.append(target, target2)
     else:
         raise Exception(f'Unknown kind: {kind}')
+
+    mapped_target, label_map = labels_to_int(dset.target)
+    dset.metadata['label_map'] = label_map
+    dset.target = mapped_target
 
     return dset
 
