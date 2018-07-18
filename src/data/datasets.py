@@ -438,7 +438,7 @@ def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
     else:
         return dset
 
-def labels_to_int(target):
+def normalize_labels(target):
     """Map an arbitary target vector to an integer vector
 
     Returns
@@ -452,7 +452,7 @@ def labels_to_int(target):
     Examples
     --------
     >>> target = np.array(['a','b','c','a'])
-    >>> mapped_target, label_map = labels_to_int(target)
+    >>> mapped_target, label_map = normalize_labels(target)
     >>> mapped_target
     array([0, 1, 2, 0])
 
@@ -651,7 +651,7 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
         raise Exception(f'Unknown kind: {kind}')
 
     if numeric_labels:
-        mapped_target, label_map = labels_to_int(dset.target)
+        mapped_target, label_map = normalize_labels(dset.target)
         dset.metadata['label_map'] = label_map
         dset.target = mapped_target
 
