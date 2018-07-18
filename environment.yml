@@ -23,6 +23,6 @@ dependencies:
   - umap-learn
   - bokeh>=0.13.0
   - joblib
-  - pip
+  - pip>=9
   - pip:
     - -e .
