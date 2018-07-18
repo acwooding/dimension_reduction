@@ -40,6 +40,10 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
+## Run all Unit Tests and Doctests
+test:
+	cd src && pytest --doctest-modules --verbose
+
 ## Lint using flake8
 lint:
 	flake8 src
@@ -74,7 +78,7 @@ else
 	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
 endif
 
-## Test python environment is setup correctly
+## Test python environment is set-up correctly
 test_environment:
 	$(PYTHON_INTERPRETER) test_environment.py
 
