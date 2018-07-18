@@ -26,3 +26,4 @@ dependencies:
   - pip>=9
   - pip:
     - -e .
+    - pytest-cov
