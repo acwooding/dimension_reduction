@@ -27,3 +27,5 @@ dependencies:
   - pip:
     - -e .
     - pytest-cov
+    - cmake
+    - git+https://github.com/acwooding/Multicore-TSNE.git@add-repr
