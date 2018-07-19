@@ -39,6 +39,7 @@ process_data:
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
+	rm -rf data/processed/joblib
 
 ## Run all Unit Tests and Doctests
 test:
