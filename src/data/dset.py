@@ -6,7 +6,6 @@ import sys
 from sklearn.datasets.base import Bunch
 
 from ..paths import raw_data_path, processed_data_path
-from .datasets import read_datasets
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
@@ -17,18 +16,17 @@ __all__ = ['Dataset']
 class Dataset(Bunch):
     def __init__(self, dataset_name=None, data=None, target=None, metadata=None,
                  license_txt=None, descr_txt=None,
-                 use_cached_metadata=True,
                  **kwargs):
         """
         use_dataset_list:
-            if a `dataset_name` is specified, 
+            if a `dataset_name` is specified,
 
         """
         super().__init__(**kwargs)
 
         if dataset_name is None:
             raise Exception('dataset_name is required')
-        
+
         if metadata is not None:
             self['metadata'] = metadata
             use_cached_metadata = False
@@ -39,16 +37,6 @@ class Dataset(Bunch):
         self['metadata']['descr'] = descr_txt
         self['data'] = data
         self['target'] = target
-
-        if use_cached_metadata:
-            # check on-disk for stored metadata
-            meta_dict = {}
-            if self.LICENSE is None:
-                meta_dict['license'] = f'{dataset_name}.license'
-            if self.DESCR is None:
-                meta_dict['descr'] = f'{dataset_name}.readme'
-            if meta_dict:
-                self.read_metadata(meta_dict)
 
     @property
     def name(self):
@@ -91,26 +79,6 @@ class Dataset(Bunch):
         with open(data_path / f'{file_base}.dataset', 'rb') as fd:
             ds = joblib.load(fd)
         return ds
-        
-    def read_metadata(self, filemap, data_path=None):
-        """
-        Set metadata fields from disk values
-
-        data_path: path. Defaults to module directory
-            directory to search.
-        filemap:
-            dictionary mapping a metadata key to a filename.
-            If this filename is found on disk, the metadata key will be set to the contents
-            of this file.
-        """
-        # read metadata from disk if present
-        if data_path is None:
-            data_path = _MODULE_DIR
-        for metadata_type in filemap:
-            metadata_file = data_path / filemap[metadata_type]
-            if metadata_file.exists():
-                with open(metadata_file, 'r') as fd:
-                    self['metadata'][metadata_type] = fd.read()
 
     def dump(self, file_base=None, data_path=None, hash_type='sha1',
              force=True, create_dirs=True):
@@ -140,7 +108,7 @@ class Dataset(Bunch):
             file_base = self.name
 
         metadata = self['metadata']
-                
+
         metadata_filename = file_base + '.metadata'
         dataset_filename = file_base + '.dataset'
         metadata_fq = data_path / metadata_filename
@@ -168,9 +136,8 @@ class Dataset(Bunch):
         with open(metadata_fq, 'wb') as fo:
             joblib.dump(metadata, fo)
         logger.debug(f'Wrote metadata to {metadata_fq}')
-        
+
         dataset_fq = data_path / dataset_filename
         with open(dataset_fq, 'wb') as fo:
             joblib.dump(self, fo)
         logger.debug(f'Wrote dataset to {dataset_fq}')
-
