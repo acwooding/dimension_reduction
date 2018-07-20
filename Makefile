@@ -35,11 +35,13 @@ fetch_data:
 process_data:
 	$(PYTHON_INTERPRETER) -m src.data.make_dataset process
 
+joblib_clean:
+	rm -rf data/interim/joblib
+
 ## Delete all compiled Python files
-clean:
+clean: joblib_clean
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
-	rm -rf data/processed/joblib
 
 ## Run all Unit Tests and Doctests
 test:

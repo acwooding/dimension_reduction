@@ -33,8 +33,8 @@ class Dataset(Bunch):
         else:
             self['metadata'] = {}
         self['metadata']['dataset_name'] = dataset_name
-        self['metadata']['license'] = license_txt
-        self['metadata']['descr'] = descr_txt
+        self.LICENSE = license_txt
+        self.DESCR = descr_txt
         self['data'] = data
         self['target'] = target
 
@@ -42,22 +42,6 @@ class Dataset(Bunch):
     def name(self):
         return self['metadata'].get('dataset_name', None)
 
-    @property
-    def LICENSE(self):
-        return self['metadata'].get('license', None)
-
-    @LICENSE.setter
-    def LICENSE(self, value):
-        self['metadata']['license'] = value
-
-    @property
-    def DESCR(self):
-        return self['metadata'].get('descr', None)
-    
-    @DESCR.setter
-    def DESCR(self, value):
-        self['metadata']['license'] = value
-    
     @property
     def has_target(self):
         return self['target'] is not None

@@ -9,8 +9,12 @@ import requests
 import pandas as pd
 import numpy as np
 from scipy.io import loadmat
-from sklearn.datasets.base import Bunch
+from .dset import Dataset
 import sys
+
+## project-specific imports
+import cv2
+## end project-specific imports
 
 from .utils import hash_file, unpack, hash_function_map
 from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
@@ -19,6 +23,7 @@ _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger(__name__)
 
+jlmem = joblib.Memory(cachedir=str(interim_data_path), verbose=2)
 
 def new_dataset(*, dataset_name):
     """Return an unpopulated dataset object.
@@ -30,10 +35,7 @@ def new_dataset(*, dataset_name):
     """
     global available_datasets
 
-    dset = Bunch()
-    dset['metadata'] = {}
-    dset['LICENSE'] = None
-    dset['DESCR'] = None
+    dset = Dataset(dataset_name)
     filemap = {
         'LICENSE': f'{dataset_name}.license',
         'DESCR': f'{dataset_name}.readme'
@@ -409,7 +411,9 @@ def add_dataset_function(dataset_name, function):
     sync_datasets()
     return available_datasets[dataset_name]
 
+@jlmem.cache
 def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
+
     '''Loads a scikit-learn style dataset
 
     dataset_name:
@@ -422,18 +426,8 @@ def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
 
     if dataset_name not in available_datasets:
         raise Exception(f'Unknown Dataset: {dataset_name}')
-
-    # check for cached version
-    cache_file = processed_data_path / f'{dataset_name}.jlib'
-    if cache_file.exists() and force is not True:
-        dset = joblib.load(cache_file)
-    else:
-        # no cache. Regenerate
-        fetch_and_unpack(dataset_name)
-        dset = available_datasets[dataset_name]['load_function'](**kwargs)
-        os.makedirs(cache_file.parent, exist_ok=True)
-        with open(cache_file, 'wb') as fo:
-            joblib.dump(dset, fo)
+    fetch_and_unpack(dataset_name)
+    dset = available_datasets[dataset_name]['load_function'](**kwargs)
 
     if return_X_y:
         return dset.data, dset.target
@@ -483,8 +477,6 @@ def load_coil_20(dataset_name='coil-20'):
 
     dset = new_dataset(dataset_name=dataset_name)
 
-    dset['metadata'] = {}
-
     feature_vectors = []
     glob_path = interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
     filelist = glob.glob(str(glob_path))
@@ -509,8 +501,6 @@ def load_coil_100(dataset_name='coil-100'):
     """
 
     dset = new_dataset(dataset_name=dataset_name)
-
-    dset['metadata'] = {}
 
     feature_vectors = []
     glob_path = interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
@@ -560,8 +550,6 @@ def load_orl_faces(dataset_name='orl-faces'):
     """
     dset = new_dataset(dataset_name=dataset_name)
 
-    dset['metadata'] = {}
-
     extract_dir = interim_data_path / dataset_name
 
     filename = []
@@ -577,7 +565,7 @@ def load_orl_faces(dataset_name='orl-faces'):
                 feature_vectors.append(im.flatten())
     dset['target'] = np.array(target)
     dset['data'] = np.vstack(feature_vectors)
-    dset.metadata['filename'] = np.array(filename)
+    dset.metadata['filenames'] = np.array(filename)
 
     return dset
 
