@@ -30,6 +30,7 @@ jobs:
       - run:
           command: |
             conda update --yes --quiet conda;
+            pip install cmake
             conda env create --quiet -f environment.yml;
             source activate dimension_reduction;
             echo "source activate dimension_reduction" >> $BASH_ENV;
