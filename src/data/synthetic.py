@@ -57,6 +57,18 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
         X = np.concatenate((x, y, z))
         X = X.T
         t = np.linalg.norm(X, axis=1)
+    elif kind == 'twinpeaks':
+        inc = 1.5 / np.sqrt(n_points)
+        x = np.arange(-1, 1, inc)
+        xx2, yy2 = np.meshgrid(x, x)
+        xx2.shape, yy2.shape
+        xy = 1 - 2 * generator.rand(2, n_points)
+        z = np.sin(np.pi * xy[0, :]) * np.tanh(3 * xy[1, :])
+        X = np.vstack([xy, z]).T #  + noise * generator.randn(n_points, 3)
+        #X[:, 2] = X[:, 2] * 1
+        # t = xy.T
+        t = 1-z
+
     elif kind == 'broken_swiss_roll':
         np1, np2 = int(np.ceil(n_points / 2.0)), int(np.floor(n_points / 2.0))
         t1 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(1, np1) * 0.4))
