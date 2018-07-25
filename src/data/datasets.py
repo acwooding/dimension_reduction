@@ -281,32 +281,9 @@ def fetch_and_unpack(dataset_name, do_unpack=True):
             unpack(filename, dst_dir=interim_dataset_path)
     if do_unpack:
         return interim_dataset_path
-    else:
-        if single_file:
-            return filename
-        else:
-            return raw_data_path
-
-def read_space_delimited(filename, skiprows=None, class_labels=True):
-    """Read an space-delimited file
-
-    skiprows: list of rows to skip when reading the file.
-
-    Note: we can't use automatic comment detection, as
-    `#` characters are also used as data labels.
-    class_labels: boolean
-        if true, the last column is treated as the class label
-    """
-    with open(filename, 'r') as fd:
-        df = pd.read_table(fd, skiprows=skiprows, skip_blank_lines=True, comment=None, header=None, sep=' ', dtype=str)
-        # targets are last column. Data is everything else
-        if class_labels is True:
-            target = df.loc[:,df.columns[-1]].values
-            data = df.loc[:,df.columns[:-1]].values
-        else:
-            data = df.values
-            target = np.zeros(data.shape[0])
-        return data, target
+    if single_file:
+        return filename
+    return raw_data_path
 
 def read_datasets(path=None, filename="datasets.json"):
     """Read the serialized (JSON) dataset list
