@@ -321,6 +321,7 @@ def write_datasets(ds, path=None, filename="datasets.json", indent=4, sort_keys=
     # copy, adjusting non-serializable items
     for key, entry in ds.items():
         action = entry.get('action', 'fetch_and_process')
+        entry['action'] = action
         func = entry.get('load_function', None)
         if func is None:
             if action == 'fetch_and_process':
