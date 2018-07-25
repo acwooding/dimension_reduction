@@ -463,7 +463,8 @@ def normalize_labels(target):
 
     return mapped_target, label_map
 
-def process_dataset(data=None, target=None, metadata=None, *, dataset_name):
+def process_dataset(data=None, target=None, metadata=None,
+                    license_txt=None, descr_txt=None, *, dataset_name):
     """Convert a triple to a dataset objet
 
     Keywords
@@ -472,6 +473,10 @@ def process_dataset(data=None, target=None, metadata=None, *, dataset_name):
         name of dataset_filename
     data:
         Array containing data
+    descr_txt: str
+        Description of the dataset
+    license_txt: str
+        License associated with this dataset
     target:
         Target vector (for classification problems) or classs label_map
     metadata: dict
@@ -487,6 +492,10 @@ def process_dataset(data=None, target=None, metadata=None, *, dataset_name):
         dset.metadata.update(metadata)
     dset['data'] = data
     dset['target'] = target
+    if license_txt:
+        dset['LICENSE'] = license_txt
+    if descr_txt:
+        dset['DESCR'] = descr_txt
 
     return dset
 
