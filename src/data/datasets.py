@@ -23,7 +23,7 @@ _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
 logger = logging.getLogger(__name__)
 
-jlmem = joblib.Memory(cachedir=str(interim_data_path), verbose=2)
+jlmem = joblib.Memory(cachedir=str(interim_data_path), verbose=0)
 
 def new_dataset(*, dataset_name):
     """Return an unpopulated dataset object.
