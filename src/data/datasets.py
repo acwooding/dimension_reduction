@@ -49,7 +49,7 @@ def new_dataset(*, dataset_name):
                 dset[metadata_type] = fd.read()
 
     # Use downloaded metadata if available
-    ds = available_datasets[dataset_name]
+    ds = available_datasets.get(dataset_name, {})
     for fetch_dict in ds.get('url_list', []):
         name = fetch_dict.get('name', None)
         # if metadata is present in the URL list, use it
