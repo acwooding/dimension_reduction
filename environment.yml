@@ -1,6 +1,7 @@
 name: dimension_reduction
 channels:
   - conda-forge
+  - pyviz
 dependencies:
   - flake8
   - sphinx
@@ -24,6 +25,7 @@ dependencies:
   - bokeh>=0.13.0
   - joblib
   - pip>=9
+  - pyviz
   - pip:
     - -e .
     - pytest-cov
