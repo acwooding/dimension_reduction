@@ -463,6 +463,33 @@ def normalize_labels(target):
 
     return mapped_target, label_map
 
+def process_dataset(data=None, target=None, metadata=None, *, dataset_name):
+    """Convert a triple to a dataset objet
+
+    Keywords
+    --------
+    dataset_name: string, required
+        name of dataset_filename
+    data:
+        Array containing data
+    target:
+        Target vector (for classification problems) or classs label_map
+    metadata: dict
+        key-value pairs to be added to dataset metadata
+
+    Returns
+    -------
+    Dataset Object
+    """
+
+    dset = new_dataset(dataset_name=dataset_name)
+    if metadata:
+        dset.metadata.update(metadata)
+    dset['data'] = data
+    dset['target'] = target
+
+    return dset
+
 #############################################
 # Add project-specific import functions
 #############################################
@@ -475,22 +502,29 @@ def load_coil_20(dataset_name='coil-20'):
         rotation: rotation of target (extracted from filename)
     """
 
-    dset = new_dataset(dataset_name=dataset_name)
-
+    metadata = {}
     feature_vectors = []
     glob_path = interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
     filelist = glob.glob(str(glob_path))
 
-    dset.metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
-    dset.metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
+    metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
+    metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
 
     for i, filename in enumerate(filelist):
         im = cv2.imread(filename, cv2.COLORSPACE_GRAY)
         feature_vectors.append(im.flatten())
 
-    dset['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
-    dset['data'] = np.vstack(feature_vectors)
-    return dset
+    target = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
+    data = np.vstack(feature_vectors)
+
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+        'metadata': metadata
+    }
+
+    return process_dataset(**dset_opts)
 
 def load_coil_100(dataset_name='coil-100'):
     """ Load the coil 100 dataset
@@ -500,23 +534,29 @@ def load_coil_100(dataset_name='coil-100'):
         rotation: rotation of target (extracted from filename)
     """
 
-    dset = new_dataset(dataset_name=dataset_name)
-
+    metadata = {}
     feature_vectors = []
     glob_path = interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
     filelist = glob.glob(str(glob_path))
 
-    dset.metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
-    dset.metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
+    metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
+    metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
 
     for filename in filelist:
         im = cv2.imread(filename)
         feature_vectors.append(im.flatten())
 
-    dset['target'] = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
-    dset['data'] = np.vstack(feature_vectors)
+    target = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
+    data = np.vstack(feature_vectors)
 
-    return dset
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+        'metadata': metadata
+    }
+
+    return process_dataset(**dset_opts)
 
 def load_mnist(dataset_name='mnist', kind='train'):
     '''
@@ -529,29 +569,31 @@ def load_mnist(dataset_name='mnist', kind='train'):
         Indicates which dataset to load
 
     '''
-    dset = new_dataset(dataset_name=dataset_name)
-
     if kind == 'test':
         kind = 't10k'
 
     label_path = interim_data_path / dataset_name / f"{kind}-labels-idx1-ubyte"
     with open(label_path, 'rb') as fd:
-        dset['target'] = np.frombuffer(fd.read(), dtype=np.uint8, offset=8)
+        target = np.frombuffer(fd.read(), dtype=np.uint8, offset=8)
     dataset_path = interim_data_path / dataset_name / f"{kind}-images-idx3-ubyte"
     with open(dataset_path, 'rb') as fd:
-        dset['data'] = np.frombuffer(fd.read(), dtype=np.uint8,
-                                       offset=16).reshape(len(dset['target']), 784)
-    return dset
+        data = np.frombuffer(fd.read(), dtype=np.uint8,
+                                       offset=16).reshape(len(target), 784)
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+    }
+    return process_dataset(**dset_opts)
 
 def load_orl_faces(dataset_name='orl-faces'):
     """Load the ORL Faces dataset
 
         Consists of 92x112, 8-bit greyscale images of 40 total subjects
     """
-    dset = new_dataset(dataset_name=dataset_name)
-
     extract_dir = interim_data_path / dataset_name
 
+    metadata = {}
     filename = []
     target = []
     feature_vectors = []
@@ -563,11 +605,17 @@ def load_orl_faces(dataset_name='orl-faces'):
                 target.append(subject)
                 im = cv2.imread(str(file), cv2.COLORSPACE_GRAY)
                 feature_vectors.append(im.flatten())
-    dset['target'] = np.array(target)
-    dset['data'] = np.vstack(feature_vectors)
-    dset.metadata['filenames'] = np.array(filename)
+    target = np.array(target)
+    data = np.vstack(feature_vectors)
+    metadata['filenames'] = np.array(filename)
 
-    return dset
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+        'metadata': metadata
+    }
+    return process_dataset(**dset_opts)
 
 def load_hiva(dataset_name='hiva', kind='train'):
     """Load the HIVA dataset
@@ -581,8 +629,6 @@ def load_hiva(dataset_name='hiva', kind='train'):
 
     hiva_dir = interim_data_path / dataset_name / 'HIVA'
 
-    dset = new_dataset(dataset_name=dataset_name)
-
     data = np.genfromtxt(hiva_dir / f'hiva_{kind}.data')
 
     if kind == 'train':
@@ -590,9 +636,15 @@ def load_hiva(dataset_name='hiva', kind='train'):
     else:
         labels = np.zeros(data.shape[0])
 
-    dset['data'] = data
-    dset['target'] = labels
-    return dset
+    data = data
+    target = labels
+
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+    }
+    return process_dataset(**dset_opts)
 
 def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
     '''
@@ -602,17 +654,20 @@ def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
     `target` is a vector of all zeros
     '''
 
-    dset = new_dataset(dataset_name=dataset_name)
-
     frey_file = interim_data_path / dataset_name / filename
 
     ff = loadmat(frey_file, squeeze_me=True, struct_as_record=False)
     ff = ff["ff"].T
 
-    dset.data = ff
-    dset.target = np.zeros(ff.shape[0])
+    data = ff
+    target = np.zeros(ff.shape[0])
 
-    return dset
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+    }
+    return process_dataset(**dset_opts)
 
 def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
     """
@@ -622,30 +677,35 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
         to reflect the mapping to the string targets
     """
 
+    metadata = None
     untar_dir = interim_data_path / dataset_name
-
     unpack_dir = untar_dir / 'lvq_pak-3.1'
 
-    dset = new_dataset(dataset_name=dataset_name)
-
     if kind == 'train':
-        dset['data'], dset['target'] = read_space_delimited(unpack_dir / 'ex1.dat', skiprows=[0,1])
-    elif kind == 'test':
-        dset['data'], dset['target'] = read_space_delimited(unpack_dir / 'ex2.dat', skiprows=[0])
-    elif kind == 'all':
         data, target = read_space_delimited(unpack_dir / 'ex1.dat', skiprows=[0,1])
+    elif kind == 'test':
+        data, target = read_space_delimited(unpack_dir / 'ex2.dat', skiprows=[0])
+    elif kind == 'all':
+        data1, target1 = read_space_delimited(unpack_dir / 'ex1.dat', skiprows=[0,1])
         data2, target2 = read_space_delimited(unpack_dir / 'ex2.dat', skiprows=[0])
-        dset['data'] = np.vstack((data, data2))
-        dset['target'] = np.append(target, target2)
+        data = np.vstack((data1, data2))
+        target = np.append(target1, target2)
     else:
         raise Exception(f'Unknown kind: {kind}')
 
     if numeric_labels:
-        mapped_target, label_map = normalize_labels(dset.target)
-        dset.metadata['label_map'] = label_map
-        dset.target = mapped_target
+        metadata = {}
+        mapped_target, label_map = normalize_labels(target)
+        metadata['label_map'] = label_map
+        target = mapped_target
 
-    return dset
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+        'metadata': metadata
+    }
+    return process_dataset(**dset_opts)
 
 def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train'):
     """Load the shuttle dataset
@@ -659,16 +719,16 @@ def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train'):
         'test': f'shuttle.tst',
     }
 
-    dset = new_dataset(dataset_name=dataset_name)
-
     extract_dir = interim_data_path / dataset_name
 
     data, target = read_space_delimited(extract_dir / filename_map[kind])
 
-    dset['data'] = data
-    dset['target'] = target
-
-    return dset
+    dset_opts = {
+        'dataset_name': dataset_name,
+        'data': data,
+        'target': target,
+    }
+    return process_dataset(**dset_opts)
 
 #############################################
 # End project-specific import functions
