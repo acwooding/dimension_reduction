@@ -9,14 +9,14 @@ import requests
 import pandas as pd
 import numpy as np
 from scipy.io import loadmat
-from .dset import Dataset
 import sys
 
 ## project-specific imports
 import cv2
 ## end project-specific imports
 
-from .utils import hash_file, unpack, hash_function_map
+from .dset import Dataset
+from .utils import hash_file, unpack, hash_function_map, read_space_delimited
 from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
 
 _MODULE = sys.modules[__name__]
@@ -345,7 +345,7 @@ def write_datasets(path=None, filename="datasets.json", indent=4, sort_keys=True
     for key, entry in ds.items():
         func = entry.get('load_function', None)
         if func is None:
-             func = partial(new_dataset, dataset_name=key)
+            func = partial(new_dataset, dataset_name=key)
         else:
             del(entry['load_function'])
         entry['load_function_name'] = func.func.__name__
@@ -431,8 +431,8 @@ def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
 
     if return_X_y:
         return dset.data, dset.target
-    else:
-        return dset
+    
+    return dset
 
 def normalize_labels(target):
     """Map an arbitary target vector to an integer vector
