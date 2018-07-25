@@ -141,3 +141,32 @@ def read_space_delimited(filename, skiprows=None, class_labels=True):
             data = df.values
             target = np.zeros(data.shape[0])
         return data, target
+
+def normalize_labels(target):
+    """Map an arbitary target vector to an integer vector
+
+    Returns
+    -------
+    tuple: (mapped_target, label_map)
+
+    where:
+        mapped_target: integer vector of same shape as target
+        label_map: dict mapping mapped_target integers to original labels
+
+    Examples
+    --------
+    >>> target = np.array(['a','b','c','a'])
+    >>> mapped_target, label_map = normalize_labels(target)
+    >>> mapped_target
+    array([0, 1, 2, 0])
+
+    The following should always be true
+
+    >>> all(np.vectorize(label_map.get)(mapped_target) == target)
+    True
+    """
+    label_map = {k:v for k, v in enumerate(np.unique(target))}
+    label_map_inv = {v:k for k, v in label_map.items()}
+    mapped_target = np.vectorize(label_map_inv.get)(target)
+
+    return mapped_target, label_map

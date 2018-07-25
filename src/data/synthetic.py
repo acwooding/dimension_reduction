@@ -103,34 +103,6 @@ def synthetic_data(n_points=1000, noise=None,
 
     return X, t, metadata
 
-def create_dsopts_from_func(dataset_name, func):
-    """Generate dataset options dict from a (partial) function"""
-    func = partial(func)
-    tup = func()
-    if len(tup) == 2:
-        X, t = tup
-        metadata = {}
-    elif len(tup) == 3:
-        X, t, metadata = tup
-    else:
-        raise Exception(f"Unexpected number of parameters from {func}. Got {len(tup)}.")
-    metadata['dataset_type'] = 'synthetic'
-    metadata['dataset_name'] = dataset_name
-    metadata['generator_function'] = jfi.get_func_name(func.func)
-    metadata['generator_args'] = func.args
-    metadata['generator_kwargs'] = func.keywords
-    fqfunc, invocation =  jfi.format_signature(func.func, *func.args, **func.keywords)
-    descr_txt =  f'Synthetic data produced by: {fqfunc}\n\n>>> {invocation}\n\n>>> help({func.func.__name__})\n\n{func.func.__doc__}'
-
-    ds_opts = {
-        'dataset_name': dataset_name,
-        'data': X,
-        'target': t,
-        'descr_txt': descr_txt,
-        'metadata': metadata
-    }
-    return ds_opts
-
 def sample_sphere_surface(n_points, n_dim=3, random_state=0):
     '''Sample on the surface of a sphere
 

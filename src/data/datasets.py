@@ -1,23 +1,18 @@
 from functools import partial
-import glob
+import importlib
 import joblib
+import joblib.func_inspect as jfi
 import json
 import logging
 import os
 import pathlib
 import requests
-import pandas as pd
-import numpy as np
-from scipy.io import loadmat
 import sys
-
-## project-specific imports
-import cv2
-## end project-specific imports
 
 from .dset import Dataset
 from .utils import hash_file, unpack, hash_function_map, read_space_delimited
 from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
+from .localdata import *
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
@@ -33,8 +28,6 @@ def new_dataset(*, dataset_name):
     `*.license` or `*.readme` files are present in the module directory,
     these will be as LICENSE and DESCR respectively.
     """
-    global available_datasets
-
     dset = Dataset(dataset_name)
     filemap = {
         'LICENSE': f'{dataset_name}.license',
@@ -49,7 +42,8 @@ def new_dataset(*, dataset_name):
                 dset[metadata_type] = fd.read()
 
     # Use downloaded metadata if available
-    ds = available_datasets.get(dataset_name, {})
+    dslist = read_datasets()
+    ds = dslist.get(dataset_name, {})
     for fetch_dict in ds.get('url_list', []):
         name = fetch_dict.get('name', None)
         # if metadata is present in the URL list, use it
@@ -135,7 +129,6 @@ def fetch_text_file(url, file_name=None, dst_dir=None, force=True, **kwargs):
     else:
         logger.warning(f'fetch of {url} failed with status: {retlist[0]}')
         return None
-
 
 def fetch_file(url,
                file_name=None, dst_dir=None,
@@ -298,10 +291,16 @@ def read_datasets(path=None, filename="datasets.json"):
 
     # make the functions callable
     for dset_name, dset_opts in ds.items():
-        opts = dset_opts.get('load_function_options', {})
+        args = dset_opts.get('load_function_args', {})
+        kwargs = dset_opts.get('load_function_kwargs', {})
         fail_func = partial(unknown_function, dset_opts['load_function_name'])
-        func_name = getattr(_MODULE, dset_opts['load_function_name'], fail_func)
-        func = partial(func_name, **opts)
+        func_mod_name = dset_opts.get('load_function_module', None)
+        if func_mod_name:
+            func_mod = importlib.import_module(func_mod_name)
+        else:
+            func_mod = _MODULE
+        func_name = getattr(func_mod, dset_opts['load_function_name'], fail_func)
+        func = partial(func_name, *args, **kwargs)
         dset_opts['load_function'] = func
 
     return ds
@@ -310,44 +309,49 @@ def unknown_function(args, **kwargs):
     """Placeholder for unknown function_name"""
     raise Exception(f"Unknown function: {args}, {kwargs}")
 
-def write_datasets(path=None, filename="datasets.json", indent=4, sort_keys=True):
-    """Write a serialized (JSON) dataset file"""
+def write_datasets(ds, path=None, filename="datasets.json", indent=4, sort_keys=True):
+    """Write a serialized (JSON) dataset file
+
+    Converts the callable `load_function` into something that can be
+    serialized to json"""
     if path is None:
         path = _MODULE_DIR
     else:
         path = pathlib.Path(path)
-
-    ds = available_datasets.copy()
     # copy, adjusting non-serializable items
     for key, entry in ds.items():
+        action = entry.get('action', 'fetch_and_process')
         func = entry.get('load_function', None)
         if func is None:
-            func = partial(new_dataset, dataset_name=key)
+            if action == 'fetch_and_process':
+                func = partial(new_dataset, dataset_name=key)
+            elif action == 'generate':
+                raise Exception('must specify generation function')
+            else:
+                raise Exception(f'Unknown action: {action}')
         else:
             del(entry['load_function'])
-        entry['load_function_name'] = func.func.__name__
-        entry['load_function_options'] = func.keywords
+        entry['load_function_module'] = ".".join(jfi.get_func_name(func.func)[0])
+        entry['load_function_name'] = jfi.get_func_name(func.func)[1]
+        entry['load_function_args'] = func.args
+        entry['load_function_kwargs'] = func.keywords
+
     with open(path / filename, 'w') as fw:
         json.dump(ds, fw, indent=indent, sort_keys=sort_keys)
 
-def sync_datasets():
-    """Make sure the internal and on-disk dataset lists are in sync"""
-    global available_datasets
-
-    write_datasets()
-    available_datasets = read_datasets()
-
-def add_dataset_by_urllist(dataset_name, url_list):
+def add_dataset_by_urllist(dataset_name, url_list, action="fetch_and_process"):
     """Add a new dataset by specifying a url_list
 
+    action: {'fetch_and_process', 'generate'}
+        Whether to download (natural data) or generate (synthetic data) this dataset
     url_list is a list of dicts keyed by:
         * url, hash_type, hash_value, name, file_name
     """
-    global available_datasets
 
-    available_datasets[dataset_name] = {'url_list': url_list}
-    sync_datasets()
-    return available_datasets[dataset_name]
+    dataset_list = read_datasets()
+    dataset_list[dataset_name] = {'url_list': url_list, 'action': action}
+    write_datasets(dataset_list)
+    return dataset_list[dataset_name]
 
 def add_dataset_metadata(dataset_name, from_file=None, from_str=None, kind='DESCR'):
     """Add metadata to a dataset
@@ -356,14 +360,12 @@ def add_dataset_metadata(dataset_name, from_file=None, from_str=None, kind='DESC
     from_str: create metadata entry from this string
     kind: {'DESCR', 'LICENSE'}
     """
-    global available_datasets
-
     filename_map = {
         'DESCR': f'{dataset_name}.readme',
         'LICENSE': f'{dataset_name}.license',
     }
-
-    if dataset_name not in available_datasets:
+    ds_list = read_datasets()
+    if dataset_name not in ds_list:
         raise Exception(f'No such dataset: {dataset_name}')
 
     if kind not in filename_map:
@@ -380,65 +382,99 @@ def add_dataset_metadata(dataset_name, from_file=None, from_str=None, kind='DESC
     with open(_MODULE_DIR / filename_map[kind], 'w') as fw:
         fw.write(meta_txt)
 
-def add_dataset_function(dataset_name, function):
-    """Add a load function for the given dataset_name"""
-    global available_datasets
+def add_synthset(dataset_name, function):
+    """Add a synthetic dataset"""
+    
+    ds_list = read_datasets()
+    ds_list[dataset_name] = {'action': 'generate'}
+    ds_list[dataset_name]['load_function'] = partial(function)
+    write_datasets(ds_list)
+    
+    return ds_list[dataset_name]
 
-    available_datasets[dataset_name]['load_function'] = partial(function)
-    sync_datasets()
-    return available_datasets[dataset_name]
+
+def add_dataset_function(dataset_name, function, action='fetch_and_process'):
+    """Add a load function for the given dataset_name
+
+    action: {'fetch_and_process', 'generate'}
+        if `fetch_and_process`, data will be downloaded and then processed with this function.
+        if `generate`, this function will be used to generate the data, and the function
+            docstring will be used as the dataset description
+    """
+    ds_list = read_datasets()
+    
+    ds_list[dataset_name]['load_function'] = partial(function)
+    ds_list[dataset_name]['action'] = action
+    write_datasets(ds_list)
+    
+    return ds_list[dataset_name]
+
+def generate_synthetic_dataset(dataset_name, func):
+    """Generate synthetic dataset options dict from a (partial) function"""
+    func = partial(func)
+    tup = func()
+    if len(tup) == 2:
+        X, t = tup
+        metadata = {}
+    elif len(tup) == 3:
+        X, t, metadata = tup
+    else:
+        raise Exception(f"Unexpected number of parameters from {func}. Got {len(tup)}.")
+    metadata['dataset_name'] = dataset_name
+    metadata['generator_function'] = jfi.get_func_name(func.func)
+    metadata['generator_args'] = func.args
+    metadata['generator_kwargs'] = func.keywords
+    fqfunc, invocation =  jfi.format_signature(func.func, *func.args, **func.keywords)
+    descr_txt =  f'Synthetic data produced by: {fqfunc}\n\n>>> {invocation}\n\n>>> help({func.func.__name__})\n\n{func.func.__doc__}'
+
+    ds_opts = {
+        'dataset_name': dataset_name,
+        'data': X,
+        'target': t,
+        'descr_txt': descr_txt,
+        'metadata': metadata
+    }
+    return ds_opts
 
 @jlmem.cache
-def load_dataset(dataset_name, return_X_y=False, force=False, **kwargs):
+def load_dataset(dataset_name, return_X_y=False, map_labels=False, **kwargs):
 
     '''Loads a scikit-learn style dataset
 
+    Parameters
+    ----------
     dataset_name:
         Name of dataset to load. see `available_datasets.keys()` for the current list
+    map_labels: boolean
+        If true, target will be converted to an integer vector, and a label_map
+        will be added to the metadata mapping back to the original labels)
     return_X_y: boolean, default=False
         if True, returns (data, target) instead of a Bunch object
-    force: boolean
-        if True, do complete fetch/process cycle. If False, will use cached object (if present)
     '''
-
-    if dataset_name not in available_datasets:
+    dataset_list = read_datasets()
+    
+    if dataset_name not in dataset_list:
         raise Exception(f'Unknown Dataset: {dataset_name}')
-    fetch_and_unpack(dataset_name)
-    dset = available_datasets[dataset_name]['load_function'](**kwargs)
+    action = dataset_list[dataset_name]['action']
+    if action == 'generate':
+        func = partial(dataset_list[dataset_name]['load_function'], **kwargs)
+        dset_opts = generate_synthetic_dataset(dataset_name, func)
+    elif action == 'fetch_and_process':
+        fetch_and_unpack(dataset_name)
+        dset_opts = dataset_list[dataset_name]['load_function'](**kwargs)
+    else:
+        raise Exception(f"Unknown action: {action} for dataset: {dataset}")
+    dset = process_dataset(**dset_opts)
 
+    if map_labels:
+        mapped_target, label_map = normalize_labels(dset.target)
+        dset.metadata['label_map'] = label_map
+        dset.target = mapped_target
+    
     if return_X_y:
         return dset.data, dset.target
-    
+
     return dset
-
-def normalize_labels(target):
-    """Map an arbitary target vector to an integer vector
-
-    Returns
-    -------
-    tuple: (mapped_target, label_map)
-
-    where:
-        mapped_target: integer vector of same shape as target
-        label_map: dict mapping mapped_target integers to original labels
-
-    Examples
-    --------
-    >>> target = np.array(['a','b','c','a'])
-    >>> mapped_target, label_map = normalize_labels(target)
-    >>> mapped_target
-    array([0, 1, 2, 0])
-
-    The following should always be true
-
-    >>> all(np.vectorize(label_map.get)(mapped_target) == target)
-    True
-    """
-    label_map = {k:v for k, v in enumerate(np.unique(target))}
-    label_map_inv = {v:k for k, v in label_map.items()}
-    mapped_target = np.vectorize(label_map_inv.get)(target)
-
-    return mapped_target, label_map
 
 def process_dataset(data=None, target=None, metadata=None,
                     license_txt=None, descr_txt=None, *, dataset_name):
@@ -476,248 +512,7 @@ def process_dataset(data=None, target=None, metadata=None,
 
     return dset
 
-#############################################
-# Add project-specific import functions
-#############################################
+def available_datasets():
+    """Returns the list of available datasets"""
+    return list(read_datasets().keys())
 
-def load_coil_20(dataset_name='coil-20'):
-    """ Load the coil 20 dataset
-
-    Additional metadata:
-        filename: original filename
-        rotation: rotation of target (extracted from filename)
-    """
-
-    metadata = {}
-    feature_vectors = []
-    glob_path = interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
-    filelist = glob.glob(str(glob_path))
-
-    metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
-    metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
-
-    for i, filename in enumerate(filelist):
-        im = cv2.imread(filename, cv2.COLORSPACE_GRAY)
-        feature_vectors.append(im.flatten())
-
-    target = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
-    data = np.vstack(feature_vectors)
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-        'metadata': metadata
-    }
-
-    return process_dataset(**dset_opts)
-
-def load_coil_100(dataset_name='coil-100'):
-    """ Load the coil 100 dataset
-
-    Additional metadata:
-        filename: original filename
-        rotation: rotation of target (extracted from filename)
-    """
-
-    metadata = {}
-    feature_vectors = []
-    glob_path = interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
-    filelist = glob.glob(str(glob_path))
-
-    metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
-    metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
-
-    for filename in filelist:
-        im = cv2.imread(filename)
-        feature_vectors.append(im.flatten())
-
-    target = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
-    data = np.vstack(feature_vectors)
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-        'metadata': metadata
-    }
-
-    return process_dataset(**dset_opts)
-
-def load_mnist(dataset_name='mnist', kind='train'):
-    '''
-    Load the MNIST dataset (or a compatible variant; e.g. F-MNIST)
-
-    dataset_name: {'mnist', 'f-mnist'}
-        Which variant to load
-    kind: {'train', 'test'}
-        Dataset comes pre-split into training and test data.
-        Indicates which dataset to load
-
-    '''
-    if kind == 'test':
-        kind = 't10k'
-
-    label_path = interim_data_path / dataset_name / f"{kind}-labels-idx1-ubyte"
-    with open(label_path, 'rb') as fd:
-        target = np.frombuffer(fd.read(), dtype=np.uint8, offset=8)
-    dataset_path = interim_data_path / dataset_name / f"{kind}-images-idx3-ubyte"
-    with open(dataset_path, 'rb') as fd:
-        data = np.frombuffer(fd.read(), dtype=np.uint8,
-                                       offset=16).reshape(len(target), 784)
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-    }
-    return process_dataset(**dset_opts)
-
-def load_orl_faces(dataset_name='orl-faces'):
-    """Load the ORL Faces dataset
-
-        Consists of 92x112, 8-bit greyscale images of 40 total subjects
-    """
-    extract_dir = interim_data_path / dataset_name
-
-    metadata = {}
-    filename = []
-    target = []
-    feature_vectors = []
-    for subject_dir in extract_dir.iterdir():
-        if subject_dir.is_dir():
-            subject = subject_dir.name[1:]
-            for file in subject_dir.iterdir():
-                filename.append(file.name)
-                target.append(subject)
-                im = cv2.imread(str(file), cv2.COLORSPACE_GRAY)
-                feature_vectors.append(im.flatten())
-    target = np.array(target)
-    data = np.vstack(feature_vectors)
-    metadata['filenames'] = np.array(filename)
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-        'metadata': metadata
-    }
-    return process_dataset(**dset_opts)
-
-def load_hiva(dataset_name='hiva', kind='train'):
-    """Load the HIVA dataset
-
-    kind: {'train', 'test', 'valid'}
-        if 'test' or 'valid', empty labels will be generated.
-        Labels are generated only if 'train' is specified
-    """
-    if kind not in ['train', 'test', 'valid']:
-        raise Exception(f"Unknown kind: {kind}")
-
-    hiva_dir = interim_data_path / dataset_name / 'HIVA'
-
-    data = np.genfromtxt(hiva_dir / f'hiva_{kind}.data')
-
-    if kind == 'train':
-        labels = np.genfromtxt(hiva_dir / f'hiva_{kind}.labels')
-    else:
-        labels = np.zeros(data.shape[0])
-
-    data = data
-    target = labels
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-    }
-    return process_dataset(**dset_opts)
-
-def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
-    '''
-    Load the Frey Faces dataset
-
-    Note, there are no labels associated with this dataset; i.e.
-    `target` is a vector of all zeros
-    '''
-
-    frey_file = interim_data_path / dataset_name / filename
-
-    ff = loadmat(frey_file, squeeze_me=True, struct_as_record=False)
-    ff = ff["ff"].T
-
-    data = ff
-    target = np.zeros(ff.shape[0])
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-    }
-    return process_dataset(**dset_opts)
-
-def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
-    """
-    kind: {'test', 'train', 'all'}, default 'all'
-    numeric_labels: boolean (default: True)
-        if set, target is a vector of integers, and label_map is created in the metadata
-        to reflect the mapping to the string targets
-    """
-
-    metadata = None
-    untar_dir = interim_data_path / dataset_name
-    unpack_dir = untar_dir / 'lvq_pak-3.1'
-
-    if kind == 'train':
-        data, target = read_space_delimited(unpack_dir / 'ex1.dat', skiprows=[0,1])
-    elif kind == 'test':
-        data, target = read_space_delimited(unpack_dir / 'ex2.dat', skiprows=[0])
-    elif kind == 'all':
-        data1, target1 = read_space_delimited(unpack_dir / 'ex1.dat', skiprows=[0,1])
-        data2, target2 = read_space_delimited(unpack_dir / 'ex2.dat', skiprows=[0])
-        data = np.vstack((data1, data2))
-        target = np.append(target1, target2)
-    else:
-        raise Exception(f'Unknown kind: {kind}')
-
-    if numeric_labels:
-        metadata = {}
-        mapped_target, label_map = normalize_labels(target)
-        metadata['label_map'] = label_map
-        target = mapped_target
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-        'metadata': metadata
-    }
-    return process_dataset(**dset_opts)
-
-def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train'):
-    """Load the shuttle dataset
-
-    This is a 9-dimensional dataset with class labels split into training and test sets
-
-    kind: {'train', 'test'}
-    """
-    filename_map = {
-        'train': f'shuttle.trn',
-        'test': f'shuttle.tst',
-    }
-
-    extract_dir = interim_data_path / dataset_name
-
-    data, target = read_space_delimited(extract_dir / filename_map[kind])
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-    }
-    return process_dataset(**dset_opts)
-
-#############################################
-# End project-specific import functions
-#############################################
-
-available_datasets = read_datasets()
