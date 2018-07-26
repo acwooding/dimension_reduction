@@ -1,5 +1,7 @@
 from  itertools import product
+import joblib.func_inspect as jfi
 import numpy as np
+from functools import partial
 from sklearn.utils import check_random_state
 
 def _combn(iterable, repeat):
@@ -21,8 +23,8 @@ def _parameterized_swiss_roll(t, random_state=None, k=21.0):
     t = np.squeeze(t)
     return np.concatenate((x,y,z)).T, t
 
-
-def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube", **kwargs):
+def synthetic_data(n_points=1000, noise=None,
+                   random_state=None, kind="unit_cube", **kwargs):
     """Make a synthetic dataset
 
     A sample dataset generators in the style of sklearn's
@@ -31,7 +33,7 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
 
     Parameters
     ----------
-    kind: {'unit_cube', 'broken_swiss_roll', 'difficult'}
+    kind: {'unit_cube', 'broken_swiss_roll', 'twinpeaks', 'difficult'}
         The type of synthetic dataset
     n_points : int, optional (default=1000)
         The total number of points generated.
@@ -49,6 +51,11 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
 
     """
     generator = check_random_state(random_state)
+    metadata = {
+        "synthetic_type": kind,
+        "n_points": n_points,
+        "noise": noise
+    }
 
     if kind == 'unit_cube':
         x = 2 * (generator.rand(1, n_points) - 0.5)
@@ -57,6 +64,16 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
         X = np.concatenate((x, y, z))
         X = X.T
         t = np.linalg.norm(X, axis=1)
+    elif kind == 'twinpeaks':
+        inc = 1.5 / np.sqrt(n_points)
+        x = np.arange(-1, 1, inc)
+        xy = 1 - 2 * generator.rand(2, n_points)
+        z = np.sin(np.pi * xy[0, :]) * np.tanh(3 * xy[1, :])
+        X = np.vstack([xy, z]).T #  + noise * generator.randn(n_points, 3)
+        #X[:, 2] = X[:, 2] * 1
+        # t = xy.T
+        t = 1-z
+
     elif kind == 'broken_swiss_roll':
         np1, np2 = int(np.ceil(n_points / 2.0)), int(np.floor(n_points / 2.0))
         t1 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(1, np1) * 0.4))
@@ -67,7 +84,7 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
 
         X, t = np.concatenate((X1, X2)), np.concatenate((t1, t2))
     elif kind == 'difficult':
-        n_dims = 5
+        n_dims = kwargs.pop("n_dims", 5)
         points_per_dim = int(np.round(float(n_points ** (1.0 / n_dims))))
         l = np.linspace(0, 1, num=points_per_dim)
         t = np.array(list(_combn(l, n_dims)))
@@ -76,6 +93,7 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
         tt = 1 + np.round(t)
         # Generate labels for dataset (2x2x2x2x2 checkerboard pattern)
         t = np.remainder(tt.sum(axis=1), 2)
+        metadata['n_dims'] = n_dims
 
     else:
         raise Exception(f"Unknown synthetic dataset type: {kind}")
@@ -83,7 +101,7 @@ def synthetic_data(n_points=1000, noise=None, random_state=None, kind="unit_cube
     if noise is not None:
         X += noise * generator.randn(*X.shape)
 
-    return X, t
+    return X, t, metadata
 
 def sample_sphere_surface(n_points, n_dim=3, random_state=0):
     '''Sample on the surface of a sphere
@@ -101,8 +119,11 @@ def sample_sphere_surface(n_points, n_dim=3, random_state=0):
     vec = vec.transpose()
     rgb = (vec + 1.0) / 2.0  # scale to a 0...1 RGB value
     color = (rgb[:, 0] + rgb[:, 1] + rgb[:, 2]) / 3.0
-
-    return vec, color
+    metadata = {
+        "n_points": n_points,
+        "n_dim": n_dim,
+    }
+    return vec, color, metadata
 
 def sample_ball(n_points, n_dim=3, random_state=0):
     '''Sample from a unit ball
@@ -119,7 +140,11 @@ def sample_ball(n_points, n_dim=3, random_state=0):
             labels.append(np.linalg.norm(pt))
     X = np.array(points)
     t = np.array(labels)
-    return X, t
+    metadata = {
+        "n_points": n_points,
+        "n_dim": n_dim,
+    }
+    return X, t, metadata
 
 def helix(n_points=1000, random_state=None, noise=None,
           n_twists=8, major_radius=2.0, minor_radius=1.0):
@@ -159,4 +184,12 @@ def helix(n_points=1000, random_state=None, noise=None,
     t = np.linalg.norm(X, axis=1)
     if noise:
         X += noise * generator.randn(n_points, 3)
-    return X, t
+
+    metadata = {
+        "n_points": n_points,
+        "noise": noise,
+        "n_twists": n_twists,
+        "major_radius": major_radius,
+        "minor_radius": minor_radius
+    }
+    return X, t, metadata
