@@ -383,18 +383,7 @@ def add_dataset_metadata(dataset_name, from_file=None, from_str=None, kind='DESC
     with open(_MODULE_DIR / filename_map[kind], 'w') as fw:
         fw.write(meta_txt)
 
-def add_synthset(dataset_name, function):
-    """Add a synthetic dataset"""
-    
-    ds_list = read_datasets()
-    ds_list[dataset_name] = {'action': 'generate'}
-    ds_list[dataset_name]['load_function'] = partial(function)
-    write_datasets(ds_list)
-    
-    return ds_list[dataset_name]
-
-
-def add_dataset_function(dataset_name, function, action='fetch_and_process'):
+def add_dataset_from_function(dataset_name, function, action='fetch_and_process'):
     """Add a load function for the given dataset_name
 
     action: {'fetch_and_process', 'generate'}
@@ -403,15 +392,30 @@ def add_dataset_function(dataset_name, function, action='fetch_and_process'):
             docstring will be used as the dataset description
     """
     ds_list = read_datasets()
-    
+    if ds_list.get(dataset_name) is None:
+        ds_list[dataset_name] = {}
     ds_list[dataset_name]['load_function'] = partial(function)
     ds_list[dataset_name]['action'] = action
     write_datasets(ds_list)
-    
+
     return ds_list[dataset_name]
 
-def generate_synthetic_dataset(dataset_name, func):
-    """Generate synthetic dataset options dict from a (partial) function"""
+def generate_synthetic_dataset_opts(dataset_name, func, use_docstring=True):
+    """Generate synthetic dataset options dict from a (partial) function
+
+    dataset_name: string
+        dataset name
+    func: partial function returning 2- or 3-tuple
+        (X, t) or (X, t, metadata)
+    use_docstring: boolean
+        If True, generate DECSR text consisting of the complete function signature
+        and docstring of underlying generation function.
+
+    Returns
+    -------
+    Dataset options dictionary conforming with the kwarg call signature of `process_dataset`
+
+    """
     func = partial(func)
     tup = func()
     if len(tup) == 2:
@@ -422,11 +426,11 @@ def generate_synthetic_dataset(dataset_name, func):
     else:
         raise Exception(f"Unexpected number of parameters from {func}. Got {len(tup)}.")
     metadata['dataset_name'] = dataset_name
-    metadata['generator_function'] = jfi.get_func_name(func.func)
-    metadata['generator_args'] = func.args
-    metadata['generator_kwargs'] = func.keywords
-    fqfunc, invocation =  jfi.format_signature(func.func, *func.args, **func.keywords)
-    descr_txt =  f'Synthetic data produced by: {fqfunc}\n\n>>> {invocation}\n\n>>> help({func.func.__name__})\n\n{func.func.__doc__}'
+    if use_docstring:
+        fqfunc, invocation =  jfi.format_signature(func.func, *func.args, **func.keywords)
+        descr_txt =  f'Synthetic data produced by: {fqfunc}\n\n>>> {invocation}\n\n>>> help({func.func.__name__})\n\n{func.func.__doc__}'
+    else:
+        descr_txt = None
 
     ds_opts = {
         'dataset_name': dataset_name,
@@ -453,25 +457,27 @@ def load_dataset(dataset_name, return_X_y=False, map_labels=False, **kwargs):
         if True, returns (data, target) instead of a Bunch object
     '''
     dataset_list = read_datasets()
-    
+
     if dataset_name not in dataset_list:
         raise Exception(f'Unknown Dataset: {dataset_name}')
     action = dataset_list[dataset_name]['action']
     if action == 'generate':
         func = partial(dataset_list[dataset_name]['load_function'], **kwargs)
-        dset_opts = generate_synthetic_dataset(dataset_name, func)
+        dset_opts = generate_synthetic_dataset_opts(dataset_name, func)
     elif action == 'fetch_and_process':
         fetch_and_unpack(dataset_name)
         dset_opts = dataset_list[dataset_name]['load_function'](**kwargs)
     else:
-        raise Exception(f"Unknown action: {action} for dataset: {dataset}")
+        raise Exception(f"Unknown action: {action} for dataset: {dataset_name}")
     dset = process_dataset(**dset_opts)
 
     if map_labels:
+        if dset.metadata.get('label_map', None) is not None:
+            raise Exception("label_map already present in dataset")
         mapped_target, label_map = normalize_labels(dset.target)
         dset.metadata['label_map'] = label_map
         dset.target = mapped_target
-    
+
     if return_X_y:
         return dset.data, dset.target
 
@@ -513,7 +519,14 @@ def process_dataset(data=None, target=None, metadata=None,
 
     return dset
 
-def available_datasets():
-    """Returns the list of available datasets"""
-    return list(read_datasets().keys())
+def available_datasets(action=None):
+    """Returns the list of available datasets
 
+    action: None, or one of {'fetch_and_process', 'generate'}
+        If None, return all datasets
+        Otherwise, filter results to datasets with the indicated `action`
+    """
+    if action is None:
+        return list(read_datasets().keys())
+
+    return [k for k, v in read_datasets().items() if v.get('action', None) == action]

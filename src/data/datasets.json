@@ -1,4 +1,27 @@
 {
+    "ball": {
+        "action": "generate",
+        "load_function_args": [
+            1000
+        ],
+        "load_function_kwargs": {
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "sample_ball"
+    },
+    "broken-swiss-roll": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "broken_swiss_roll",
+            "n_points": 1000,
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data"
+    },
     "coil-100": {
         "action": "fetch_and_process",
         "hash_type": "sha1",
@@ -20,6 +43,18 @@
         "load_function_name": "load_coil_20",
         "load_function_options": {},
         "url": "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.tar.gz"
+    },
+    "difficult": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "difficult",
+            "n_points": 6000,
+            "noise": 0.02,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data"
     },
     "f-mnist": {
         "action": "fetch_and_process",
@@ -80,6 +115,16 @@
         },
         "load_function_module": "sklearn.datasets.samples_generator",
         "load_function_name": "make_blobs"
+    },
+    "helix": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "helix"
     },
     "hiva": {
         "action": "fetch_and_process",
@@ -236,5 +281,17 @@
         },
         "load_function_module": "sklearn.datasets.samples_generator",
         "load_function_name": "make_swiss_roll"
+    },
+    "twinpeaks": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "twinpeaks",
+            "n_points": 3000,
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data"
     }
 }
