@@ -101,6 +101,7 @@ def load_mnist(dataset_name='mnist', kind='train', metadata=None):
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata,
     }
     return dset_opts
 
@@ -162,6 +163,7 @@ def load_hiva(dataset_name='hiva', kind='train', metadata=None):
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata,
     }
     return dset_opts
 
@@ -185,6 +187,7 @@ def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat', meta
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata
     }
     return dset_opts
 
@@ -246,5 +249,6 @@ def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train', metadata=
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata,
     }
     return dset_opts
