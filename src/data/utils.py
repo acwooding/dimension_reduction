@@ -78,7 +78,7 @@ def unpack(filename, dst_dir=None, create_dst=True):
         outfile, outmode = path[:-3], 'wb'
     elif path.endswith('.Z'):
         logger.warning(".Z files are only supported on systems that ship with gzip. Trying...")
-        os.system(f'gzip -d {path}')
+        os.system(f'gzip -f -d {path}')
         opener, mode = open, 'rb'
         path = path[:-2]
         outfile, outmode = path, 'wb'
