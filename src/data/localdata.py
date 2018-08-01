@@ -11,15 +11,15 @@ from .utils import read_space_delimited, normalize_labels
 __all__ = ['load_coil_20', 'load_coil_100', 'load_frey_faces', 'load_hiva',
            'load_lvq_pak', 'load_mnist', 'load_orl_faces', 'load_shuttle_statlog']
 
-def load_coil_20(dataset_name='coil-20'):
+def load_coil_20(dataset_name='coil-20', metadata=None):
     """ Load the coil 20 dataset
 
     Additional metadata:
         filename: original filename
         rotation: rotation of target (extracted from filename)
     """
-
-    metadata = {}
+    if metadata is None:
+        metadata = {}
     feature_vectors = []
     glob_path = interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
     filelist = glob.glob(str(glob_path))
