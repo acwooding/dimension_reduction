@@ -126,7 +126,7 @@ def load_orl_faces(dataset_name='orl-faces', metadata=None):
                 feature_vectors.append(im.flatten())
     target = np.array(target)
     data = np.vstack(feature_vectors)
-    metadata['filenames'] = np.array(filename)
+    metadata['filename'] = np.array(filename)
 
     dset_opts = {
         'dataset_name': dataset_name,
