@@ -253,11 +253,12 @@ def _np_set_difference(array1, array2):
     '''
     Compute the row by row set difference of two 2d arrays.
 
-    >>> np_set_difference(np.array([[0, 1, 2, 3],\
-                                    [1, 0, 3, 4]]),
+    >>> _np_set_difference(np.array([[0, 1, 2, 3],\
+                                    [1, 0, 3, 4]]),\
                           np.array([[0, 1, 4, 5],\
                                     [2, 2, 3, 4]]))
-    array([[2, 3], [0, 1]])
+    array([[2, 3],
+           [0, 1]])
     '''
     set_diff = []
     for i, row in enumerate(array1):
