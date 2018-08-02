@@ -11,15 +11,15 @@ from .utils import read_space_delimited, normalize_labels
 __all__ = ['load_coil_20', 'load_coil_100', 'load_frey_faces', 'load_hiva',
            'load_lvq_pak', 'load_mnist', 'load_orl_faces', 'load_shuttle_statlog']
 
-def load_coil_20(dataset_name='coil-20'):
+def load_coil_20(dataset_name='coil-20', metadata=None):
     """ Load the coil 20 dataset
 
     Additional metadata:
         filename: original filename
         rotation: rotation of target (extracted from filename)
     """
-
-    metadata = {}
+    if metadata is None:
+        metadata = {}
     feature_vectors = []
     glob_path = interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
     filelist = glob.glob(str(glob_path))
@@ -43,7 +43,7 @@ def load_coil_20(dataset_name='coil-20'):
 
     return dset_opts
 
-def load_coil_100(dataset_name='coil-100'):
+def load_coil_100(dataset_name='coil-100', metadata=None):
     """ Load the coil 100 dataset
 
     Additional metadata:
@@ -51,7 +51,8 @@ def load_coil_100(dataset_name='coil-100'):
         rotation: rotation of target (extracted from filename)
     """
 
-    metadata = {}
+    if metadata is None:
+        metadata = {}
     feature_vectors = []
     glob_path = interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
     filelist = glob.glob(str(glob_path))
@@ -75,7 +76,7 @@ def load_coil_100(dataset_name='coil-100'):
 
     return dset_opts
 
-def load_mnist(dataset_name='mnist', kind='train'):
+def load_mnist(dataset_name='mnist', kind='train', metadata=None):
     '''
     Load the MNIST dataset (or a compatible variant; e.g. F-MNIST)
 
@@ -100,17 +101,19 @@ def load_mnist(dataset_name='mnist', kind='train'):
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata,
     }
     return dset_opts
 
-def load_orl_faces(dataset_name='orl-faces'):
+def load_orl_faces(dataset_name='orl-faces', metadata=None):
     """Load the ORL Faces dataset
 
         Consists of 92x112, 8-bit greyscale images of 40 total subjects
     """
     extract_dir = interim_data_path / dataset_name
 
-    metadata = {}
+    if metadata is None:
+        metadata = {}
     filename = []
     target = []
     feature_vectors = []
@@ -124,7 +127,7 @@ def load_orl_faces(dataset_name='orl-faces'):
                 feature_vectors.append(im.flatten())
     target = np.array(target)
     data = np.vstack(feature_vectors)
-    metadata['filenames'] = np.array(filename)
+    metadata['filename'] = np.array(filename)
 
     dset_opts = {
         'dataset_name': dataset_name,
@@ -134,7 +137,7 @@ def load_orl_faces(dataset_name='orl-faces'):
     }
     return dset_opts
 
-def load_hiva(dataset_name='hiva', kind='train'):
+def load_hiva(dataset_name='hiva', kind='train', metadata=None):
     """Load the HIVA dataset
 
     kind: {'train', 'test', 'valid'}
@@ -160,10 +163,11 @@ def load_hiva(dataset_name='hiva', kind='train'):
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata,
     }
     return dset_opts
 
-def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
+def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat', metadata=None):
     '''
     Load the Frey Faces dataset
 
@@ -183,10 +187,11 @@ def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat'):
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata
     }
     return dset_opts
 
-def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
+def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True, metadata=None):
     """
     kind: {'test', 'train', 'all'}, default 'all'
     numeric_labels: boolean (default: True)
@@ -194,7 +199,6 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
         to reflect the mapping to the string targets
     """
 
-    metadata = None
     untar_dir = interim_data_path / dataset_name
     unpack_dir = untar_dir / 'lvq_pak-3.1'
 
@@ -211,7 +215,8 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
         raise Exception(f'Unknown kind: {kind}')
 
     if numeric_labels:
-        metadata = {}
+        if metadata is None:
+            metadata = {}
         mapped_target, label_map = normalize_labels(target)
         metadata['label_map'] = label_map
         target = mapped_target
@@ -224,7 +229,7 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True):
     }
     return dset_opts
 
-def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train'):
+def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train', metadata=None):
     """Load the shuttle dataset
 
     This is a 9-dimensional dataset with class labels split into training and test sets
@@ -244,5 +249,6 @@ def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train'):
         'dataset_name': dataset_name,
         'data': data,
         'target': target,
+        'metadata': metadata,
     }
     return dset_opts
