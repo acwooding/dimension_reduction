@@ -184,4 +184,4 @@ class Dataset(Bunch):
         dataset_fq = data_path / dataset_filename
         with open(dataset_fq, 'wb') as fo:
             joblib.dump(self, fo)
-        logger.debug(f'Wrote dataset to {dataset_fq}')
+        logger.debug(f'Wrote {dataset_filename}')

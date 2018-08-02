@@ -89,7 +89,7 @@ def unpack(filename, dst_dir=None, create_dst=True):
 
     with opener(path, mode) as f_in:
         if archive:
-            logger.info(f"Extracting {filename.name}")
+            logger.debug(f"Extracting {filename.name}")
             f_in.extractall(path=dst_dir)
         else:
             outfile = pathlib.Path(outfile).name
