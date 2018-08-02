@@ -482,37 +482,66 @@ def generate_synthetic_dataset_opts(dataset_name, func, use_docstring=True):
     }
     return ds_opts
 
-def load_dataset(dataset_name, return_X_y=False, map_labels=False, **kwargs):
+def load_dataset(dataset_name, return_X_y=False, map_labels=False, force=False,
+                 cache_dir=None, **kwargs):
 
-    '''Loads a scikit-learn style dataset
+    '''Loads a Dataset object by name.
+
+    Dataset will be cached after creation. Subsequent calls with matching call
+    signature will return this cached object.
 
     Parameters
     ----------
     dataset_name:
-        Name of dataset to load. see `available_datasets.keys()` for the current list
+        Name of dataset to load. see `available_datasets()` for the current list
+    force: boolean
+        If True, always regenerate the dataset. If false, a cached result can
+        be returned (if available)
+    cache_dir: path
+        Directory to search for cache files
     map_labels: boolean
-        If true, target will be converted to an integer vector, and a label_map
-        will be added to the metadata mapping back to the original labels)
+        If true, target will be converted to an integer vector, and a `label_map`
+        dictionary will be added to the dataset metadata)
     return_X_y: boolean, default=False
         if True, returns (data, target) instead of a `Dataset` object
     '''
+    if cache_dir is None:
+        cache_dir = interim_data_path
+        
     dataset_list = read_datasets()
-
     if dataset_name not in dataset_list:
         raise Exception(f'Unknown Dataset: {dataset_name}')
-    action = dataset_list[dataset_name]['action']
-    if action == 'generate':
-        func = partial(dataset_list[dataset_name]['load_function'], **kwargs)
-        dset_opts = generate_synthetic_dataset_opts(dataset_name, func)
-    elif action == 'fetch_and_process':
-        fetch_and_unpack(dataset_name)
-        metadata = get_default_metadata(dataset_name=dataset_name)
-        supplied_metadata = kwargs.pop('metadata', {})
-        kwargs['metadata'] = {**metadata, **supplied_metadata}
-        dset_opts = dataset_list[dataset_name]['load_function'](**kwargs)
-    else:
-        raise Exception(f"Unknown action: {action} for dataset: {dataset_name}")
-    dset = Dataset(**dset_opts)
+
+    cached_meta = {
+        'dataset_name': dataset_name,
+        'map_labels': map_labels,
+        **kwargs
+    }
+    meta_hash = joblib.hash(cached_meta, hash_name='sha1')
+    
+    dset = None
+    if force is False:
+        try:
+            dset = Dataset.load(meta_hash, data_path=cache_dir)
+            logger.debug(f"Returning cached dataset: {meta_hash}")
+        except FileNotFoundError:
+            logger.debug("No Cached Dataset found. Re-creating")
+            
+    if dset is None:
+        action = dataset_list[dataset_name]['action']
+        if action == 'generate':
+            func = partial(dataset_list[dataset_name]['load_function'], **kwargs)
+            dset_opts = generate_synthetic_dataset_opts(dataset_name, func)
+        elif action == 'fetch_and_process':
+            fetch_and_unpack(dataset_name)
+            metadata = get_default_metadata(dataset_name=dataset_name)
+            supplied_metadata = kwargs.pop('metadata', {})
+            kwargs['metadata'] = {**metadata, **supplied_metadata}
+            dset_opts = dataset_list[dataset_name]['load_function'](**kwargs)
+        else:
+            raise Exception(f"Unknown action: {action} for dataset: {dataset_name}")
+        dset = Dataset(**dset_opts)
+        dset.dump(data_path=cache_dir, file_base=meta_hash)
 
     if map_labels:
         if dset.metadata.get('label_map', None) is not None:

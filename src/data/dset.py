@@ -6,6 +6,7 @@ import sys
 from sklearn.datasets.base import Bunch
 
 from ..paths import raw_data_path, processed_data_path
+from .utils import hash_function_map
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
@@ -124,13 +125,36 @@ class Dataset(Bunch):
             ds = joblib.load(fd)
         return ds
 
+    def get_data_hashes(self, exclude_list=None, hash_type='sha1'):
+        """Compute a the hash of data items
+
+        exclude_list: list or None
+            List of attributes to skip.
+            if None, skips ['metadata']
+
+        hash_type: {'sha1', 'md5', 'sha256'}
+            Algorithm to use for hashing
+        """
+        if exclude_list is None:
+            exclude_list = ['metadata']
+
+        ret = {'hash_type': hash_type}
+        for key, value in self.items():
+            if key in exclude_list:
+                continue
+            ret[f"{key}_hash"] = joblib.hash(value, hash_name=hash_type)
+        return ret
+
     def dump(self, file_base=None, data_path=None, hash_type='sha1',
-             force=True, create_dirs=True):
+             force=True, create_dirs=True, dump_metadata=True):
         """Dump a dataset.
 
         Note, this dumps a separate metadata structure, so that dataset
-        metadata be read without reading in the (possibly large) data itself
 
+        dump_metadata: boolean
+            If True, also dump a standalone copy of the metadata.
+            Useful for checking metadata without reading
+            in the (potentially large) dataset itself
         file_base: string
             Filename stem. By default, just the dataset name
         hash_type: {'sha1', 'md5'}
@@ -157,8 +181,8 @@ class Dataset(Bunch):
         dataset_filename = file_base + '.dataset'
         metadata_fq = data_path / metadata_filename
 
-        metadata['data_hash'] = joblib.hash(self.data, hash_name=hash_type)
-        metadata['target_hash'] = joblib.hash(self.target, hash_name=hash_type)
+        data_hashes = self.get_data_hashes(hash_type=hash_type)
+        self['metadata'] = {**self['metadata'], **data_hashes}
 
         # check for a cached version
         if metadata_fq.exists() and force is not True:
@@ -177,9 +201,11 @@ class Dataset(Bunch):
 
         if create_dirs:
             os.makedirs(metadata_fq.parent, exist_ok=True)
-        with open(metadata_fq, 'wb') as fo:
-            joblib.dump(metadata, fo)
-        logger.debug(f'Wrote metadata to {metadata_fq}')
+
+        if dump_metadata:
+            with open(metadata_fq, 'wb') as fo:
+                joblib.dump(metadata, fo)
+            logger.debug(f'Wrote {metadata_filename}')
 
         dataset_fq = data_path / dataset_filename
         with open(dataset_fq, 'wb') as fo:
