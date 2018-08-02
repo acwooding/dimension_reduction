@@ -507,7 +507,7 @@ def load_dataset(dataset_name, return_X_y=False, map_labels=False, force=False,
     '''
     if cache_dir is None:
         cache_dir = interim_data_path
-        
+
     dataset_list = read_datasets()
     if dataset_name not in dataset_list:
         raise Exception(f'Unknown Dataset: {dataset_name}')
@@ -518,15 +518,15 @@ def load_dataset(dataset_name, return_X_y=False, map_labels=False, force=False,
         **kwargs
     }
     meta_hash = joblib.hash(cached_meta, hash_name='sha1')
-    
+
     dset = None
     if force is False:
         try:
             dset = Dataset.load(meta_hash, data_path=cache_dir)
-            logger.debug(f"Returning cached dataset: {meta_hash}")
+            logger.debug(f"Found cached dataset for {dataset_name}: {meta_hash}")
         except FileNotFoundError:
             logger.debug("No Cached Dataset found. Re-creating")
-            
+
     if dset is None:
         action = dataset_list[dataset_name]['action']
         if action == 'generate':
