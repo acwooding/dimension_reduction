@@ -34,6 +34,9 @@ jobs:
             conda env create --quiet -f environment.yml;
             source activate dimension_reduction;
             echo "source activate dimension_reduction" >> $BASH_ENV;
+      - run:
+          command: |
+            mkdir test-reports
 
       - save_cache:
           key: pip-cache
@@ -56,7 +59,10 @@ jobs:
           command: |
             source activate dimension_reduction
             cd src
-            pytest --doctest-modules --doctest-continue-on-failure --verbose --cov
+            pytest --doctest-modules --doctest-continue-on-failure --verbose --cov --junitxml=test-reports/junit.xml
+
+      - store_test_results:
+          path: test-reports
 
       - store_artifacts:
           path: test-reports
