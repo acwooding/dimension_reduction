@@ -249,24 +249,36 @@ def _trustworthiness_normalizating_factor(n_neighbors, n_points):
     return G_K
 
 
-def _knn_to_point_untrustworthiness(high_knn, low_knn, n_neighbors=None,
-                                    high_rank=None):
+def _np_set_difference(array1, array2):
     '''
-    Given the n_neighbors nearest neighbors in high space and low space,
+    Compute the row by row set difference of two 2d arrays.
+
+    >>> np_set_difference(np.array([[0, 1, 2, 3],\
+                                    [1, 0, 3, 4]]),
+                          np.array([[0, 1, 4, 5],\
+                                    [2, 2, 3, 4]]))
+    array([[2, 3], [0, 1]])
+    '''
+    set_diff = []
+    for i, row in enumerate(array1):
+        set_diff.append(np.setdiff1d(row, array2[i]))
+    return np.array(set_diff)
+
+
+def _sum_indices_to_point_scores(sum_indices, *, n_neighbors,
+                                 rank_matrix):
+    '''
+    Given the indices to sum rank differences over for each point
     together with the rank matrix, compute the value of
-    "untrustworthiness" of a point (this is the factor that a point
-    contributes negatively to trustworthiness).
+    "untrustworthiness"/"discontinuity" of a point.
     '''
-    if n_neighbors is None or high_rank is None:
-        raise ValueError("n_neighbors and high_rank are required")
     point_scores = []
-    N = high_knn.shape[0]
+    N = rank_matrix.shape[0]
     G_K = _trustworthiness_normalizating_factor(n_neighbors, N)
-    for i, low in enumerate(low_knn):
-        trust_indices = set(low).difference(set(high_knn[i]))
+    for i, indices in enumerate(sum_indices):
         score = 0
-        for j in trust_indices:
-            score += (high_rank[i, j] - n_neighbors) * 2 / G_K
+        for j in indices:
+            score += (rank_matrix[i, j] - n_neighbors) * 2 / G_K
         point_scores.append(score)
     return np.array(point_scores)
 
@@ -291,9 +303,10 @@ def point_untrustworthiness(high_distances=None, low_distances=None,
     low_rank = rank_matrix(ld)
     high_knn = rank_to_knn(high_rank, n_neighbors=n_neighbors)
     low_knn = rank_to_knn(low_rank, n_neighbors=n_neighbors)
-    point_scores = _knn_to_point_untrustworthiness(high_knn, low_knn,
-                                                   n_neighbors=n_neighbors,
-                                                   high_rank=high_rank)
+    set_difference = _np_set_difference(low_knn, high_knn)
+    point_scores = _sum_indices_to_point_scores(set_difference,
+                                                n_neighbors=n_neighbors,
+                                                rank_matrix=high_rank)
     return point_scores
 
 
@@ -314,6 +327,55 @@ def trustworthiness(high_distances=None, low_distances=None,
                                      low_distances=low_distances,
                                      metric=metric,
                                      n_neighbors=n_neighbors)
+    else:
+        pt = point_scores
+    return 1 - sum(pt)
+
+
+def point_discontinuity(high_distances=None, low_distances=None,
+                        high_data=None, low_data=None,
+                        metric='euclidean', n_neighbors=None):
+    '''
+    Given high/low distances or data, compute the value of
+    "discontinuity" of a point (this is the factor that a point
+    contributes negatively to continuity).
+    '''
+    hd, ld, _ = pairwise_distance_differences(high_distances=high_distances,
+                                              low_distances=low_distances,
+                                              high_data=high_data,
+                                              low_data=low_data,
+                                              metric=metric)
+
+    if n_neighbors is None:
+        raise ValueError("n_neighbors is required")
+    high_rank = rank_matrix(hd)
+    low_rank = rank_matrix(ld)
+    high_knn = rank_to_knn(high_rank, n_neighbors=n_neighbors)
+    low_knn = rank_to_knn(low_rank, n_neighbors=n_neighbors)
+    set_difference = _np_set_difference(high_knn, low_knn)
+    point_scores = _sum_indices_to_point_scores(set_difference,
+                                                n_neighbors=n_neighbors,
+                                                rank_matrix=low_rank)
+    return point_scores
+
+
+def continuity(high_distances=None, low_distances=None,
+               high_data=None, low_data=None,
+               point_scores=None,
+               metric='euclidean',
+               n_neighbors=None):
+    '''
+    Given high/low distances or data, compute the value of
+    continuity of an embedding. Alternately, pass in point_scores,
+    which should be the output from point_discontinuity.
+    '''
+    if point_scores is None:
+        pt = point_discontinuity(high_data=high_data,
+                                 low_data=low_data,
+                                 high_distances=high_distances,
+                                 low_distances=low_distances,
+                                 metric=metric,
+                                 n_neighbors=n_neighbors)
     else:
         pt = point_scores
     return 1 - sum(pt)
