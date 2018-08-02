@@ -1,19 +1,66 @@
 {
+    "ball": {
+        "action": "generate",
+        "load_function_args": [
+            1000
+        ],
+        "load_function_kwargs": {
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "sample_ball"
+    },
+    "broken-swiss-roll": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "broken_swiss_roll",
+            "n_points": 1000,
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data"
+    },
     "coil-100": {
+        "action": "fetch_and_process",
         "hash_type": "sha1",
         "hash_value": "b58920394780e1c224a39004e74bd3574fbed85a",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_coil_100",
         "load_function_options": {},
         "url": "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.tar.gz"
     },
     "coil-20": {
+        "action": "fetch_and_process",
         "hash_type": "sha1",
         "hash_value": "e5d518fa9ef1d81aef7dfa24b398e4a509b2ffd5",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_coil_20",
         "load_function_options": {},
         "url": "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.tar.gz"
     },
+    "difficult": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "difficult",
+            "n_points": 6000,
+            "noise": 0.02,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data"
+    },
     "f-mnist": {
+        "action": "fetch_and_process",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_mnist",
         "load_function_options": {
             "dataset_name": "f-mnist"
@@ -46,13 +93,44 @@
         ]
     },
     "frey-faces": {
+        "action": "fetch_and_process",
         "hash_type": "sha1",
         "hash_value": "32c4bc7a947721c46df32d4f4973f31daf5d3946",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_frey_faces",
         "load_function_options": {},
         "url": "https://cs.nyu.edu/~roweis/data/frey_rawface.mat"
     },
+    "gaussian-blobs": {
+        "action": "generate",
+        "load_function_args": [
+            1000
+        ],
+        "load_function_kwargs": {
+            "centers": 4,
+            "n_features": 10,
+            "random_state": 6502
+        },
+        "load_function_module": "sklearn.datasets.samples_generator",
+        "load_function_name": "make_blobs"
+    },
+    "helix": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "helix"
+    },
     "hiva": {
+        "action": "fetch_and_process",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_hiva",
         "load_function_options": {
             "kind": "train"
@@ -68,6 +146,10 @@
         ]
     },
     "lvq-pak": {
+        "action": "fetch_and_process",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_lvq_pak",
         "load_function_options": {},
         "url_list": [
@@ -81,6 +163,10 @@
         ]
     },
     "mnist": {
+        "action": "fetch_and_process",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_mnist",
         "load_function_options": {},
         "url_list": [
@@ -111,6 +197,10 @@
         ]
     },
     "orl-faces": {
+        "action": "fetch_and_process",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_orl_faces",
         "load_function_options": {
             "dataset_name": "orl-faces"
@@ -125,7 +215,22 @@
             }
         ]
     },
+    "s-curve": {
+        "action": "generate",
+        "load_function_args": [
+            1000
+        ],
+        "load_function_kwargs": {
+            "random_state": 6502
+        },
+        "load_function_module": "sklearn.datasets.samples_generator",
+        "load_function_name": "make_s_curve"
+    },
     "shuttle-statlog": {
+        "action": "fetch_and_process",
+        "load_function_args": [],
+        "load_function_kwargs": {},
+        "load_function_module": "src.data.localdata",
         "load_function_name": "load_shuttle_statlog",
         "load_function_options": {
             "dataset_name": "shuttle-statlog"
@@ -153,5 +258,40 @@
                 "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.doc"
             }
         ]
+    },
+    "sphere": {
+        "action": "generate",
+        "load_function_args": [
+            1000
+        ],
+        "load_function_kwargs": {
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "sample_sphere_surface"
+    },
+    "swiss-roll": {
+        "action": "generate",
+        "load_function_args": [
+            1000
+        ],
+        "load_function_kwargs": {
+            "noise": 0.2,
+            "random_state": 6502
+        },
+        "load_function_module": "sklearn.datasets.samples_generator",
+        "load_function_name": "make_swiss_roll"
+    },
+    "twinpeaks": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "twinpeaks",
+            "n_points": 3000,
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data"
     }
 }
