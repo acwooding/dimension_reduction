@@ -23,7 +23,7 @@ def _parameterized_swiss_roll(t, random_state=None, k=21.0):
     t = np.squeeze(t)
     return np.concatenate((x,y,z)).T, t
 
-def synthetic_data(n_points=1000, noise=None,
+def synthetic_data(n_points=1000, noise=0.05,
                    random_state=None, kind="unit_cube", **kwargs):
     """Make a synthetic dataset
 
@@ -37,11 +37,19 @@ def synthetic_data(n_points=1000, noise=None,
         The type of synthetic dataset
     n_points : int, optional (default=1000)
         The total number of points generated.
-    noise : double or None (default=None)
+    noise : double or None (default=0.05)
         Standard deviation of Gaussian noise added to the data.
+        If None, no noise is added.
     random_state : int, RandomState instance or None (default)
         Determines random number generation for dataset shuffling and noise.
         Pass an int for reproducible output across multiple function calls.
+
+    Additional Parameters
+    ---------------------
+    difficult:
+        n_dims: int (default 5)
+            Number of dimensions to embed
+
     Returns
     -------
     X : array of shape [n_points, 2]
@@ -103,7 +111,7 @@ def synthetic_data(n_points=1000, noise=None,
 
     return X, t, metadata
 
-def sample_sphere_surface(n_points, n_dim=3, random_state=0):
+def sample_sphere_surface(n_points, n_dim=3, random_state=0, noise=None):
     '''Sample on the surface of a sphere
 
     See Wolfram Sphere Point Picking
@@ -113,17 +121,20 @@ def sample_sphere_surface(n_points, n_dim=3, random_state=0):
     Use a very simple trick to color the points in a reasonable way
     '''
 
-    np.random.seed(random_state)
-    vec = np.random.randn(n_dim, n_points)
-    vec /= np.linalg.norm(vec, axis=0)
-    vec = vec.transpose()
-    rgb = (vec + 1.0) / 2.0  # scale to a 0...1 RGB value
+    generator = check_random_state(random_state)
+    X = generator.randn(n_dim, n_points)
+    X /= np.linalg.norm(X, axis=0)
+    X = X.transpose()
+    rgb = (X + 1.0) / 2.0  # scale to a 0...1 RGB value
     color = (rgb[:, 0] + rgb[:, 1] + rgb[:, 2]) / 3.0
     metadata = {
         "n_points": n_points,
         "n_dim": n_dim,
     }
-    return vec, color, metadata
+    if noise is not None:
+        X += noise * generator.randn(*X.shape)
+
+    return X, color, metadata
 
 def sample_ball(n_points, n_dim=3, random_state=0):
     '''Sample from a unit ball
@@ -146,11 +157,21 @@ def sample_ball(n_points, n_dim=3, random_state=0):
     }
     return X, t, metadata
 
-def helix(n_points=1000, random_state=None, noise=None,
+def helix(n_points=1000, random_state=None, noise=0.05,
           n_twists=8, major_radius=2.0, minor_radius=1.0):
-    '''
-    Sample from a toroidal helix.
+    '''Sample from a toroidal helix; i.e. use the parameterization: 
 
+    x = R + r cos(nt)) * cos(t)
+    y = R + r cos(nt)) * sin(t)
+    z = r sin(nt)
+
+    where $n$ is `n_twists`, $R$ is the `major_radius`
+    and $r$ is the `minor_radius`, and $t$ ranges from 0 .. 2*pi
+
+    Label is currently just $t$
+
+    Parameters
+    ----------
     major_radius:
         Major (equatorial) radius of the torus
     minor_radius:
@@ -161,27 +182,21 @@ def helix(n_points=1000, random_state=None, noise=None,
         Number of points to return
     random_state: int or None
         For seeding the random number generator
-    noise : double or None (default=None)
+    noise : double or None (default=0.05)
         Standard deviation of Gaussian noise added to the data.
-
-
-    x = r_1 + r_2 cos(nt)) * cos(t)
-    y = r_1 + r_2 cos(nt)) * sin(t)
-    z = r_2 sin(nt)
-
-    where $n$ is `n_twists`, $r_1$ is the `major_radius`
-    and $r_2$ is the `minor_radius`
+        If None, no noise is added.
 
     '''
     generator = check_random_state(random_state)
     t = generator.uniform(0, 2*np.pi, (1, n_points))
-    cosnt = np.cos(20*t)
+    cosnt = np.cos(n_twists*t)
     x = (major_radius + minor_radius * cosnt) * np.cos(t)
     y = (major_radius + minor_radius * cosnt) * np.sin(t)
     z = minor_radius * np.sin(n_twists * t)
     X = np.concatenate((x,y,z))
     X = X.T
-    t = np.linalg.norm(X, axis=1)
+    #labels = np.linalg.norm(X, axis=1)
+    labels = t.reshape(-1)
     if noise:
         X += noise * generator.randn(n_points, 3)
 
@@ -192,4 +207,4 @@ def helix(n_points=1000, random_state=None, noise=None,
         "major_radius": major_radius,
         "minor_radius": minor_radius
     }
-    return X, t, metadata
+    return X, labels, metadata

@@ -8,9 +8,10 @@ import os
 import pathlib
 import requests
 import sys
+import inspect
 
 from .dset import Dataset
-from .utils import hash_file, unpack, hash_function_map, read_space_delimited, normalize_labels
+from .utils import hash_file, unpack, hash_function_map, read_space_delimited, normalize_labels, partial_call_signature
 from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
 from .localdata import *
 
@@ -468,7 +469,7 @@ def generate_synthetic_dataset_opts(dataset_name, func, use_docstring=True):
         raise Exception(f"Unexpected number of parameters from {func}. Got {len(tup)}.")
     metadata['dataset_name'] = dataset_name
     if use_docstring:
-        fqfunc, invocation =  jfi.format_signature(func.func, *func.args, **func.keywords)
+        fqfunc, invocation =  partial_call_signature(func)
         descr_txt =  f'Synthetic data produced by: {fqfunc}\n\n>>> {invocation}\n\n>>> help({func.func.__name__})\n\n{func.func.__doc__}'
     else:
         descr_txt = None
