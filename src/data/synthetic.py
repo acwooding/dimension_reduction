@@ -21,10 +21,24 @@ def _parameterized_swiss_roll(t, random_state=None, k=21.0):
     y = k * generator.rand(*t.shape)
     z = t * np.sin(t)
     t = np.squeeze(t)
-    return np.concatenate((x,y,z)).T, t
+    return np.concatenate((x,y,z)).T, t, y
+
+def rescale(x, shift=0.0, scale=1.0, n_classes=2, n_occur=1):
+    """Convert a vector to discrete classes
+
+    Parameters
+    ----------
+    shift: shift coordinates up by this amount
+    scale: scale shifted coordinates by (the reciprocal of) this factor
+    n_classes: number of classes to return
+    n_occur: number of occurrences of each class
+    """
+    return np.remainder(np.round((x+shift)*n_classes*n_occur/scale), n_classes)
+
 
 def synthetic_data(n_points=1000, noise=0.05,
-                   random_state=None, kind="unit_cube", **kwargs):
+                   random_state=None, kind="unit_cube",
+                   n_classes=None, n_occur=1, **kwargs):
     """Make a synthetic dataset
 
     A sample dataset generators in the style of sklearn's
@@ -37,6 +51,12 @@ def synthetic_data(n_points=1000, noise=0.05,
         The type of synthetic dataset
     n_points : int, optional (default=1000)
         The total number of points generated.
+    n_classes: None or int
+        If None, target vector is based on underlying manifold coordinate
+        If int, the manifold coordinate is bucketized into this many classes.
+    n_occur: int
+        Number of occurrences of a given class (along a given axis)
+        ignored if n_classes = None
     noise : double or None (default=0.05)
         Standard deviation of Gaussian noise added to the data.
         If None, no noise is added.
@@ -71,26 +91,42 @@ def synthetic_data(n_points=1000, noise=0.05,
         z = 2 * (generator.rand(1, n_points) - 0.5)
         X = np.concatenate((x, y, z))
         X = X.T
-        t = np.linalg.norm(X, axis=1)
+        if n_classes is None:
+            t = np.linalg.norm(X, axis=1)
+        else:
+            metadata['manifold_coords'] = np.concatenate((x,y,z), axis=0).T
+            xh = rescale(x, shift=1.0, scale=2.0, n_classes=n_classes, n_occur=n_occur).reshape(-1)
+            yh = rescale(y, shift=1.0, scale=2.0, n_classes=n_classes, n_occur=n_occur).reshape(-1)
+            zh = rescale(z, shift=1.0, scale=2.0, n_classes=n_classes, n_occur=n_occur).reshape(-1)
+            t = (xh + yh + zh) % n_classes
+
     elif kind == 'twinpeaks':
         inc = 1.5 / np.sqrt(n_points)
         x = np.arange(-1, 1, inc)
         xy = 1 - 2 * generator.rand(2, n_points)
         z = np.sin(np.pi * xy[0, :]) * np.tanh(3 * xy[1, :])
         X = np.vstack([xy, z]).T #  + noise * generator.randn(n_points, 3)
-        #X[:, 2] = X[:, 2] * 1
-        # t = xy.T
-        t = 1-z
+        # XXX FIXME
+        if n_classes is None:
+            t = 1-z
+        else:
+            t = xy.T
+            metadata['manifold_coords'] = t
+            t = rescale(1-z, n_classes=n_classes, n_occur=n_occur)
 
     elif kind == 'broken_swiss_roll':
         np1, np2 = int(np.ceil(n_points / 2.0)), int(np.floor(n_points / 2.0))
         t1 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(1, np1) * 0.4))
         t2 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(1, np2) * 0.4 + 0.6))
 
-        X1,t1 = _parameterized_swiss_roll(t1, random_state=generator)
-        X2,t2 = _parameterized_swiss_roll(t2, random_state=generator)
+        X1, t1, h1 = _parameterized_swiss_roll(t1, random_state=generator, k=30)
+        X2, t2, h2 = _parameterized_swiss_roll(t2, random_state=generator, k=30)
 
         X, t = np.concatenate((X1, X2)), np.concatenate((t1, t2))
+        height = np.concatenate((h1.reshape(-1), h2.reshape(-1)))
+        if n_classes is not None:
+            t = rescale(t/2 + height/12, n_classes=n_classes, n_occur=n_occur)
+
     elif kind == 'difficult':
         n_dims = kwargs.pop("n_dims", 5)
         points_per_dim = int(np.round(float(n_points ** (1.0 / n_dims))))
@@ -158,12 +194,14 @@ def sample_ball(n_points, n_dim=3, random_state=0):
     return X, t, metadata
 
 def helix(n_points=1000, random_state=None, noise=0.05,
-          n_twists=8, major_radius=2.0, minor_radius=1.0):
-    '''Sample from a toroidal helix; i.e. use the parameterization: 
+          n_twists=8, major_radius=2.0, minor_radius=1.0, n_classes=None):
+    '''Sample from a toroidal helix; i.e. use the parameterization:
 
     x = R + r cos(nt)) * cos(t)
     y = R + r cos(nt)) * sin(t)
     z = r sin(nt)
+
+    X = (x, y, z) + noise
 
     where $n$ is `n_twists`, $R$ is the `major_radius`
     and $r$ is the `minor_radius`, and $t$ ranges from 0 .. 2*pi
@@ -180,12 +218,21 @@ def helix(n_points=1000, random_state=None, noise=0.05,
         Number of twists in the toroidal helix
     n_points:
         Number of points to return
+    n_classes: int or None
+        If None, target vector is the manifold coordinate (t), before noise
+        If int, the manifold parameter is bucketized into this many classes.
+          The non-bucketized manifold coordinates are returned as `metadata['manifold_coords']`
     random_state: int or None
         For seeding the random number generator
     noise : double or None (default=0.05)
         Standard deviation of Gaussian noise added to the data.
         If None, no noise is added.
 
+    Returns
+    -------
+    X, y, metadata
+    X = (x,y,z) + noise
+    y = t or class number (see `n_classes`)
     '''
     generator = check_random_state(random_state)
     t = generator.uniform(0, 2*np.pi, (1, n_points))
@@ -196,7 +243,6 @@ def helix(n_points=1000, random_state=None, noise=0.05,
     X = np.concatenate((x,y,z))
     X = X.T
     #labels = np.linalg.norm(X, axis=1)
-    labels = t.reshape(-1)
     if noise:
         X += noise * generator.randn(n_points, 3)
 
@@ -205,6 +251,13 @@ def helix(n_points=1000, random_state=None, noise=0.05,
         "noise": noise,
         "n_twists": n_twists,
         "major_radius": major_radius,
-        "minor_radius": minor_radius
+        "minor_radius": minor_radius,
+        "n_classes": n_classes,
     }
+
+    labels = t.reshape(-1)
+    if n_classes is not None:
+        metadata['manifold_coords'] = labels
+        labels = np.remainder(np.round(labels / (2*np.pi) * n_classes), n_classes)
+
     return X, labels, metadata
