@@ -55,6 +55,54 @@ def old_point_strain(high_distances, low_distances):
     return result
 
 
+def knn_to_point_untrustworthiness(high_knn, low_knn, n_neighbors=None,
+                                   high_rank=None):
+    '''
+    Given the n_neighbors nearest neighbors in high space and low space,
+    together with the rank matrix, compute the value of
+    "untrustworthiness" of a point (this is the factor that a point
+    contributes negatively to trustworthiness).
+    '''
+    if n_neighbors is None or high_rank is None:
+        raise ValueError("n_neighbors and high_rank are required")
+    point_scores = []
+    N = high_knn.shape[0]
+    G_K = qm._trustworthiness_normalizating_factor(n_neighbors, N)
+    for i, low in enumerate(low_knn):
+        trust_indices = set(low).difference(set(high_knn[i]))
+        score = 0
+        for j in trust_indices:
+            score += (high_rank[i, j] - n_neighbors) * 2 / G_K
+        point_scores.append(score)
+    return np.array(point_scores)
+
+
+def old_point_untrustworthiness(high_distances=None, low_distances=None,
+                                high_data=None, low_data=None,
+                                metric='euclidean', n_neighbors=None):
+    '''
+    Given high/low distances or data, compute the value of
+    "untrustworthiness" of a point (this is the factor that a point
+    contributes negatively to trustworthiness).
+    '''
+    hd, ld, _ = qm.pairwise_distance_differences(high_distances=high_distances,
+                                                 low_distances=low_distances,
+                                                 high_data=high_data,
+                                                 low_data=low_data,
+                                                 metric=metric)
+
+    if n_neighbors is None:
+        raise ValueError("n_neighbors is required")
+    high_rank = qm.rank_matrix(hd)
+    low_rank = qm.rank_matrix(ld)
+    high_knn = qm.rank_to_knn(high_rank, n_neighbors=n_neighbors)
+    low_knn = qm.rank_to_knn(low_rank, n_neighbors=n_neighbors)
+    point_scores = knn_to_point_untrustworthiness(high_knn, low_knn,
+                                                  n_neighbors=n_neighbors,
+                                                  high_rank=high_rank)
+    return point_scores
+
+
 # Start of tests
 
 
@@ -106,7 +154,20 @@ def test_old_new_point_strain(high_distances, low_distances):
                 old_point_strain(high_distances, low_distances)).all()
 
 # TODO: Test various input styles.
-
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       st.integers(min_value=1, max_value=3))
+def test_old_new_point_untrustworthiness(high_distances, low_distances,
+                                         n_neighbors):
+    old = old_point_untrustworthiness(high_distances=high_distances,
+                                      low_distances=low_distances,
+                                      n_neighbors=n_neighbors)
+    new = qm.point_untrustworthiness(high_distances=high_distances,
+                                     low_distances=low_distances,
+                                     n_neighbors=n_neighbors)
+    assert all(old == new)
 
 class TestEncoding(unittest.TestCase):
 
