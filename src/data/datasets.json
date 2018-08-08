@@ -22,6 +22,18 @@
         "load_function_module": "src.data.synthetic",
         "load_function_name": "synthetic_data"
     },
+    "broken_swiss_roll": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "broken_swiss_roll",
+            "n_points": 1000,
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data"
+    },
     "coil-100": {
         "action": "fetch_and_process",
         "hash_type": "sha1",
@@ -288,6 +300,7 @@
         "load_function_args": [],
         "load_function_kwargs": {
             "kind": "twinpeaks",
+            "n_classes": 3,
             "n_points": 3000,
             "noise": 0.05,
             "random_state": 6502
@@ -295,7 +308,7 @@
         "load_function_module": "src.data.synthetic",
         "load_function_name": "synthetic_data"
     },
-    "unit_cube": {
+    "unit-cube": {
         "action": "generate",
         "load_function_args": [],
         "load_function_kwargs": {

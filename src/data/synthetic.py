@@ -8,20 +8,60 @@ def _combn(iterable, repeat):
     """Equivalent of matlab's combn"""
     return list(product(iterable, repeat=repeat))
 
-def _parameterized_swiss_roll(t, random_state=None, k=21.0):
-    """
-    Given a parameter t, return a swiss roll
+def _parameterized_swiss_roll(manifold_coords):
+    """Given parameters t, y return a swiss roll
 
-    k: constant in height (y-coordinate) computation
-    random_state : int, RandomState instance or None (default)
-        Pass an int for reproducible output across multiple function calls.
+    Produces a 3d swiss roll with parameterized coordinates:
+      [t cos(t), y, t sin(t)]
+
+    Parameters
+    ----------
+    manifold_coordinates: A tuple (t, y) indicating swiss roll parameters
+
+    Returns
+    -------
+    A tuple (coords, manifold_coords) where
+        coords: [t cos(t), y, t sin(t)]
+        manifold_coords: [t, y]
+
     """
-    generator = check_random_state(random_state)
+    t, y = manifold_coords[:, 0], manifold_coords[:, 1]
     x = t * np.cos(t)
-    y = k * generator.rand(*t.shape)
     z = t * np.sin(t)
-    t = np.squeeze(t)
-    return np.concatenate((x,y,z)).T, t, y
+    return np.column_stack((x,y,z))
+
+def checkerboard(t, shift_factors=None, scale_factors=None, n_classes=2, n_occur=1):
+    """Divide an n-dimensional array into classes via checkerboarding
+
+    Parameters
+    ----------
+    n_classes: int or None
+        Number of distinct classes
+        if None, input vector will be rescaled and shifted, but not quantized.
+    n_occur: int
+        Number of occurrences of each class (along each axis)
+    scale_factors: array of float
+        Scale factor (to convert each column to the range 0...1)
+    shift_factors: array of float
+        Shift factor (to be added to each column to start the range at 0)
+
+    Returns
+    -------
+    np.array the same shape as t, representing integer class for each data point
+
+    """
+    if t.ndim == 1:
+        t = t.reshape((-1, 1))
+
+    if scale_factors is None:
+        scale_factors = np.ones(t.shape[1])
+    if shift_factors is None:
+        shift_factors = np.zeros(t.shape[1])
+
+    if n_classes is None:
+        return ((t + shift_factors) / scale_factors).reshape(-1)
+
+    return np.remainder(np.sum(np.round(0.5 + (t + shift_factors) / scale_factors * n_classes * n_occur ), axis=1), n_classes)
 
 def rescale(x, shift=0.0, scale=1.0, n_classes=2, n_occur=1):
     """Convert a vector to discrete classes
@@ -47,7 +87,7 @@ def synthetic_data(n_points=1000, noise=0.05,
 
     Parameters
     ----------
-    kind: {'unit_cube', 'broken_swiss_roll', 'twinpeaks', 'difficult'}
+    kind: {'unit_cube', 'swiss_roll', 'broken_swiss_roll', 'twinpeaks', 'difficult'}
         The type of synthetic dataset
     n_points : int, optional (default=1000)
         The total number of points generated.
@@ -70,6 +110,11 @@ def synthetic_data(n_points=1000, noise=0.05,
         n_dims: int (default 5)
             Number of dimensions to embed
 
+    swiss_roll:
+    broken_swiss_roll:
+        height: float (default 30.)
+            scaling to apply to y dimension
+
     Returns
     -------
     X : array of shape [n_points, 2]
@@ -86,19 +131,14 @@ def synthetic_data(n_points=1000, noise=0.05,
     }
 
     if kind == 'unit_cube':
-        x = 2 * (generator.rand(1, n_points) - 0.5)
-        y = 2 * (generator.rand(1, n_points) - 0.5)
-        z = 2 * (generator.rand(1, n_points) - 0.5)
-        X = np.concatenate((x, y, z))
-        X = X.T
-        if n_classes is None:
-            t = np.linalg.norm(X, axis=1)
-        else:
-            metadata['manifold_coords'] = np.concatenate((x,y,z), axis=0).T
-            xh = rescale(x, shift=1.0, scale=2.0, n_classes=n_classes, n_occur=n_occur).reshape(-1)
-            yh = rescale(y, shift=1.0, scale=2.0, n_classes=n_classes, n_occur=n_occur).reshape(-1)
-            zh = rescale(z, shift=1.0, scale=2.0, n_classes=n_classes, n_occur=n_occur).reshape(-1)
-            t = (xh + yh + zh) % n_classes
+        x = 2 * (generator.rand(n_points) - 0.5)
+        y = 2 * (generator.rand(n_points) - 0.5)
+        z = 2 * (generator.rand(n_points) - 0.5)
+        X = np.column_stack((x, y, z))
+        shift = np.array([1.])
+        scale = np.array([2.])
+        labels = checkerboard(X, shift_factors=shift, scale_factors=scale, n_occur=n_occur, n_classes=n_classes)
+        metadata['manifold_coords'] = np.concatenate((x,y,z), axis=0).T
 
     elif kind == 'twinpeaks':
         inc = 1.5 / np.sqrt(n_points)
@@ -106,26 +146,45 @@ def synthetic_data(n_points=1000, noise=0.05,
         xy = 1 - 2 * generator.rand(2, n_points)
         z = np.sin(np.pi * xy[0, :]) * np.tanh(3 * xy[1, :])
         X = np.vstack([xy, z]).T #  + noise * generator.randn(n_points, 3)
-        # XXX FIXME
+        t = xy.T
+        metadata['manifold_coords'] = t
+
         if n_classes is None:
-            t = 1-z
+            labels = 1-z
         else:
-            t = xy.T
-            metadata['manifold_coords'] = t
-            t = rescale(1-z, n_classes=n_classes, n_occur=n_occur)
+            shift = np.array([1.])
+            scale = np.array([2.])
+            labels = checkerboard(t, shift_factors=shift, scale_factors=scale,
+                                  n_classes=n_classes, n_occur=n_occur)
+
+    elif kind == 'swiss_roll':
+        height = kwargs.pop('height', 30.)
+        t = 1.5 * np.pi * (1.0 + 2.0 * generator.rand(n_points))
+        y = height * generator.rand(*t.shape)
+        manifold_coords = np.column_stack((t, y))
+        X = _parameterized_swiss_roll(manifold_coords)
+        scale = np.array([3*np.pi])
+        shift = np.array([-1.5*np.pi])
+        metadata['manifold_coords'] = manifold_coords
+        labels =  checkerboard(t, shift_factors=shift, scale_factors=scale,
+                               n_classes=n_classes, n_occur=n_occur)
+
 
     elif kind == 'broken_swiss_roll':
-        np1, np2 = int(np.ceil(n_points / 2.0)), int(np.floor(n_points / 2.0))
-        t1 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(1, np1) * 0.4))
-        t2 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(1, np2) * 0.4 + 0.6))
+        height = kwargs.pop('height', 30.)
+        np1 = int(np.ceil(n_points / 2.0))
+        t1 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(np1) * 0.4))
+        t2 = 1.5 * np.pi * (1.0 + 2.0 * (generator.rand(n_points - np1) * 0.4 + 0.6))
+        t = np.concatenate((t1, t2))
+        y = height * generator.rand(*t.shape)
+        manifold_coords = np.column_stack((t, y))
+        X = _parameterized_swiss_roll(manifold_coords)
 
-        X1, t1, h1 = _parameterized_swiss_roll(t1, random_state=generator, k=30)
-        X2, t2, h2 = _parameterized_swiss_roll(t2, random_state=generator, k=30)
-
-        X, t = np.concatenate((X1, X2)), np.concatenate((t1, t2))
-        height = np.concatenate((h1.reshape(-1), h2.reshape(-1)))
-        if n_classes is not None:
-            t = rescale(t/2 + height/12, n_classes=n_classes, n_occur=n_occur)
+        scale = np.array([3*np.pi])
+        shift = np.array([-1.5*np.pi])
+        metadata['manifold_coords'] = manifold_coords
+        labels = checkerboard(t, shift_factors=shift, scale_factors=scale,
+                              n_classes=n_classes, n_occur=n_occur)
 
     elif kind == 'difficult':
         n_dims = kwargs.pop("n_dims", 5)
@@ -136,8 +195,9 @@ def synthetic_data(n_points=1000, noise=0.05,
              t[:,4] * np.cos(t[:,1]), t[:,4] + t[:,3], t[:,1], t[:,2] * t[:,3],  t[:,0])).T
         tt = 1 + np.round(t)
         # Generate labels for dataset (2x2x2x2x2 checkerboard pattern)
-        t = np.remainder(tt.sum(axis=1), 2)
+        labels = np.remainder(tt.sum(axis=1), 2)
         metadata['n_dims'] = n_dims
+        metadata['manifold_coords'] = t
 
     else:
         raise Exception(f"Unknown synthetic dataset type: {kind}")
@@ -145,7 +205,7 @@ def synthetic_data(n_points=1000, noise=0.05,
     if noise is not None:
         X += noise * generator.randn(*X.shape)
 
-    return X, t, metadata
+    return X, labels, metadata
 
 def sample_sphere_surface(n_points, n_dim=3, random_state=0, noise=None):
     '''Sample on the surface of a sphere
@@ -194,7 +254,8 @@ def sample_ball(n_points, n_dim=3, random_state=0):
     return X, t, metadata
 
 def helix(n_points=1000, random_state=None, noise=0.05,
-          n_twists=8, major_radius=2.0, minor_radius=1.0, n_classes=None):
+          n_twists=8, major_radius=2.0, minor_radius=1.0, n_classes=None,
+          n_occur=1):
     '''Sample from a toroidal helix; i.e. use the parameterization:
 
     x = R + r cos(nt)) * cos(t)
@@ -258,6 +319,5 @@ def helix(n_points=1000, random_state=None, noise=0.05,
     labels = t.reshape(-1)
     if n_classes is not None:
         metadata['manifold_coords'] = labels
-        labels = np.remainder(np.round(labels / (2*np.pi) * n_classes), n_classes)
-
+        labels = checkerboard(labels, scale_factors=2*np.pi, n_classes=n_classes, n_occur=n_occur)
     return X, labels, metadata
