@@ -126,7 +126,8 @@
             "random_state": 6502
         },
         "load_function_module": "sklearn.datasets.samples_generator",
-        "load_function_name": "make_blobs"
+        "load_function_name": "make_blobs",
+        "rescale": "minmax"
     },
     "helix": {
         "action": "generate",
@@ -236,7 +237,8 @@
             "random_state": 6502
         },
         "load_function_module": "sklearn.datasets.samples_generator",
-        "load_function_name": "make_s_curve"
+        "load_function_name": "make_s_curve",
+        "rescale": "minmax"
     },
     "shuttle-statlog": {
         "action": "fetch_and_process",
@@ -293,7 +295,8 @@
             "random_state": 6502
         },
         "load_function_module": "sklearn.datasets.samples_generator",
-        "load_function_name": "make_swiss_roll"
+        "load_function_name": "make_swiss_roll",
+        "rescale": "minmax"
     },
     "twinpeaks": {
         "action": "generate",
