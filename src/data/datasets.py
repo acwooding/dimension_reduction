@@ -8,9 +8,12 @@ import os
 import pathlib
 import requests
 import sys
+import inspect
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
 
 from .dset import Dataset
-from .utils import hash_file, unpack, hash_function_map, read_space_delimited, normalize_labels
+from .utils import hash_file, unpack, hash_function_map, read_space_delimited, normalize_labels, partial_call_signature
 from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
 from .localdata import *
 
@@ -423,25 +426,28 @@ def add_dataset_metadata(dataset_name, from_file=None, from_str=None, kind='DESC
     with open(_MODULE_DIR / filename_map[kind], 'w') as fw:
         fw.write(meta_txt)
 
-def add_dataset_from_function(dataset_name, function, action='fetch_and_process'):
+def add_dataset_from_function(dataset_name, function, action='fetch_and_process', rescale=None):
     """Add a load function for the given dataset_name
 
     action: {'fetch_and_process', 'generate'}
         if `fetch_and_process`, data will be downloaded and then processed with this function.
         if `generate`, this function will be used to generate the data, and the function
             docstring will be used as the dataset description
+    rescale: None or one of {'minmax', 'standards'}
+        How to rescale the resulting dataset
     """
     ds_list = read_datasets()
     if ds_list.get(dataset_name) is None:
         ds_list[dataset_name] = {}
     ds_list[dataset_name]['load_function'] = partial(function)
     ds_list[dataset_name]['action'] = action
+    ds_list[dataset_name]['rescale'] = rescale
     write_datasets(ds_list)
     ds_list = read_datasets()
 
     return ds_list[dataset_name]
 
-def generate_synthetic_dataset_opts(dataset_name, func, use_docstring=True):
+def generate_synthetic_dataset_opts(dataset_name, func, use_docstring=True, rescale=None):
     """Generate synthetic dataset options dict from a (partial) function
 
     dataset_name: string
@@ -451,6 +457,7 @@ def generate_synthetic_dataset_opts(dataset_name, func, use_docstring=True):
     use_docstring: boolean
         If True, generate DECSR text consisting of the complete function signature
         and docstring of underlying generation function.
+    rescale: None or {'minmax', 'standard'}
 
     Returns
     -------
@@ -467,8 +474,17 @@ def generate_synthetic_dataset_opts(dataset_name, func, use_docstring=True):
     else:
         raise Exception(f"Unexpected number of parameters from {func}. Got {len(tup)}.")
     metadata['dataset_name'] = dataset_name
+    if rescale == 'minmax':
+        scaler = MinMaxScaler()
+        X = scaler.fit_transform(X)
+    elif rescale == 'standard':
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+    elif rescale is not None:
+        raise Exception(f"Unrecognized rescale method: {rescale}")
+
     if use_docstring:
-        fqfunc, invocation =  jfi.format_signature(func.func, *func.args, **func.keywords)
+        fqfunc, invocation =  partial_call_signature(func)
         descr_txt =  f'Synthetic data produced by: {fqfunc}\n\n>>> {invocation}\n\n>>> help({func.func.__name__})\n\n{func.func.__doc__}'
     else:
         descr_txt = None
@@ -531,7 +547,8 @@ def load_dataset(dataset_name, return_X_y=False, map_labels=False, force=False,
         action = dataset_list[dataset_name]['action']
         if action == 'generate':
             func = partial(dataset_list[dataset_name]['load_function'], **kwargs)
-            dset_opts = generate_synthetic_dataset_opts(dataset_name, func)
+            rescale = dataset_list[dataset_name].get('rescale', None)
+            dset_opts = generate_synthetic_dataset_opts(dataset_name, func, rescale=rescale)
         elif action == 'fetch_and_process':
             fetch_and_unpack(dataset_name)
             metadata = get_default_metadata(dataset_name=dataset_name)

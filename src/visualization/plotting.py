@@ -78,7 +78,7 @@ def plot_3d_dataset(data, color_data, title='3d plot',
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(data[:, dim_list[0]], data[:, dim_list[1]],
                data[:, dim_list[2]],
-               c=color_data, cmap=cmap)
+               c=color_data, cmap=cmap, **kwargs)
     ax.view_init(10)
     plt.title(title)
     return fig, ax

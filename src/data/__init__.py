@@ -1,4 +1,5 @@
 from . import datasets
+from . import synthetic
 from . import utils
 from . import dset
 from . import localdata

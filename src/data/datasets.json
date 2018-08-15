@@ -8,7 +8,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "sample_ball"
+        "load_function_name": "sample_ball",
+        "rescale": null
     },
     "broken-swiss-roll": {
         "action": "generate",
@@ -20,7 +21,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
+        "load_function_name": "synthetic_data",
+        "rescale": "minmax"
     },
     "coil-100": {
         "action": "fetch_and_process",
@@ -54,7 +56,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
+        "load_function_name": "synthetic_data",
+        "rescale": "minmax"
     },
     "f-mnist": {
         "action": "fetch_and_process",
@@ -114,17 +117,18 @@
             "random_state": 6502
         },
         "load_function_module": "sklearn.datasets.samples_generator",
-        "load_function_name": "make_blobs"
+        "load_function_name": "make_blobs",
+        "rescale": "minmax"
     },
     "helix": {
         "action": "generate",
         "load_function_args": [],
         "load_function_kwargs": {
-            "noise": 0.05,
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "helix"
+        "load_function_name": "helix",
+        "rescale": "minmax"
     },
     "hiva": {
         "action": "fetch_and_process",
@@ -221,10 +225,12 @@
             1000
         ],
         "load_function_kwargs": {
+            "noise": 0.05,
             "random_state": 6502
         },
         "load_function_module": "sklearn.datasets.samples_generator",
-        "load_function_name": "make_s_curve"
+        "load_function_name": "make_s_curve",
+        "rescale": "minmax"
     },
     "shuttle-statlog": {
         "action": "fetch_and_process",
@@ -265,10 +271,12 @@
             1000
         ],
         "load_function_kwargs": {
+            "noise": 0.05,
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "sample_sphere_surface"
+        "load_function_name": "sample_sphere_surface",
+        "rescale": null
     },
     "swiss-roll": {
         "action": "generate",
@@ -276,22 +284,38 @@
             1000
         ],
         "load_function_kwargs": {
-            "noise": 0.2,
+            "noise": 0.05,
             "random_state": 6502
         },
         "load_function_module": "sklearn.datasets.samples_generator",
-        "load_function_name": "make_swiss_roll"
+        "load_function_name": "make_swiss_roll",
+        "rescale": "minmax"
     },
     "twinpeaks": {
         "action": "generate",
         "load_function_args": [],
         "load_function_kwargs": {
             "kind": "twinpeaks",
+            "n_classes": 3,
             "n_points": 3000,
             "noise": 0.05,
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
+        "load_function_name": "synthetic_data",
+        "rescale": "minmax"
+    },
+    "unit-cube": {
+        "action": "generate",
+        "load_function_args": [],
+        "load_function_kwargs": {
+            "kind": "unit_cube",
+            "n_points": 3000,
+            "noise": 0.05,
+            "random_state": 6502
+        },
+        "load_function_module": "src.data.synthetic",
+        "load_function_name": "synthetic_data",
+        "rescale": null
     }
 }
