@@ -8,7 +8,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "sample_ball"
+        "load_function_name": "sample_ball",
+        "rescale": null
     },
     "broken-swiss-roll": {
         "action": "generate",
@@ -20,19 +21,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
-    },
-    "broken_swiss_roll": {
-        "action": "generate",
-        "load_function_args": [],
-        "load_function_kwargs": {
-            "kind": "broken_swiss_roll",
-            "n_points": 1000,
-            "noise": 0.05,
-            "random_state": 6502
-        },
-        "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
+        "load_function_name": "synthetic_data",
+        "rescale": "minmax"
     },
     "coil-100": {
         "action": "fetch_and_process",
@@ -66,7 +56,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
+        "load_function_name": "synthetic_data",
+        "rescale": "minmax"
     },
     "f-mnist": {
         "action": "fetch_and_process",
@@ -136,7 +127,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "helix"
+        "load_function_name": "helix",
+        "rescale": "minmax"
     },
     "hiva": {
         "action": "fetch_and_process",
@@ -283,7 +275,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "sample_sphere_surface"
+        "load_function_name": "sample_sphere_surface",
+        "rescale": null
     },
     "swiss-roll": {
         "action": "generate",
@@ -309,7 +302,8 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
+        "load_function_name": "synthetic_data",
+        "rescale": "minmax"
     },
     "unit-cube": {
         "action": "generate",
@@ -321,6 +315,7 @@
             "random_state": 6502
         },
         "load_function_module": "src.data.synthetic",
-        "load_function_name": "synthetic_data"
+        "load_function_name": "synthetic_data",
+        "rescale": null
     }
 }
