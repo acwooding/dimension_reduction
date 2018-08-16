@@ -1,7 +1,5 @@
 from  itertools import product
-import joblib.func_inspect as jfi
 import numpy as np
-from functools import partial
 from sklearn.utils import check_random_state
 
 def _combn(iterable, repeat):
@@ -78,7 +76,7 @@ def rescale(x, shift=0.0, scale=1.0, n_classes=2, n_occur=1):
 
 def synthetic_data(n_points=1000, noise=0.05,
                    random_state=None, kind="unit_cube",
-                   n_classes=None, n_occur=1, **kwargs):
+                   n_classes=None, n_occur=1, legacy_labels=False, **kwargs):
     """Make a synthetic dataset
 
     A sample dataset generators in the style of sklearn's
@@ -89,6 +87,11 @@ def synthetic_data(n_points=1000, noise=0.05,
     ----------
     kind: {'unit_cube', 'swiss_roll', 'broken_swiss_roll', 'twinpeaks', 'difficult'}
         The type of synthetic dataset
+    legacy_labels: boolean
+        If True, try and reproduce the labels from the Matlab Toolkit for
+        Dimensionality Reduction. (overrides any value in n_classes)
+        This usually only works if algorithm-specific coefficient choices
+        (e.g. `height` for swiss_roll) are left at their default values
     n_points : int, optional (default=1000)
         The total number of points generated.
     n_classes: None or int
@@ -145,11 +148,13 @@ def synthetic_data(n_points=1000, noise=0.05,
         x = np.arange(-1, 1, inc)
         xy = 1 - 2 * generator.rand(2, n_points)
         z = np.sin(np.pi * xy[0, :]) * np.tanh(3 * xy[1, :])
-        X = np.vstack([xy, z]).T #  + noise * generator.randn(n_points, 3)
+        X = np.vstack([xy, z * 10.]).T #  + noise * generator.randn(n_points, 3)
         t = xy.T
         metadata['manifold_coords'] = t
 
-        if n_classes is None:
+        if legacy_labels is True:
+            labels = np.remainder(np.sum(np.round((ds.data + np.tile(np.min(ds.data, axis=0), (ds.data.shape[0], 1))) / 10.), axis=1), 2)
+        elif n_classes is None:
             labels = 1-z
         else:
             shift = np.array([1.])
@@ -163,11 +168,14 @@ def synthetic_data(n_points=1000, noise=0.05,
         y = height * generator.rand(*t.shape)
         manifold_coords = np.column_stack((t, y))
         X = _parameterized_swiss_roll(manifold_coords)
-        scale = np.array([3*np.pi])
-        shift = np.array([-1.5*np.pi])
         metadata['manifold_coords'] = manifold_coords
-        labels =  checkerboard(t, shift_factors=shift, scale_factors=scale,
-                               n_classes=n_classes, n_occur=n_occur)
+        if legacy_labels is True:
+            labels = np.remainder(np.round(t / 2.) + np.round(height / 12.), 2)
+        else:
+            scale = np.array([3*np.pi])
+            shift = np.array([-1.5*np.pi])
+            labels =  checkerboard(t, shift_factors=shift, scale_factors=scale,
+                                   n_classes=n_classes, n_occur=n_occur)
 
 
     elif kind == 'broken_swiss_roll':
@@ -180,19 +188,30 @@ def synthetic_data(n_points=1000, noise=0.05,
         manifold_coords = np.column_stack((t, y))
         X = _parameterized_swiss_roll(manifold_coords)
 
-        scale = np.array([3*np.pi])
-        shift = np.array([-1.5*np.pi])
         metadata['manifold_coords'] = manifold_coords
-        labels = checkerboard(t, shift_factors=shift, scale_factors=scale,
-                              n_classes=n_classes, n_occur=n_occur)
+        if legacy_labels is True:
+            labels = np.remainder(np.round(t / 2.) + np.round(height / 12.), 2)
+        else:
+            scale = np.array([3*np.pi])
+            shift = np.array([-1.5*np.pi])
+            labels = checkerboard(t, shift_factors=shift, scale_factors=scale,
+                                  n_classes=n_classes, n_occur=n_occur)
 
     elif kind == 'difficult':
         n_dims = kwargs.pop("n_dims", 5)
         points_per_dim = int(np.round(float(n_points ** (1.0 / n_dims))))
         l = np.linspace(0, 1, num=points_per_dim)
         t = np.array(list(_combn(l, n_dims)))
-        X = np.vstack((np.cos(t[:,0]),  np.tanh(3 * t[:,1]),  t[:,0] + t[:,2],  t[:,3] * np.sin(t[:,1]),  np.sin(t[:,0] + t[:,4]),
-             t[:,4] * np.cos(t[:,1]), t[:,4] + t[:,3], t[:,1], t[:,2] * t[:,3],  t[:,0])).T
+        X = np.vstack((np.cos(t[:,0]),
+                       np.tanh(3 * t[:,1]),
+                       t[:,0] + t[:,2],
+                       t[:,3] * np.sin(t[:,1]),
+                       np.sin(t[:,0] + t[:,4]),
+                       t[:,4] * np.cos(t[:,1]),
+                       t[:,4] + t[:,3],
+                       t[:,1],
+                       t[:,2] * t[:,3],
+                       t[:,0])).T
         tt = 1 + np.round(t)
         # Generate labels for dataset (2x2x2x2x2 checkerboard pattern)
         labels = np.remainder(tt.sum(axis=1), 2)
@@ -255,7 +274,7 @@ def sample_ball(n_points, n_dim=3, random_state=0):
 
 def helix(n_points=1000, random_state=None, noise=0.05,
           n_twists=8, major_radius=2.0, minor_radius=1.0, n_classes=None,
-          n_occur=1):
+          n_occur=1, legacy_labels=False):
     '''Sample from a toroidal helix; i.e. use the parameterization:
 
     x = R + r cos(nt)) * cos(t)
@@ -275,6 +294,11 @@ def helix(n_points=1000, random_state=None, noise=0.05,
         Major (equatorial) radius of the torus
     minor_radius:
         Minor (cross-section) radius of the torus
+    legacy_labels: boolean
+        If True, try and reproduce the labels from the Matlab Toolkit for
+        Dimensionality Reduction. (overrides any value in n_classes)
+        This usually only works if algorithm-specific coefficient choices
+        (e.g. `n_twists`, radii) are left at their default values
     n_twists:
         Number of twists in the toroidal helix
     n_points:
@@ -317,7 +341,9 @@ def helix(n_points=1000, random_state=None, noise=0.05,
     }
 
     labels = t.reshape(-1)
-    if n_classes is not None:
+    if legacy_labels is True:
+        labels = np.remainder(np.round(t * 1.5), 2).reshape(-1)
+    elif n_classes is not None:
         metadata['manifold_coords'] = labels
         labels = checkerboard(labels, scale_factors=2*np.pi, n_classes=n_classes, n_occur=n_occur)
     return X, labels, metadata
