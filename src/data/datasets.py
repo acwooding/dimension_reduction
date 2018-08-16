@@ -284,6 +284,11 @@ def fetch_and_unpack(dataset_name, do_unpack=True):
     if dataset_name not in ds:
         raise Exception(f"Unknown Dataset: {dataset_name}")
 
+    action = ds[dataset_name].get('action', None)
+    if  action != 'fetch_and_process':
+        logger.debug(f"Skipping fetch for dataset:{dataset_name}, action={action}")
+        return None
+
     interim_dataset_path = interim_data_path / dataset_name
 
     logger.debug(f"Checking for {dataset_name}")
