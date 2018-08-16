@@ -1,7 +1,5 @@
 from  itertools import product
-import joblib.func_inspect as jfi
 import numpy as np
-from functools import partial
 from sklearn.utils import check_random_state
 
 def _combn(iterable, repeat):
