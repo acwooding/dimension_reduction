@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.metrics import pairwise_distances as sk_pairwise_distances
+from sklearn.neighbors import NearestNeighbors
 
 import logging
 
@@ -380,3 +381,57 @@ def continuity(high_distances=None, low_distances=None,
     else:
         pt = point_scores
     return 1 - sum(pt)
+
+
+def point_generalized_1nn_error(*, data, classes, metric='euclidean'):
+    '''
+    Given data and associated classes (for each row), return an
+    array with entry 0 if the row's nearest neighbor has the same class
+    and a 1 if the row's nearest neighbor is from a different class.
+
+    Parameters
+    ----------
+    data: np.array
+    classes: 1d np.array
+    metric: an sklearn metric to use on the data to find nearest neighbors
+
+    Returns
+    -------
+    point_generalized_1nn_error: 1d np.array
+    '''
+    nbrs = NearestNeighbors(n_neighbors=2, metric=metric).fit(data)
+    _, indices = nbrs.kneighbors(data)
+    error = []
+    for a, b in indices:
+        if classes[a] == classes[b]:
+            error.append(0)
+        else:
+            error.append(1)
+    return np.array(error)
+
+
+def generalized_1nn_error(data=None, classes=None, point_error=None,
+                          metric='euclidean'):
+    '''
+    Given either data and associated classes (for each row), or
+    point_error, return the proportion of datapoints whose nearest neighbor
+    does not have the same class as it does.
+
+    Parameters
+    ----------
+    data: np.array
+    classes: 1d np.array
+    point_error: 1d np.array
+        output from point_generalized_1nn_error
+    metric: an sklearn metric to use on the data to find nearest neighbors
+
+    Returns
+    -------
+    generalized_1nn_error: (float)
+    '''
+    if point_error is None:
+        point_error = point_generalized_1nn_error(data=data,
+                                                  classes=classes,
+                                                  metric=metric)
+    error = np.sum(point_error)/len(point_error)
+    return error
