@@ -31,3 +31,4 @@ dependencies:
     - -e .
     - pytest-cov
     - git+https://github.com/acwooding/Multicore-TSNE.git@add-repr
+    - coveralls
