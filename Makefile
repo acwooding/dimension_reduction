@@ -28,11 +28,11 @@ endif
 data: requirements process_data
 
 ## Fetch the data
-fetch_data:
+fetch_data: src/data/datasets.json
 	$(PYTHON_INTERPRETER) -m src.data.make_dataset fetch
 
 ## Fetch and process the data
-process_data:
+process_data: fetch_data
 	$(PYTHON_INTERPRETER) -m src.data.make_dataset process
 
 joblib_clean:
@@ -42,6 +42,16 @@ joblib_clean:
 clean: joblib_clean
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
+
+## Build models / train / fit
+train: src/models/models.json
+	$(PYTHON_INTERPRETER) -m src.models.train_model
+
+src/models/experiments.json: train
+
+## Run Experiments / predict / transform
+predict: src/models/experiments.json
+	$(PYTHON_INTERPRETER) -m src.models.predict_model
 
 ## Run all Unit Tests and Doctests
 test:
