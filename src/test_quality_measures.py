@@ -134,6 +134,75 @@ def test_old_new_doubly_center_matrix(matrix):
 
 @given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
                                                    max_value=100)),
+       arrays(np.float, (3, 2), elements=st.floats(min_value=-100,
+                                                   max_value=100)))
+def test_pairwise_distance_differences_data(high_data, low_data):
+    hd, ld, dd = qm.pairwise_distance_differences(high_data=high_data,
+                                                  low_data=low_data)
+    n_pts = high_data.shape[0]
+    assert hd.shape == (n_pts, n_pts)
+    assert ld.shape == (n_pts, n_pts)
+    assert dd.shape == (n_pts, n_pts)
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)))
+def test_pairwise_distance_differences_dist(high_dist, low_dist):
+    hd, ld, dd = qm.pairwise_distance_differences(high_distances=high_dist,
+                                                  low_distances=low_dist)
+    n_pts = high_dist.shape[0]
+    assert hd.shape == (n_pts, n_pts)
+    assert ld.shape == (n_pts, n_pts)
+    assert dd.shape == (n_pts, n_pts)
+    assert (hd == high_dist).all()
+    assert (ld == low_dist).all()
+    assert (dd == (high_dist-low_dist)).all()
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 2), elements=st.floats(min_value=-100,
+                                                   max_value=100)))
+def test_stress_data(high_data, low_data):
+    stress = qm.stress(high_data=high_data, low_data=low_data)
+    assert stress.dtype == 'float64'
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)))
+def test_stress_distances(high_distances, low_distances):
+    stress = qm.stress(high_distances=high_distances,
+                       low_distances=low_distances)
+    assert stress.dtype == 'float64'
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 2), elements=st.floats(min_value=-100,
+                                                   max_value=100)))
+def test_point_stress_data(high_data, low_data):
+    pstress = qm.point_stress(high_data=high_data, low_data=low_data)
+    n_pts = high_data.shape[0]
+    assert pstress.shape == (n_pts, )
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)))
+def test_point_stress_distances(high_distances, low_distances):
+    pstress = qm.point_stress(high_distances=high_distances,
+                              low_distances=low_distances)
+    n_pts = high_distances.shape[0]
+    assert pstress.shape == (n_pts, )
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
        arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
                                                    max_value=100)))
 def test_old_new_strain(high_distances, low_distances):
@@ -153,6 +222,7 @@ def test_old_new_point_strain(high_distances, low_distances):
         assert (qm.point_strain(high_distances, low_distances) ==
                 old_point_strain(high_distances, low_distances)).all()
 
+
 # TODO: Test various input styles.
 @given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
                                                    max_value=100)),
@@ -169,6 +239,13 @@ def test_old_new_point_untrustworthiness(high_distances, low_distances,
                                      n_neighbors=n_neighbors)
     assert all(old == new)
 
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)))
+def test_rank_matrix_compatibility(matrix):
+    assert (qm.slower_rank_matrix(matrix) == qm.rank_matrix(matrix)).all()
+
+
 class TestEncoding(unittest.TestCase):
 
     @given(arrays(np.float, (3, 2), elements=st.floats(min_value=-100,
@@ -176,6 +253,18 @@ class TestEncoding(unittest.TestCase):
     def test_doubly_center_matrix_input(self, matrix):
         with self.assertRaises(ValueError):
             qm.doubly_center_matrix(matrix)
+
+    @given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                       max_value=100)))
+    def test_pairwise_distance_differences_input(self, matrix):
+        with self.assertRaises(ValueError):
+            qm.pairwise_distance_differences(high_data=matrix)
+        with self.assertRaises(ValueError):
+            qm.pairwise_distance_differences(high_distances=matrix)
+        with self.assertRaises(ValueError):
+            qm.pairwise_distance_differences(low_data=matrix)
+        with self.assertRaises(ValueError):
+            qm.pairwise_distance_differences(low_distances=matrix)
 
     @given(st.integers(min_value=1, max_value=100))
     def test_zero_input_strain(self, N):

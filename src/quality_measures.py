@@ -43,6 +43,36 @@ def pairwise_distance_differences(high_distances=None, low_distances=None,
     high_distances: np array of pairwise distances between high_data points
     low_distances: np array of pairwise distances between low_data points
     distance_difference: np array high_distances - low_distances
+
+    >>> a = np.array([[7, 4, 0], [4, 5, 2], [9, 4, 3]])
+    >>> b = np.array([[0, 6], [7, 1], [4, 9]])
+    >>> pairwise_distance_differences(high_data=a, low_data=b)[0]
+    array([[0.        , 3.74165739, 3.60555128],
+           [3.74165739, 0.        , 5.19615242],
+           [3.60555128, 5.19615242, 0.        ]])
+    >>> pairwise_distance_differences(high_data=a, low_data=b)[1]
+    array([[0.        , 8.60232527, 5.        ],
+           [8.60232527, 0.        , 8.54400375],
+           [5.        , 8.54400375, 0.        ]])
+    >>> pairwise_distance_differences(high_data=a, low_data=b)[2]
+    array([[ 0.        , -4.86066788, -1.39444872],
+           [-4.86066788,  0.        , -3.34785132],
+           [-1.39444872, -3.34785132,  0.        ]])
+
+    >>> a = np.array([[0, 4, 7], [4, 0, 2], [7, 2, 0]])
+    >>> b = np.array([[0, 4, 8], [4, 0, 1], [8, 1, 0]])
+    >>> pairwise_distance_differences(high_distances=a, low_distances=b)[0]
+    array([[0, 4, 7],
+           [4, 0, 2],
+           [7, 2, 0]])
+    >>> pairwise_distance_differences(high_distances=a, low_distances=b)[1]
+    array([[0, 4, 8],
+           [4, 0, 1],
+           [8, 1, 0]])
+    >>> pairwise_distance_differences(high_distances=a, low_distances=b)[2]
+    array([[ 0,  0, -1],
+           [ 0,  0,  1],
+           [-1,  1,  0]])
     '''
     if (high_distances is None) and (high_data is None):
         raise ValueError("One of high_distances or high_data is required")
@@ -57,20 +87,30 @@ def pairwise_distance_differences(high_distances=None, low_distances=None,
 
     return high_distances, low_distances, difference_distances
 
+
 # Stress
-
-
 def stress(high_distances=None, low_distances=None,
            high_data=None, low_data=None, metric='euclidean'):
     '''
     Compute the stress as defined in Metric MDS given $d_{ij}-||x_{i}-x_{j}||$.
+
+
+    >>> a = np.array([[7, 4, 0], [4, 5, 2], [9, 4, 3]])
+    >>> b = np.array([[0, 6], [7, 1], [4, 9]])
+    >>> stress(high_data=a, low_data=b)
+    8.576559679258732
+
+    >>> a = np.array([[0, 4, 7], [4, 0, 2], [7, 2, 0]])
+    >>> b = np.array([[0, 4, 8], [4, 0, 1], [8, 1, 0]])
+    >>> stress(high_distances=a, low_distances=b)
+    2.0
     '''
-    difference_distances = pairwise_distance_differences(high_distances=high_distances,
-                                                    low_distances=low_distances,
-                                                    high_data=high_data,
-                                                    low_data=low_data,
-                                                    metric=metric)[2]
-    s_difference_distances = square_matrix_entries(difference_distances)
+    dd = pairwise_distance_differences(high_distances=high_distances,
+                                       low_distances=low_distances,
+                                       high_data=high_data,
+                                       low_data=low_data,
+                                       metric=metric)[2]
+    s_difference_distances = square_matrix_entries(dd)
     stress = np.sqrt(np.sum(s_difference_distances))
     return stress
 
@@ -80,15 +120,26 @@ def point_stress(high_distances=None, low_distances=None,
     '''
     Attempt at defining a notion of the contribution to stress by point.
 
-    Do this by taking the square root of the row sums of  $(d_{ij}-||x_{i}-x_{j}||)^2$
-    '''
-    difference_distances = pairwise_distance_differences(high_distances=high_distances,
-                                                    low_distances=low_distances,
-                                                    high_data=high_data,
-                                                    low_data=low_data,
-                                                    metric=metric)[2]
+    Do this by taking the square root of the row sums of
+    $(d_{ij}-||x_{i}-x_{j}||)^2$
 
-    s_difference_distances = square_matrix_entries(difference_distances)
+    >>> a = np.array([[7, 4, 0], [4, 5, 2], [9, 4, 3]])
+    >>> b = np.array([[0, 6], [7, 1], [4, 9]])
+    >>> point_stress(high_data=a, low_data=b)
+    array([5.05673605, 5.90205055, 3.62665076])
+
+    >>> a = np.array([[0, 4, 7], [4, 0, 2], [7, 2, 0]])
+    >>> b = np.array([[0, 4, 8], [4, 0, 1], [8, 1, 0]])
+    >>> point_stress(high_distances=a, low_distances=b)
+    array([1.        , 1.        , 1.41421356])
+    '''
+    dd = pairwise_distance_differences(high_distances=high_distances,
+                                       low_distances=low_distances,
+                                       high_data=high_data,
+                                       low_data=low_data,
+                                       metric=metric)[2]
+
+    s_difference_distances = square_matrix_entries(dd)
     point_stress = np.sqrt(np.sum(s_difference_distances, axis=1))
     return point_stress
 
@@ -112,15 +163,15 @@ def strain(high_distances=None, low_distances=None,
     '''
     Compute the strain as defined in Classical MDS.
     '''
-    high_distances, low_distances, _ = pairwise_distance_differences(high_distances=high_distances,
-                                                          low_distances=low_distances,
-                                                          high_data=high_data,
-                                                          low_data=low_data,
-                                                          metric=metric)
+    hd, ld, _ = pairwise_distance_differences(high_distances=high_distances,
+                                              low_distances=low_distances,
+                                              high_data=high_data,
+                                              low_data=low_data,
+                                              metric=metric)
     if (high_distances == 0).all():
         raise ValueError("high_distances can't be the zero matrix")
-    B = doubly_center_matrix(square_matrix_entries(high_distances))
-    top = square_matrix_entries(B - square_matrix_entries(low_distances))
+    B = doubly_center_matrix(square_matrix_entries(hd))
+    top = square_matrix_entries(B - square_matrix_entries(ld))
     result = np.sqrt(np.sum(top)/np.sum(square_matrix_entries(B)))
     return result
 
@@ -133,15 +184,15 @@ def point_strain(high_distances=None, low_distances=None,
     over the normalization factor.
     '''
 
-    high_distances, low_distances, _ = pairwise_distance_differences(high_distances=high_distances,
-                                                          low_distances=low_distances,
-                                                          high_data=high_data,
-                                                          low_data=low_data,
-                                                          metric=metric)
+    hd, ld, _ = pairwise_distance_differences(high_distances=high_distances,
+                                              low_distances=low_distances,
+                                              high_data=high_data,
+                                              low_data=low_data,
+                                              metric=metric)
     if (high_distances == 0).all():
         raise ValueError("high_distances can't be the zero matrix")
-    B = doubly_center_matrix(square_matrix_entries(high_distances))
-    top = square_matrix_entries(B - square_matrix_entries(low_distances))
+    B = doubly_center_matrix(square_matrix_entries(hd))
+    top = square_matrix_entries(B - square_matrix_entries(ld))
     result = np.sum(top, axis=1)/np.sum(square_matrix_entries(B))
     return result
 
@@ -177,13 +228,13 @@ def rank_matrix(distance_matrix):
     return mat
 
 
-def faster_rank_matrix(distance_matrix):
+def slower_rank_matrix(distance_matrix):
     '''
     Return a rank matrix where the (i, j) entry is the number of
     distances in row i that that are less than the value of the
     entry (i, j) in the distance matrix. Ties in distance are broken
     by lexicographical order of the column index (as in numpy's argsort).
-    >>> faster_rank_matrix(np.array([[0, 1, 5, 3],\
+    >>> slower_rank_matrix(np.array([[0, 1, 5, 3],\
                                      [1, 0 , 3, 5],\
                                      [5, 3, 0, 1],\
                                      [3, 5, 1, 0]]))
@@ -191,7 +242,7 @@ def faster_rank_matrix(distance_matrix):
            [1, 0, 2, 3],
            [3, 2, 0, 1],
            [2, 3, 1, 0]], dtype=int32)
-    >>> faster_rank_matrix(np.array([[0, 1, 2, 3],\
+    >>> slower_rank_matrix(np.array([[0, 1, 2, 3],\
                                      [1, 0 , 1, 2],\
                                      [2, 1, 0, 1],\
                                      [3, 2, 1, 0]]))
