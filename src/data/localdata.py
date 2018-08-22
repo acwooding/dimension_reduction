@@ -1,39 +1,80 @@
 import cv2
-from ..paths import interim_data_path
+from ..paths import interim_data_path, processed_data_path
 import glob
 import pandas as pd
 import numpy as np
 import os
+import logging
 from scipy.io import loadmat
 
 from .utils import read_space_delimited, normalize_labels
 
-__all__ = ['load_coil_20', 'load_coil_100', 'load_frey_faces', 'load_hiva',
-           'load_lvq_pak', 'load_mnist', 'load_orl_faces', 'load_shuttle_statlog']
+__all__ = ['process_coil', 'process_frey_faces', 'process_hiva',
+           'process_lvq_pak', 'process_mnist', 'process_orl_faces', 'process_shuttle_statlog']
 
-def load_coil_20(dataset_name='coil-20', metadata=None):
-    """ Load the coil 20 dataset
+logger = logging.getLogger(__name__)
 
+def process_coil(dataset_name='coil-20', metadata=None, preview_extension=None,
+              unpacked_path='processed_images', image_glob='*.pgm', colorspace='greyscale'):
+    """Load a coil-style (image) dataset
+
+    dataset_name: string
+    metadata: dict
+        new metadata will be appended to this dict. If None, a new dict is created
+    unpacked_path: string
+        Look for data in `interim_data_path/dataset_name/unpacked_path`
+    image_glob: glob
+        If `preview_extension` is not None, input images are expected
+        to match this pattern.
+    colorspace: {'greyscale', 'color'},
+        Colorspace to use when loading.
+    preview_extension: string or None
+        Create preview images (of this file type) in
+        `processed_data_path / dataset_name / preview_extension`
+        Must be a filename extension supported by the image library.
+        If None, no preview images are created
     Additional metadata:
         filename: original filename
         rotation: rotation of target (extracted from filename)
     """
+
+    if colorspace is not None:
+        if colorspace == 'greyscale':
+            colorspace = cv2.COLORSPACE_GRAY
+        elif colorspace == 'color':
+            colorspace = None
+        else:
+            raise Exception(f"Unknown colorspace: {colorspace}")
+
     if metadata is None:
         metadata = {}
     feature_vectors = []
-    glob_path = interim_data_path / 'coil-20' / 'processed_images' / '*.pgm'
-    filelist = glob.glob(str(glob_path))
+    glob_path = interim_data_path / dataset_name / unpacked_path
 
-    metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
-    metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
+    if preview_extension is not None:
+        logger.debug(f"creating {preview_extension}-format preview images")
+        preview_dir = processed_data_path / dataset_name / preview_extension
+        if not preview_dir.exists():
+            os.makedirs(preview_dir)
 
-    for filename in filelist:
-        im = cv2.imread(filename, cv2.COLORSPACE_GRAY)
+    filename_list = []
+    logger.debug(f"Processing images in {unpacked_path} matching {image_glob}")
+    for filename in glob_path.glob(image_glob):
+        filename_list.append(filename.name)
+        if colorspace is not None:
+            im = cv2.imread(str(filename), colorspace)
+        else:
+            im = cv2.imread(str(filename))
         feature_vectors.append(im.flatten())
+        if preview_extension is not None:
+            preview_file = preview_dir / f"{filename.stem}.{preview_extension}"
+            cv2.imwrite(str(preview_file), im)
 
-    target = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
+    metadata['filename'] = pd.Series(filename_list)
+    metadata['rotation'] = metadata['filename'].str.extract("obj[0-9]+__([0-9]+)", expand=False)
+    target = metadata['filename'].str.extract("obj([0-9]+)", expand=False)
     data = np.vstack(feature_vectors)
-
+    logger.debug(f"Processed {len(feature_vectors)} images")
     dset_opts = {
         'dataset_name': dataset_name,
         'data': data,
@@ -43,40 +84,7 @@ def load_coil_20(dataset_name='coil-20', metadata=None):
 
     return dset_opts
 
-def load_coil_100(dataset_name='coil-100', metadata=None):
-    """ Load the coil 100 dataset
-
-    Additional metadata:
-        filename: original filename
-        rotation: rotation of target (extracted from filename)
-    """
-
-    if metadata is None:
-        metadata = {}
-    feature_vectors = []
-    glob_path = interim_data_path / 'coil-100' / 'coil-100/' / '*.ppm'
-    filelist = glob.glob(str(glob_path))
-
-    metadata['filename'] = pd.Series(filelist).apply(os.path.basename)
-    metadata['rotation'] = pd.Series(filelist).str.extract("obj[0-9]+__([0-9]+)", expand=False)
-
-    for filename in filelist:
-        im = cv2.imread(filename)
-        feature_vectors.append(im.flatten())
-
-    target = pd.Series(filelist).str.extract("obj([0-9]+)", expand=False)
-    data = np.vstack(feature_vectors)
-
-    dset_opts = {
-        'dataset_name': dataset_name,
-        'data': data,
-        'target': target,
-        'metadata': metadata
-    }
-
-    return dset_opts
-
-def load_mnist(dataset_name='mnist', kind='train', metadata=None):
+def process_mnist(dataset_name='mnist', kind='train', metadata=None):
     '''
     Load the MNIST dataset (or a compatible variant; e.g. F-MNIST)
 
@@ -105,7 +113,7 @@ def load_mnist(dataset_name='mnist', kind='train', metadata=None):
     }
     return dset_opts
 
-def load_orl_faces(dataset_name='orl-faces', metadata=None):
+def process_orl_faces(dataset_name='orl-faces', metadata=None):
     """Load the ORL Faces dataset
 
         Consists of 92x112, 8-bit greyscale images of 40 total subjects
@@ -137,7 +145,7 @@ def load_orl_faces(dataset_name='orl-faces', metadata=None):
     }
     return dset_opts
 
-def load_hiva(dataset_name='hiva', kind='train', metadata=None):
+def process_hiva(dataset_name='hiva', kind='train', metadata=None):
     """Load the HIVA dataset
 
     kind: {'train', 'test', 'valid'}
@@ -167,7 +175,7 @@ def load_hiva(dataset_name='hiva', kind='train', metadata=None):
     }
     return dset_opts
 
-def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat', metadata=None):
+def process_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat', metadata=None):
     '''
     Load the Frey Faces dataset
 
@@ -191,7 +199,7 @@ def load_frey_faces(dataset_name='frey-faces', filename='frey_rawface.mat', meta
     }
     return dset_opts
 
-def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True, metadata=None):
+def process_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True, metadata=None):
     """
     kind: {'test', 'train', 'all'}, default 'all'
     numeric_labels: boolean (default: True)
@@ -229,7 +237,7 @@ def load_lvq_pak(dataset_name='lvq-pak', kind='all', numeric_labels=True, metada
     }
     return dset_opts
 
-def load_shuttle_statlog(dataset_name='shuttle-statlog', kind='train', metadata=None):
+def process_shuttle_statlog(dataset_name='shuttle-statlog', kind='train', metadata=None):
     """Load the shuttle dataset
 
     This is a 9-dimensional dataset with class labels split into training and test sets

@@ -26,8 +26,8 @@ dependencies:
   - joblib
   - pip>=9
   - pyviz
+  - cmake
   - pip:
     - -e .
     - pytest-cov
-    - cmake
     - git+https://github.com/acwooding/Multicore-TSNE.git@add-repr

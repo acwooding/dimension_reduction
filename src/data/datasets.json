@@ -26,25 +26,43 @@
     },
     "coil-100": {
         "action": "fetch_and_process",
-        "hash_type": "sha1",
-        "hash_value": "b58920394780e1c224a39004e74bd3574fbed85a",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_coil_100",
-        "load_function_options": {},
-        "url": "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.tar.gz"
+        "load_function_name": "process_coil",
+        "load_function_kwargs": {
+	    "unpacked_path": "coil-100",
+	    "image_glob": "*.ppm",
+            "dataset_name": "coil-100",
+	    "colorspace": "color",
+	    "preview_extension": "png"
+	},
+        "url_list": [
+            {
+		"hash_type": "sha1",
+		"hash_value": "b58920394780e1c224a39004e74bd3574fbed85a",
+                "name": null,
+                "url": "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.tar.gz"
+            }
+	]
     },
     "coil-20": {
         "action": "fetch_and_process",
-        "hash_type": "sha1",
-        "hash_value": "e5d518fa9ef1d81aef7dfa24b398e4a509b2ffd5",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_coil_20",
-        "load_function_options": {},
-        "url": "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.tar.gz"
+        "load_function_name": "process_coil",
+        "load_function_kwargs": {
+	    "dataset_name": "coil-20",
+	    "colorspace": "greyscale",
+	    "preview_extension": "png"
+	},
+	"url_list": [
+	    {
+		"hash_type": "sha1",
+		"hash_value": "e5d518fa9ef1d81aef7dfa24b398e4a509b2ffd5",
+		"name": null,
+		"url": "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.tar.gz"
+	    }
+	]
     },
     "difficult": {
         "action": "generate",
@@ -62,10 +80,9 @@
     "f-mnist": {
         "action": "fetch_and_process",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_mnist",
-        "load_function_options": {
+        "load_function_name": "process_mnist",
+        "load_function_kwargs": {
             "dataset_name": "f-mnist"
         },
         "url_list": [
@@ -100,10 +117,9 @@
         "hash_type": "sha1",
         "hash_value": "32c4bc7a947721c46df32d4f4973f31daf5d3946",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_frey_faces",
-        "load_function_options": {},
+        "load_function_name": "process_frey_faces",
+        "load_function_kwargs": {},
         "url": "https://cs.nyu.edu/~roweis/data/frey_rawface.mat"
     },
     "gaussian-blobs": {
@@ -133,10 +149,9 @@
     "hiva": {
         "action": "fetch_and_process",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_hiva",
-        "load_function_options": {
+        "load_function_name": "process_hiva",
+        "load_function_kwargs": {
             "kind": "train"
         },
         "url_list": [
@@ -152,10 +167,9 @@
     "lvq-pak": {
         "action": "fetch_and_process",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_lvq_pak",
-        "load_function_options": {},
+        "load_function_name": "process_lvq_pak",
+        "load_function_kwargs": {},
         "url_list": [
             {
                 "file_name": null,
@@ -169,10 +183,9 @@
     "mnist": {
         "action": "fetch_and_process",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_mnist",
-        "load_function_options": {},
+        "load_function_name": "process_mnist",
+        "load_function_kwargs": {},
         "url_list": [
             {
                 "hash_type": "sha1",
@@ -203,10 +216,9 @@
     "orl-faces": {
         "action": "fetch_and_process",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_orl_faces",
-        "load_function_options": {
+        "load_function_name": "process_orl_faces",
+        "load_function_kwargs": {
             "dataset_name": "orl-faces"
         },
         "url_list": [
@@ -235,10 +247,9 @@
     "shuttle-statlog": {
         "action": "fetch_and_process",
         "load_function_args": [],
-        "load_function_kwargs": {},
         "load_function_module": "src.data.localdata",
-        "load_function_name": "load_shuttle_statlog",
-        "load_function_options": {
+        "load_function_name": "process_shuttle_statlog",
+        "load_function_kwargs": {
             "dataset_name": "shuttle-statlog"
         },
         "url_list": [
