@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/acwooding/dimension_reduction/badge.svg?branch=coveralls)](https://coveralls.io/github/acwooding/dimension_reduction?branch=coveralls)
+
 Python Dimension Reduction Playground
 =====================================
 
