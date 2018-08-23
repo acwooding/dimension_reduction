@@ -486,3 +486,57 @@ def generalized_1nn_error(data=None, classes=None, point_error=None,
                                                   metric=metric)
     error = np.sum(point_error)/len(point_error)
     return error
+
+def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
+    """Make a sklearn-style scoring function for measures taking high/low data representations.
+
+    Assumes the wrapped function expects `high_data` and `low_data` as parameters
+
+    greater_is_better : boolean, default=True
+        Whether `func` is a score function (default), meaning high is good,
+        or a loss function, meaning low is good. In the latter case, the
+        scorer object will sign-flip the outcome of the `func`.
+    """
+    sign = 1 if greater_is_better else -1
+    def wrapped_func(estimator, X, y=None, **wrap_kw):
+        low_data = estimator.transform(X)
+        new_kwargs = {**kwargs, **wrap_kw}
+        score = func(high_data=X, low_data=low_data, **new_kwargs)
+        return sign * score
+    return wrapped_func
+
+def available_quality_measures():
+    """Valid quality measures for evaluating dimension reductions.
+
+    This function simply returns the valid quality metrics.
+    It exists to allow for a description of the mapping for
+    each of the valid strings.
+
+    The valid quality metrics, and the function they map to, are:
+
+    ============     ====================================
+    metric           Function
+    ============     ====================================
+    '1nn-error'
+    'adj-kendall-tau'
+    'continuity'
+    'jaccard'
+    'quality'
+    'stress'
+    'strain'
+    'trustworthiness'
+    ============     ====================================
+
+    """
+    return DR_MEASURES
+
+DR_MEASURES = {
+    "1nn-error": generalized_1nn_error,
+#    "adj-kendall-tau":None,
+    "continuity": continuity,
+#    "jaccard":None,
+#    "quality":None,
+    "stress": stress,
+    "strain": strain,
+    "trustworthiness": trustworthiness,
+}

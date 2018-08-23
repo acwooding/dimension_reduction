@@ -30,5 +30,5 @@ dependencies:
   - pip:
     - -e .
     - pytest-cov
-    - git+https://github.com/acwooding/Multicore-TSNE.git@add-repr
+    - git+https://github.com/acwooding/Multicore-TSNE.git@make-base-estimator
     - coveralls
