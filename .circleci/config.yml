@@ -60,7 +60,7 @@ jobs:
             source activate dimension_reduction
             cd src
             pytest --doctest-modules --doctest-continue-on-failure --verbose --cov --junitxml=test-reports/junit.xml
-            coveralls
+            COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls
 
       - store_test_results:
           path: test-reports
