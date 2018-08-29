@@ -8,10 +8,10 @@ import time
 from ..paths import processed_data_path
 from ..utils import record_time_interval
 from .dset import Dataset
+from ..logging import logger
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-logger = logging.getLogger(__name__)
 
 __all__ = ['run_algorithm']
 

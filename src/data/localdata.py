@@ -8,11 +8,17 @@ import logging
 from scipy.io import loadmat
 
 from .utils import read_space_delimited, normalize_labels
+from ..logging import logger
 
-__all__ = ['process_coil', 'process_frey_faces', 'process_hiva',
-           'process_lvq_pak', 'process_mnist', 'process_orl_faces', 'process_shuttle_statlog']
-
-logger = logging.getLogger(__name__)
+__all__ = [
+    'process_coil',
+    'process_frey_faces',
+    'process_hiva',
+    'process_lvq_pak',
+    'process_mnist',
+    'process_orl_faces',
+    'process_shuttle_statlog',
+]
 
 def process_coil(dataset_name='coil-20', metadata=None, preview_extension=None,
               unpacked_path='processed_images', image_glob='*.pgm', colorspace='greyscale'):
