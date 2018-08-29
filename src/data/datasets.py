@@ -3,7 +3,6 @@ import importlib
 import joblib
 import joblib.func_inspect as jfi
 import json
-import logging
 import os
 import pathlib
 import requests
@@ -16,10 +15,10 @@ from .dset import Dataset
 from .utils import hash_file, unpack, hash_function_map, read_space_delimited, normalize_labels, partial_call_signature
 from ..paths import data_path, raw_data_path, interim_data_path, processed_data_path
 from .localdata import *
+from ..logging import logger
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-logger = logging.getLogger(__name__)
 
 jlmem = joblib.Memory(cachedir=str(interim_data_path), verbose=0)
 

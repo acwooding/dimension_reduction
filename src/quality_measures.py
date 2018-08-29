@@ -2,15 +2,7 @@ import numpy as np
 from sklearn.metrics import pairwise_distances as sk_pairwise_distances
 from sklearn.neighbors import NearestNeighbors
 
-import logging
-
-LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
-DATE_FORMAT = "%m/%d/%Y %I:%M:%S %p"
-
-logging.basicConfig(format=LOG_FORMAT, level=logging.INFO,
-                    datefmt=DATE_FORMAT)
-logger = logging.getLogger()
-
+from .logging import logger
 
 # Helper functions
 def square_matrix_entries(matrix):

@@ -1,25 +1,20 @@
-import logging
 import time
 import numpy as np
 import json
-
+from .logging import logger
 # Timing and Performance
-
-logger = logging.getLogger()
-
 
 def timing_info(method):
     def wrapper(*args, **kw):
         start_time = time.time()
         result = method(*args, **kw)
         end_time = time.time()
-        logger.info("timing_info: {method.__name__}"
-                    "@{round((end_time-start_time)*1000,1)} ms")
+        logger.info(f"timing_info: {method.__name__}"
+                    f"@{round((end_time-start_time)*1000,1)} ms")
 
         return result
 
     return wrapper
-
 
 def record_time_interval(section, start_time, line_break=False):
     """Record a time interval since the last timestamp"""
