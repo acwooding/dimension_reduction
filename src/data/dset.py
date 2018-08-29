@@ -5,8 +5,7 @@ import pathlib
 import sys
 from sklearn.datasets.base import Bunch
 
-from ..paths import raw_data_path, processed_data_path
-from .utils import hash_function_map
+from ..paths import processed_data_path
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))

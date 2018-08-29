@@ -2,6 +2,8 @@ from  itertools import product
 import numpy as np
 from sklearn.utils import check_random_state
 
+__all__ = ['synthetic_data', 'sample_sphere_surface', 'sample_ball', 'helix']
+
 def _combn(iterable, repeat):
     """Equivalent of matlab's combn"""
     return list(product(iterable, repeat=repeat))
@@ -60,19 +62,6 @@ def checkerboard(t, shift_factors=None, scale_factors=None, n_classes=2, n_occur
         return ((t + shift_factors) / scale_factors).reshape(-1)
 
     return np.remainder(np.sum(np.round(0.5 + (t + shift_factors) / scale_factors * n_classes * n_occur ), axis=1), n_classes)
-
-def rescale(x, shift=0.0, scale=1.0, n_classes=2, n_occur=1):
-    """Convert a vector to discrete classes
-
-    Parameters
-    ----------
-    shift: shift coordinates up by this amount
-    scale: scale shifted coordinates by (the reciprocal of) this factor
-    n_classes: number of classes to return
-    n_occur: number of occurrences of each class
-    """
-    return np.remainder(np.round((x+shift)*n_classes*n_occur/scale), n_classes)
-
 
 def synthetic_data(n_points=1000, noise=0.05,
                    random_state=None, kind="unit_cube",
@@ -153,7 +142,7 @@ def synthetic_data(n_points=1000, noise=0.05,
         metadata['manifold_coords'] = t
 
         if legacy_labels is True:
-            labels = np.remainder(np.sum(np.round((ds.data + np.tile(np.min(ds.data, axis=0), (ds.data.shape[0], 1))) / 10.), axis=1), 2)
+            labels = np.remainder(np.sum(np.round((X + np.tile(np.min(X, axis=0), (X.shape[0], 1))) / 10.), axis=1), 2)
         elif n_classes is None:
             labels = 1-z
         else:
