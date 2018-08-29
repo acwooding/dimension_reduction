@@ -1,0 +1,27 @@
+[
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        2,
+        22,
+        42,
+        62,
+        82
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  }
+]

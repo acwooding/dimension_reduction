@@ -44,10 +44,8 @@ clean: joblib_clean
 	find . -type d -name "__pycache__" -delete
 
 ## Build models / train / fit
-train: src/models/models.json
-	$(PYTHON_INTERPRETER) -m src.models.train_model
-
-src/models/experiments.json: train
+train: src/data/datasets.json models/experiment_models.json
+	$(PYTHON_INTERPRETER) -m src.models.train_model experiment_models.json
 
 ## Run Experiments / predict / transform
 predict: src/models/experiments.json

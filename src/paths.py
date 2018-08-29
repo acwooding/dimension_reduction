@@ -9,3 +9,8 @@ data_path = project_dir / 'data'
 raw_data_path = data_path / 'raw'
 interim_data_path = data_path / 'interim'
 processed_data_path = data_path / 'processed'
+
+models_path = project_dir / 'models'
+
+trained_models_path = models_path / 'trained'
+analysis_path = models_path / 'analysis'
