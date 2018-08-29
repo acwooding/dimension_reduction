@@ -487,10 +487,11 @@ def generalized_1nn_error(data=None, classes=None, point_error=None,
     error = np.sum(point_error)/len(point_error)
     return error
 
+
 def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
     """Make a sklearn-style scoring function for measures taking high/low data representations.
 
-    Assumes the wrapped function expects `high_data` and `low_data` as parameters
+    Assumes the wrapped function expects `high_data` and `low_data` as parameters.
 
     greater_is_better : boolean, default=True
         Whether `func` is a score function (default), meaning high is good,
@@ -504,6 +505,7 @@ def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
         score = func(high_data=X, low_data=low_data, **new_kwargs)
         return sign * score
     return wrapped_func
+
 
 def available_quality_measures():
     """Valid quality measures for evaluating dimension reductions.
