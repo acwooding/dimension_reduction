@@ -10,8 +10,8 @@ from ..paths import models_path, trained_models_path, processed_data_path
 from ..data import datasets
 from ..utils import normalize_numpy_dict, save_json
 
-from sklearn.decomposition import PCA
-from sklearn.manifold import MDS, Isomap, LocallyLinearEmbedding
+from sklearn.decomposition import PCA, KernelPCA
+from sklearn.manifold import MDS, Isomap, LocallyLinearEmbedding, SpectralEmbedding
 from sklearn.model_selection import GridSearchCV
 
 from MulticoreTSNE import MulticoreTSNE as TSNE
@@ -28,11 +28,16 @@ meta_estimators = {
 
 DR_ALGORITHMS = {
     "autoencoder": None,
-    "isomap": Isomap,
-    "MDS": MDS,
-    "PCA": PCA,
-    "t-SNE": TSNE,
-    "UMAP": UMAP,
+    "HLLE": LocallyLinearEmbedding(method='hessian'),
+    "Isomap": Isomap(),
+    "KernelPCA": KernelPCA(),
+    "LaplacianEigenmaps": SpectralEmbedding(),
+    "LLE": LocallyLinearEmbedding(),
+    "LTSA": LocallyLinearEmbedding(method='ltsa'),
+    "MDS": MDS(),
+    "PCA": PCA(),
+    "TSNE": TSNE(),
+    "UMAP": UMAP(),
 }
 
 def available_algorithms():
@@ -91,7 +96,7 @@ def main(model_list):
         meta = td.get('meta', None)
         if meta == 'grid_search':
             ds = datasets.load_dataset(td['dataset'])
-            alg = available_algorithms()[td['algorithm']]()
+            alg = available_algorithms()[td['algorithm']]
             score = qm.make_hi_lo_scorer(qm.available_quality_measures()[td['score']], **td['score_params'])
             grid_search = meta_estimators[td['meta']](alg, td['algorithm_params'], scoring=score, **td['meta_params'])
             grid_search.fit(ds.data)#, y=ds.target)
