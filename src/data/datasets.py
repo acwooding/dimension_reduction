@@ -80,19 +80,36 @@ def get_default_metadata(*, dataset_name):
     return metadata
 
 def new_dataset(metadata=None, *, dataset_name):
+    """Default wrapper to create a new dataset
+
+    Parameters
+    ----------
+    metadata: dict or None
+        default metadata dictionary. If None, default metadata is generated
+    """
+    
     if metadata is None:
         metadata = get_default_metadata(dataset_name=dataset_name)
     return Dataset(metadata=metadata)
 
 
 def get_dataset_filename(ds_dict):
-    '''Figure out the downloaded filename for a dataset entry
+    """Figure out the downloaded filename for a dataset entry
 
     if a `file_name` key is present, use this,
     otherwise, use the last component of the `url`
 
     Returns the filename
-    '''
+
+    Examples
+    --------
+    >>> ds_dict = {'url': 'http://example.com/path/to/file.txt'}
+    >>> get_dataset_filename(ds_dict)
+    'file.txt'
+    >>> ds_dict['file_name'] = 'new_filename.blob'
+    >>> get_dataset_filename(ds_dict)
+    'new_filename.blob'
+    """
 
     file_name = ds_dict.get('file_name', None)
     url = ds_dict.get('url', [])

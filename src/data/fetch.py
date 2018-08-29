@@ -21,9 +21,9 @@ __all__ = [
 ]
 
 _HASH_FUNCTION_MAP = {
+    'md5': hashlib.md5,
     'sha1': hashlib.sha1,
     'sha256': hashlib.sha256,
-    'md5': hashlib.md5,
 }
 
 def available_hashes():
@@ -44,6 +44,9 @@ def available_hashes():
     sha1             hashlib.sha1
     sha256           hashlib.sha256
     ============     ====================================
+
+    >>> list(available_hashes().keys())
+    ['md5', 'sha1', 'sha256']
     """
     return _HASH_FUNCTION_MAP
 
@@ -81,6 +84,13 @@ def fetch_files(force=False, dst_dir=None, **kwargs):
         raw_file:
             output file name. If not specified, use the last
             component of the URL
+
+    Examples
+    --------
+    >>> fetch_files()
+    Traceback (most recent call last):
+      ...
+    Exception: One of `file_name` or `url` is required
     '''
     url_list = kwargs.get('url_list', None)
     if not url_list:
@@ -134,6 +144,8 @@ def fetch_file(url=None, contents=None,
                **kwargs):
     '''Fetch remote files via URL
 
+    if `file_name` already exists, compute the hash of the on-disk file
+
     contents:
         contents of file to be created
     url:
@@ -155,18 +167,25 @@ def fetch_file(url=None, contents=None,
         not present on the filesystem, or if the existing file has a
         bad hash. If force is True, download is always attempted.
 
-
-    returns one of:
-
-
+    Returns
+    -------
+    one of:
         (HTTP_Code, downloaded_filename, hash) (if downloaded from URL)
         (True, filename, hash) (if already exists)
         (False, [error])
-    if `file_name` already exists, compute the hash of the on-disk file,
+
+    Examples
+    --------
+    >>> fetch_file()
+    Traceback (most recent call last):
+      ...
+    Exception: One of `file_name` or `url` is required
     '''
     if dst_dir is None:
         dst_dir = raw_data_path
     if file_name is None:
+        if url is None:
+            raise Exception('One of `file_name` or `url` is required')
         file_name = url.split("/")[-1]
     dl_data_path = pathlib.Path(dst_dir)
 
@@ -275,57 +294,3 @@ def unpack(filename, dst_dir=None, create_dst=True):
             logger.info(f"Decompresing {outfile}")
             with open(pathlib.Path(dst_dir) / outfile, outmode) as f_out:
                 shutil.copyfileobj(f_in, f_out)
-
-
-def fetch_and_unpack(dataset_name, do_unpack=True):
-    '''Fetch and process datasets to their usable form
-
-    dataset_name: string
-        Name of dataset. Must be in `datasets.json`
-    do_unpack: boolean
-        If false, just download, don't process.
-
-    '''
-    ds = read_datasets()
-    if dataset_name not in ds:
-        raise Exception(f"Unknown Dataset: {dataset_name}")
-
-    action = ds[dataset_name].get('action', None)
-    if  action != 'fetch_and_process':
-        logger.debug(f"Skipping fetch for dataset:{dataset_name}, action={action}")
-        return None
-
-    interim_dataset_path = interim_data_path / dataset_name
-
-    logger.debug(f"Checking for {dataset_name}")
-    if ds[dataset_name].get('url_list', None):
-        single_file = False
-        status, results = fetch_files(dst_dir=raw_data_path,
-                                      **ds[dataset_name])
-        if status:
-            logger.debug(f"{dataset_name} retrieved successfully")
-        else:
-            logger.error(f"Failed to retrieve all data files: {results}")
-            raise Exception("Failed to retrieve all data files")
-        if do_unpack:
-            for _, filename, _ in results:
-                unpack(filename, dst_dir=interim_dataset_path)
-    else:
-        single_file = True
-        status, filename, hashval = fetch_file(dst_dir=raw_data_path,
-                                               **ds[dataset_name])
-        hashtype = ds[dataset_name].get('hash_type', None)
-        if status:
-            logger.debug(f"Retrieved Dataset: {dataset_name} "
-                        f"({hashtype}: {hashval})")
-        else:
-            logger.error(f"Unpack to {filename} failed (hash: {hashval}). "
-                         f"Status: {status}")
-            raise Exception(f"Failed to download raw data: {filename}")
-        if do_unpack:
-            unpack(filename, dst_dir=interim_dataset_path)
-    if do_unpack:
-        return interim_dataset_path
-    if single_file:
-        return filename
-    return raw_data_path
