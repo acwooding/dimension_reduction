@@ -45,9 +45,7 @@ clean: joblib_clean
 
 ## Build models / train / fit
 train: src/models/models.json
-	$(PYTHON_INTERPRETER) -m src.models.train_model
-
-src/models/experiments.json: train
+	$(PYTHON_INTERPRETER) -m src.models.train_model experiment_models.json
 
 ## Run Experiments / predict / transform
 predict: src/models/experiments.json
