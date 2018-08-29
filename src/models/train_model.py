@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 import click
-from ..logging import logger
 import json
 import joblib
 import os
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-from ..paths import models_path, trained_models_path, processed_data_path
-from ..data import datasets
-from ..utils import normalize_numpy_dict, save_json
 
 from sklearn.decomposition import PCA
 from sklearn.manifold import MDS, Isomap, LocallyLinearEmbedding
