@@ -6,10 +6,7 @@ import base64
 
 import math
 
-import logging
-
-logger = logging.getLogger()
-
+from ..logging import logger
 
 def two_dim_label_viz(data, labels, cmap="Blues", s=10, **kwargs):
     """
