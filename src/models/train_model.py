@@ -49,7 +49,7 @@ DR_ALGORITHMS = {
     "MDS": MDS(),
     "PCA": PCA(),
     "t-SNE": TSNE(),
-    "UMAP": UMAP(),
+    "UMAP": UMAP(random_state=6502),
 }
 
 def available_algorithms():
@@ -79,7 +79,7 @@ def available_algorithms():
 
 @click.command()
 @click.argument('model_list')
-def main(model_list):
+def main(model_list, output_file='experiments.json'):
     """Trains models speficied in the supplied `model_list` file
 
     output is a dictionary of trained model metadata, keyed by
@@ -105,12 +105,11 @@ def main(model_list):
 
     Parameters
     ----------
-
     model_list:
         json file specifying list of meta-estimators, algorithms, and score functions to
         combine into a model
-    force: boolean
-        if True, overwrite existing model
+    output_file:
+        name of json file to write metadata to
 
 
     """
@@ -192,6 +191,7 @@ def main(model_list):
             joblib.dump(alg, trained_models_path / f"{model_key}.model")
             save_json(trained_models_path / f"{model_key}.metadata", td)
 
+    save_json(models_path / output_file, metadata_dict)
 
 
 if __name__ == '__main__':
