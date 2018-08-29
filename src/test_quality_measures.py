@@ -4,17 +4,10 @@ from hypothesis.extra.numpy import arrays
 from hypothesis import given
 import unittest
 import numpy as np
-import logging
+import os
 
 import src.quality_measures as qm
-
-LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
-DATE_FORMAT = "%m/%d/%Y %I:%M:%S %p"
-
-logging.basicConfig(format=LOG_FORMAT, level=logging.INFO,
-                    datefmt=DATE_FORMAT)
-logger = logging.getLogger()
-
+from .logging import logger
 
 # old functions to test against while refactoring
 

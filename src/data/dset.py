@@ -6,10 +6,10 @@ import sys
 from sklearn.datasets.base import Bunch
 
 from ..paths import processed_data_path
+from ..logging import logger
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-logger = logging.getLogger(__name__)
 
 __all__ = ['Dataset']
 

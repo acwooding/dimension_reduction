@@ -4,7 +4,6 @@ import sys
 import joblib
 import joblib.func_inspect as jfi
 import json
-import logging
 import os
 import pathlib
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
@@ -14,6 +13,7 @@ from .fetch import unpack
 from .utils import normalize_labels, partial_call_signature
 from ..paths import raw_data_path, interim_data_path
 from .fetch import fetch_files, fetch_file
+from ..logging import logger
 
 __all__ = [
     'add_dataset_by_urllist',
@@ -34,7 +34,6 @@ __all__ = [
 
 _MODULE = sys.modules[__name__]
 _MODULE_DIR = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
-logger = logging.getLogger(__name__)
 
 jlmem = joblib.Memory(cachedir=str(interim_data_path), verbose=0)
 
