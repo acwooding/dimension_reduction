@@ -14,7 +14,8 @@ from sklearn.decomposition import PCA, KernelPCA
 from sklearn.manifold import MDS, Isomap, LocallyLinearEmbedding, SpectralEmbedding
 from sklearn.model_selection import GridSearchCV
 
-from MulticoreTSNE import MulticoreTSNE as TSNE
+#from MulticoreTSNE import MulticoreTSNE as TSNE
+from sklearn.manifold import TSNE
 from umap import UMAP
 
 import numpy as np

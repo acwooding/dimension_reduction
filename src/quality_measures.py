@@ -168,7 +168,7 @@ def strain(high_distances=None, low_distances=None,
                                               high_data=high_data,
                                               low_data=low_data,
                                               metric=metric)
-    if (high_distances == 0).all():
+    if (hd == 0).all():
         raise ValueError("high_distances can't be the zero matrix")
     B = doubly_center_matrix(square_matrix_entries(hd))
     top = square_matrix_entries(B - square_matrix_entries(ld))
@@ -189,7 +189,7 @@ def point_strain(high_distances=None, low_distances=None,
                                               high_data=high_data,
                                               low_data=low_data,
                                               metric=metric)
-    if (high_distances == 0).all():
+    if (hd == 0).all():
         raise ValueError("high_distances can't be the zero matrix")
     B = doubly_center_matrix(square_matrix_entries(hd))
     top = square_matrix_entries(B - square_matrix_entries(ld))
@@ -500,7 +500,12 @@ def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
     """
     sign = 1 if greater_is_better else -1
     def wrapped_func(estimator, X, y=None, **wrap_kw):
-        low_data = estimator.transform(X)
+        logger.debug(f"X.shape: {X.shape}")
+        if getattr(estimator, "transform", None) is not None:
+            low_data = estimator.transform(X)
+        else:
+            low_data = estimator.fit_transform(X)
+        logger.debug(f"low_data.shape: {low_data.shape}")
         new_kwargs = {**kwargs, **wrap_kw}
         score = func(high_data=X, low_data=low_data, **new_kwargs)
         return sign * score
