@@ -6,11 +6,12 @@ import os
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-from sklearn.decomposition import PCA
-from sklearn.manifold import MDS, Isomap, LocallyLinearEmbedding
+from sklearn.decomposition import PCA, KernelPCA
+from sklearn.manifold import MDS, Isomap, LocallyLinearEmbedding, SpectralEmbedding
 from sklearn.model_selection import GridSearchCV
 
-from MulticoreTSNE import MulticoreTSNE as TSNE
+#from MulticoreTSNE import MulticoreTSNE as TSNE
+from sklearn.manifold import TSNE
 from umap import UMAP
 
 import numpy as np
@@ -45,11 +46,16 @@ def available_meta_estimators():
 
 DR_ALGORITHMS = {
     "autoencoder": None,
-    "isomap": Isomap(),
+    "HLLE": LocallyLinearEmbedding(method='hessian'),
+    "Isomap": Isomap(),
+    "KernelPCA": KernelPCA(),
+    "LaplacianEigenmaps": SpectralEmbedding(),
+    "LLE": LocallyLinearEmbedding(),
+    "LTSA": LocallyLinearEmbedding(method='ltsa'),
     "MDS": MDS(),
     "PCA": PCA(),
-    "t-SNE": TSNE(),
-    "UMAP": UMAP(random_state=6502),
+    "TSNE": TSNE(),
+    "UMAP": UMAP(),
 }
 
 def available_algorithms():

@@ -1,0 +1,8870 @@
+[
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        51214,
+        51567
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        44351,
+        45069
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        34775,
+        7949
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        43592,
+        5239
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        5282,
+        41529
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        40229,
+        7580
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        31084,
+        23732
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        43744,
+        41425
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        64774,
+        19105
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        53140,
+        50580
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        44958,
+        45225
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        54109,
+        59380
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        37463,
+        3010
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        11493,
+        7555
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        23822,
+        11483
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        50879,
+        16318
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        42557,
+        56797
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        48754,
+        17053
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        26226,
+        10506
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        9658,
+        18817
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        61063,
+        59434
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        15614,
+        23875
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        7612,
+        15183
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        46679,
+        269
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        41534,
+        60269
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        43208,
+        34087
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        18577,
+        40870
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        50259,
+        48326
+      ]
+    },
+    "dataset": "swiss-roll",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        16771,
+        16784
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        10287,
+        25412
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        37692,
+        21930
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        28809,
+        126
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        45853,
+        35730
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        51526,
+        53705
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        40839,
+        16566
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        57060,
+        62857
+      ]
+    },
+    "dataset": "swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        23166,
+        35088
+      ]
+    },
+    "dataset": "helix",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        63112,
+        34393
+      ]
+    },
+    "dataset": "helix",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        45344,
+        15678
+      ]
+    },
+    "dataset": "helix",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        16951,
+        56481
+      ]
+    },
+    "dataset": "helix",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        26257,
+        6692
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        54604,
+        54065
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        35016,
+        57650
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        13390,
+        28758
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        7026,
+        48241
+      ]
+    },
+    "dataset": "helix",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        1455,
+        6715
+      ]
+    },
+    "dataset": "helix",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        3561,
+        15210
+      ]
+    },
+    "dataset": "helix",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        13839,
+        61980
+      ]
+    },
+    "dataset": "helix",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        28411,
+        22861
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        3493,
+        18746
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        750,
+        21629
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        1169,
+        1102
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        49630,
+        526
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        60446,
+        57563
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        58353,
+        15264
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        2516,
+        15651
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        43788,
+        23330
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        43160,
+        53025
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        2135,
+        22293
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        55660,
+        1261
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        39215,
+        54879
+      ]
+    },
+    "dataset": "helix",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        30611,
+        43450
+      ]
+    },
+    "dataset": "helix",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        22926,
+        52661
+      ]
+    },
+    "dataset": "helix",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        13142,
+        34841
+      ]
+    },
+    "dataset": "helix",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        58208,
+        56298
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        22994,
+        27187
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        53090,
+        40471
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        49748,
+        13455
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        44301,
+        28451
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        22721,
+        42495
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        53678,
+        5243
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        27752,
+        13400
+      ]
+    },
+    "dataset": "helix",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        38143,
+        40112
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        59780,
+        18315
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        14408,
+        42379
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        43018,
+        14296
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        48107,
+        43363
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        6608,
+        11966
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        55974,
+        23579
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        54428,
+        10888
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        9982,
+        28978
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        56686,
+        57323
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        34733,
+        56918
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        51778,
+        44564
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        53836,
+        31906
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        57046,
+        64675
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        4617,
+        18345
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        35988,
+        33236
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        30457,
+        21935
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        7984,
+        55798
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        59791,
+        11792
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        56079,
+        63683
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        17019,
+        18829
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        63684,
+        42477
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        36376,
+        51776
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        21672,
+        33674
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        31788,
+        27580
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        39167,
+        38110
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        18833,
+        12613
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        38950,
+        59427
+      ]
+    },
+    "dataset": "twinpeaks",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        64877,
+        53276
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        57090,
+        52722
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        15036,
+        51037
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        33739,
+        33521
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        62116,
+        63709
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        56261,
+        64630
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        62242,
+        2514
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        53788,
+        2355
+      ]
+    },
+    "dataset": "twinpeaks",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        32052,
+        55423
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        40093,
+        1010
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        35717,
+        4572
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        45624,
+        13431
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        32168,
+        47941
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        9522,
+        55441
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        60121,
+        32495
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        9206,
+        16568
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        16271,
+        51728
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        49281,
+        28787
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        49369,
+        33319
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        21469,
+        20403
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        43591,
+        65403
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        48307,
+        60555
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        9722,
+        45785
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        6344,
+        39396
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        31356,
+        18241
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        8193,
+        6802
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        10698,
+        55705
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        38213,
+        21591
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        42728,
+        52402
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        60643,
+        36531
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        51664,
+        24524
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        29403,
+        13483
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        46145,
+        29818
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        24766,
+        65212
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        48714,
+        45194
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        47864,
+        12332
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        47856,
+        34494
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        24338,
+        28693
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        20134,
+        11985
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        60192,
+        32699
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        14515,
+        56921
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        34320,
+        3016
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        9974,
+        7886
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        28967,
+        5825
+      ]
+    },
+    "dataset": "broken-swiss-roll",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        18365,
+        38631
+      ]
+    },
+    "dataset": "difficult",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        36740,
+        43616
+      ]
+    },
+    "dataset": "difficult",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        46561,
+        59640
+      ]
+    },
+    "dataset": "difficult",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        14198,
+        25388
+      ]
+    },
+    "dataset": "difficult",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        34815,
+        28636
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        25845,
+        12093
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        42507,
+        53510
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        2571,
+        55776
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        24653,
+        32527
+      ]
+    },
+    "dataset": "difficult",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        44352,
+        34571
+      ]
+    },
+    "dataset": "difficult",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        6222,
+        16858
+      ]
+    },
+    "dataset": "difficult",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        46437,
+        36041
+      ]
+    },
+    "dataset": "difficult",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        58751,
+        47981
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        44932,
+        50313
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        40910,
+        10865
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        1302,
+        27128
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        3470,
+        58740
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        25559,
+        30232
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        6854,
+        37599
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        47426,
+        21268
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        48314,
+        21677
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        41814,
+        46947
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        18784,
+        50117
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "eigen_solver": [
+        "dense"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        48725,
+        1590
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        48915,
+        34562
+      ]
+    },
+    "dataset": "difficult",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        35976,
+        20219
+      ]
+    },
+    "dataset": "difficult",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        8946,
+        34538
+      ]
+    },
+    "dataset": "difficult",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        12127,
+        62209
+      ]
+    },
+    "dataset": "difficult",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        14794,
+        40884
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        53070,
+        3315
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        43930,
+        45936
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        60523,
+        42829
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        17252,
+        21405
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        41426,
+        9021
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        53341,
+        57651
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        61259,
+        535
+      ]
+    },
+    "dataset": "difficult",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        15295,
+        37081
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        46369,
+        2086
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        13525,
+        22270
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        3694,
+        64373
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        27869,
+        48300
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        44160,
+        14280
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        35645,
+        47486
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        26783,
+        57271
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        59847,
+        32254
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        51031,
+        58064
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        13640,
+        31724
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        59543,
+        27733
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        38702,
+        33475
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        29628,
+        49800
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        22388,
+        49518
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        4540,
+        63142
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        39513,
+        46111
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        14703,
+        9711
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        63502,
+        6356
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        32134,
+        53850
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        5366,
+        40435
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        45698,
+        12861
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        58236,
+        5725
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        16802,
+        63406
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        60046,
+        38531
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        12990,
+        58036
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        2958,
+        11579
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        27387,
+        59267
+      ]
+    },
+    "dataset": "coil-20",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        18952,
+        15598
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        28200,
+        31818
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        58769,
+        55628
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        51658,
+        37392
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        9925,
+        25467
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        64936,
+        64349
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        43181,
+        38237
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        30646,
+        38078
+      ]
+    },
+    "dataset": "coil-20",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        13013,
+        13741
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        47736,
+        18765
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        63798,
+        30172
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        53447,
+        18052
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        10522,
+        43328
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        42830,
+        65064
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        15968,
+        8725
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        19721,
+        12160
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        8700,
+        33831
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        53083,
+        65422
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        21359,
+        32409
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        35120,
+        19846
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        33572,
+        6744
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        36616,
+        60509
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        34542,
+        33691
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        18751,
+        36788
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        39300,
+        53778
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        3787,
+        33285
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        60970,
+        3748
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        43928,
+        21116
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        60410,
+        56792
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        52518,
+        24062
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        38129,
+        58236
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        25486,
+        23567
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        27883,
+        35990
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        12811,
+        58361
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        31538,
+        62657
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        5709,
+        15210
+      ]
+    },
+    "dataset": "orl-faces",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        59809,
+        41088
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        46582,
+        40425
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        27871,
+        31711
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        62569,
+        8562
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        58827,
+        56698
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        4109,
+        1428
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        64386,
+        50087
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        13847,
+        41071
+      ]
+    },
+    "dataset": "orl-faces",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        19803,
+        51355
+      ]
+    },
+    "dataset": "hiva",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        57562,
+        28666
+      ]
+    },
+    "dataset": "hiva",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        30138,
+        405
+      ]
+    },
+    "dataset": "hiva",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "PCA",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        6801,
+        52503
+      ]
+    },
+    "dataset": "hiva",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        58680,
+        58952
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        49312,
+        50914
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        62545,
+        20567
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "Isomap",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        26257,
+        54811
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        2947,
+        25522
+      ]
+    },
+    "dataset": "hiva",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        59735,
+        36013
+      ]
+    },
+    "dataset": "hiva",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        45280,
+        15475
+      ]
+    },
+    "dataset": "hiva",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "KernelPCA",
+    "algorithm_params": {
+      "degree": 5,
+      "kernel": "poly",
+      "n_components": 2,
+      "random_state": [
+        55351,
+        23064
+      ]
+    },
+    "dataset": "hiva",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        5744,
+        43899
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        28073,
+        61472
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        22837,
+        38133
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LLE",
+    "algorithm_params": {
+      "method": [
+        "modified"
+      ],
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        64560,
+        23574
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        3391,
+        27413
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        45609,
+        55750
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        40749,
+        4256
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "HLLE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        15251,
+        55806
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        5919,
+        8958
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        56915,
+        38298
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        32453,
+        35401
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "LTSA",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        64066,
+        14367
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        15700,
+        54920
+      ]
+    },
+    "dataset": "hiva",
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        24186,
+        37452
+      ]
+    },
+    "dataset": "hiva",
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        15848,
+        33082
+      ]
+    },
+    "dataset": "hiva",
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "MDS",
+    "algorithm_params": {
+      "n_components": 2,
+      "random_state": [
+        8622,
+        9286
+      ]
+    },
+    "dataset": "hiva",
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        15196,
+        1241
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        8472,
+        61026
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        47788,
+        34002
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "TSNE",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "perplexity": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "random_state": [
+        23000,
+        42086
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        6275,
+        43535
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "continuity",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        28947,
+        30612
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "stress",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        59712,
+        61523
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "strain",
+    "score_params": {
+      "greater_is_better": false,
+      "metric": "euclidean"
+    }
+  },
+  {
+    "algorithm": "UMAP",
+    "algorithm_params": {
+      "n_components": [
+        2
+      ],
+      "n_neighbors": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "random_state": [
+        38806,
+        9110
+      ]
+    },
+    "dataset": "hiva",
+    "meta": "grid_search",
+    "meta_params": {
+      "return_train_score": true,
+      "verbose": 10
+    },
+    "score": "trustworthiness",
+    "score_params": {
+      "greater_is_better": true,
+      "metric": "euclidean",
+      "n_neighbors": 12
+    }
+  }
+]
