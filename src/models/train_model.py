@@ -193,7 +193,8 @@ def main(model_list, output_file='experiments.json'):
         elif meta_name is None:
             logger.debug(f'Fitting {model_key}')
             # Apply parameters straight to the estimator
-            alg.fit(ds.data, **alg_opts)
+            alg.set_params(**alg_opts)
+            alg.fit(ds.data)
             joblib.dump(alg, trained_models_path / f"{model_key}.model")
             save_json(trained_models_path / f"{model_key}.metadata", td)
 
