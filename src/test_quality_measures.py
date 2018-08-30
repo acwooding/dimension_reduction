@@ -348,6 +348,10 @@ def test_scorers(hd, ld, target, n_neighbors):
     estimator = test_estimator()
     estimator.fit(ld)
     for key in key_l:
+        if key in greater_is_better:
+            val = 1.0
+        else:
+            val = -1.0
         logger.debug(key)
         measure = qm.available_quality_measures()[key]
         scorer = qm.available_scorers()[key]
@@ -366,7 +370,7 @@ def test_scorers(hd, ld, target, n_neighbors):
             assert False
         logger.debug(f"measure:{m}, scorer:{s}")
         if m != 0 and s!=0:
-            assert np.isclose(m/s, 1.0) or np.isclose(m/s, -1.0)
+            assert np.isclose(m/s, val)
         else:
             assert s == m
 
