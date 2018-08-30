@@ -22,6 +22,7 @@ from ..paths import models_path, trained_models_path, processed_data_path
 from ..data import datasets
 from ..utils import normalize_numpy_dict, save_json
 from .. import quality_measures as qm
+from functools import partial
 
 DR_META_ESTIMATORS = {
     'grid_search': GridSearchCV
@@ -126,7 +127,7 @@ def main(model_list, output_file='experiments.json'):
     with open(models_path / model_list) as f:
         training_dicts = json.load(f)
 
-    quality_measures = qm.available_quality_measures()
+    quality_measures = qm.available_scorers()
     dataset_list = datasets.available_datasets()
 
     metadata_dict = {}
@@ -166,7 +167,7 @@ def main(model_list, output_file='experiments.json'):
         score_name = td.get('score', None)
         score_params = td.get('score_params', {})
         assert score_name in quality_measures, f'Unknown Score: {score_name}'
-        score = qm.make_hi_lo_scorer(quality_measures[score_name], **score_params)
+        score = partial(quality_measures[score_name], **score_params)
 
         meta_name = td.get('meta', None)
         meta_opts = td.get('meta_params', {})
@@ -176,7 +177,7 @@ def main(model_list, output_file='experiments.json'):
         if meta_name == 'grid_search':
             logger.debug(f'Grid-Searching {model_key}')
             grid_search = meta_alg(alg, alg_opts, scoring=score, **meta_opts)
-            grid_search.fit(ds.data)#, y=ds.target)
+            grid_search.fit(ds.data, y=ds.target)
 
             #save off the results from the grid search
             best_est = grid_search.best_estimator_ # save this off  as k.model
