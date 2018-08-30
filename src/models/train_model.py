@@ -6,86 +6,23 @@ import os
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-from sklearn.decomposition import PCA, KernelPCA
-from sklearn.manifold import MDS, Isomap, LocallyLinearEmbedding, SpectralEmbedding
-from sklearn.model_selection import GridSearchCV
-
-#from MulticoreTSNE import MulticoreTSNE as TSNE
-from sklearn.manifold import TSNE
-from umap import UMAP
-
 import numpy as np
 import pandas as pd
 
 from ..logging import logger
-from ..paths import models_path, trained_models_path, processed_data_path
+from ..paths import model_path, trained_model_path
 from ..data import datasets
-from ..utils import normalize_numpy_dict, save_json
+from ..utils import save_json
 from .. import quality_measures as qm
-
-DR_META_ESTIMATORS = {
-    'grid_search': GridSearchCV
-}
-
-def available_meta_estimators():
-    """Valid Meta-estimators for dimension reduction applications
-    This function simply returns the list of known dimension reduction
-    algorithms.
-
-    It exists to allow for a description of the mapping for
-    each of the valid strings.
-
-    ============     ====================================
-    Meta-est         Function
-    ============     ====================================
-    grid_search      sklearn.model_selection.GridSearchCV
-    ============     ====================================
-    """
-    return DR_META_ESTIMATORS
-
-
-DR_ALGORITHMS = {
-    "autoencoder": None,
-    "HLLE": LocallyLinearEmbedding(method='hessian'),
-    "Isomap": Isomap(),
-    "KernelPCA": KernelPCA(),
-    "LaplacianEigenmaps": SpectralEmbedding(),
-    "LLE": LocallyLinearEmbedding(),
-    "LTSA": LocallyLinearEmbedding(method='ltsa'),
-    "MDS": MDS(),
-    "PCA": PCA(),
-    "TSNE": TSNE(),
-    "UMAP": UMAP(),
-}
-
-def available_algorithms():
-    """Valid Algorithms for dimension reduction applications
-
-    This function simply returns the list of known dimension reduction
-    algorithms.
-
-    It exists to allow for a description of the mapping for
-    each of the valid strings.
-
-    The valid quality metrics, and the function they map to, are:
-
-    ============     ====================================
-    Algorithm        Function
-    ============     ====================================
-    autoencoder
-    isomap
-    MDS
-    PCA
-    t-SNE
-    UMAP
-    ============     ====================================
-    """
-    return DR_ALGORITHMS
-
+from . import dr
+from . import meta
+from . import train
 
 @click.command()
 @click.argument('model_list')
-def main(model_list, output_file='experiments.json'):
+@click.option('--output_file', '-o', nargs=1, type=str)
+@click.option('--hash-type', '-H', type=click.Choice(['md5', 'sha1']))
+def main(model_list, output_file='experiments.json', hash_type='sha1'):
     """Trains models speficied in the supplied `model_list` file
 
     output is a dictionary of trained model metadata, keyed by
@@ -100,7 +37,7 @@ def main(model_list, output_file='experiments.json'):
     run_number:
         Arbitrary integer. Combination of these 4 things must be unique.
 
-    trained models are written to `trained_models_path`. For every model, we write:
+    trained models are written to `trained_model_path`. For every model, we write:
 
     {model_key}.model:
         the trained model
@@ -116,52 +53,59 @@ def main(model_list, output_file='experiments.json'):
         combine into a model
     output_file:
         name of json file to write metadata to
+    hash_name:
+        type of hash to use for caching
 
 
     """
     logger.info(f'Building models from {model_list}')
 
-    os.makedirs(trained_models_path, exist_ok=True)
+    os.makedirs(trained_model_path, exist_ok=True)
 
-    with open(models_path / model_list) as f:
+    with open(model_path / model_list) as f:
         training_dicts = json.load(f)
 
     quality_measures = qm.available_quality_measures()
     dataset_list = datasets.available_datasets()
 
+    dr_algorithm_list = dr.available_algorithms()
+    meta_est_list = meta.available_meta_estimators()
+
     metadata_dict = {}
+    saved_meta = {}
     for td in training_dicts:
         ds_name = td.get('dataset', None)
         assert ds_name in dataset_list, f'Unknown Dataset: {ds_name}'
 
         alg_name = td.get('algorithm', None)
-        assert alg_name in DR_ALGORITHMS, f'Unknown Algorithm: {alg_name}'
+        assert alg_name in dr_algorithm_list, f'Unknown Algorithm: {alg_name}'
 
         score_name = td.get('score', None)
         assert score_name in quality_measures, f'Unknown Score: {score_name}'
 
         meta_name = td.get('meta', None)
         if meta_name is not None:
-            assert meta_name in DR_META_ESTIMATORS, f'Unknown meta-estimator: {meta_name}'
+            assert meta_name in meta_est_list, f'Unknown meta-estimator: {meta_name}'
 
         run_number = td.get('run_number', 0)
-        id_base = f"{td['algorithm']}_{td['dataset']}_{td['score']}_{run_number}"
-        if id_base in metadata_dict:
+        model_key = f"{td['algorithm']}_{td['dataset']}_{td['score']}_{run_number}"
+        if model_key in metadata_dict:
             raise Exception("{id_base} already exists. Give a unique `run_number` to avoid collisions.")
         else:
             td['run_number'] = run_number
-            metadata_dict[id_base] = td
+            metadata_dict[model_key] = td
 
     for model_key, td in metadata_dict.items():
         logger.debug(f'Creating model for {model_key}')
         ds_name = td['dataset']
         ds_opts = td.get('dataset_params', {})
         ds = datasets.load_dataset(ds_name, **ds_opts)
+        td['data_hash'] = joblib.hash(ds.data, hash_name=hash_type)
+        td['target_hash'] = joblib.hash(ds.data, hash_name=hash_type)
 
         alg_name = td['algorithm']
         alg_opts = td.get('algorithm_params', {})
-        alg = DR_ALGORITHMS[alg_name]
-        alg_default_opts = alg.get_params()
+        alg = dr_algorithm_list[alg_name]
 
         score_name = td.get('score', None)
         score_params = td.get('score_params', {})
@@ -171,7 +115,7 @@ def main(model_list, output_file='experiments.json'):
         meta_name = td.get('meta', None)
         meta_opts = td.get('meta_params', {})
         if meta_name is not None:
-            meta_alg = DR_META_ESTIMATORS[meta_name]
+            meta_alg = meta_est_list[meta_name]
 
         if meta_name == 'grid_search':
             logger.debug(f'Grid-Searching {model_key}')
@@ -180,25 +124,22 @@ def main(model_list, output_file='experiments.json'):
 
             #save off the results from the grid search
             best_est = grid_search.best_estimator_ # save this off  as k.model
-            joblib.dump(best_est, trained_models_path / f"{model_key}.model")
+            td['algorithm_params'] = best_est.get_params()
 
-            meta_parameters_out = best_est.get_params()
-            td['algorithm_params'] = meta_parameters_out
-            save_json(trained_models_path / f"{model_key}.metadata", td)
+            saved_meta[model_key] = train.save_model(model_name=model_key, model=best_est, metadata=td)
 
             cv_results = pd.DataFrame(grid_search.cv_results_).T # save this off as k.csv
             cv_results.index.name = 'grid_search_results'
-            cv_results.to_csv(trained_models_path / f"{model_key}-gridsearch.csv")
+            cv_results.to_csv(trained_model_path / f"{model_key}-gridsearch.csv")
 
         elif meta_name is None:
             logger.debug(f'Fitting {model_key}')
             # Apply parameters straight to the estimator
             alg.set_params(**alg_opts)
             alg.fit(ds.data)
-            joblib.dump(alg, trained_models_path / f"{model_key}.model")
-            save_json(trained_models_path / f"{model_key}.metadata", td)
+            saved_meta[model_key] = train.save_model(model_name=model_key, model=alg, metadata=td)
 
-    save_json(models_path / output_file, metadata_dict)
+    save_json(model_path / output_file, saved_meta)
 
 
 if __name__ == '__main__':
