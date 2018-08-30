@@ -487,6 +487,9 @@ def generalized_1nn_error_scorer(estimator, X, y=None, metric='euclidean'):
     return the proportion of datapoints whose nearest neighbor
     does not have the same class as it does.
 
+    Note: This returns the generalized 1-nn classifier error times -1, as
+    scorers get used in such a way that "greater is better".
+
     Parameters
     ----------
     estimator: sklearn estimator with a transform/fit_transform method
@@ -497,7 +500,7 @@ def generalized_1nn_error_scorer(estimator, X, y=None, metric='euclidean'):
 
     Returns
     -------
-    generalized_1nn_error: (float)
+    -1 * generalized_1nn_error: (float)
     '''
     if getattr(estimator, "transform", None) is not None:
         data = estimator.transform(X)
@@ -507,7 +510,7 @@ def generalized_1nn_error_scorer(estimator, X, y=None, metric='euclidean'):
                                               classes=y,
                                               metric=metric)
     error = np.sum(point_error)/len(point_error)
-    return error
+    return -1 * error
 
 
 def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
@@ -580,9 +583,9 @@ def available_scorers():
     This function simply returns the valid scorer. As per the
     sklearn API, a scorer is a function that can be called with
     parameters (estimator, X, y), where estimator is the model
-    that should be evaluated, X is validation data, and y is the
-    ground truth target for X (in the supervised case) or None
-    (in the unsupervised case).
+    that should be evaluated, X is data to be operated on,
+    and y is the ground truth target for X (in the supervised case)
+    or None (in the unsupervised case).
 
     It exists to allow for a description of the mapping for
     each of the valid strings.
@@ -607,7 +610,7 @@ def available_scorers():
 
 
 DR_SCORERS = {
-    "1nn-error": generalized_1nn_error,
+    "1nn-error": generalized_1nn_error_scorer,
 #    "adj-kendall-tau":None,
     "continuity": make_hi_lo_scorer(continuity, greater_is_better=True),
 #    "jaccard":None,
