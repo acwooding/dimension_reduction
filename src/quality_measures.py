@@ -492,12 +492,10 @@ def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
     """
     sign = 1 if greater_is_better else -1
     def wrapped_func(estimator, X, y=None, **wrap_kw):
-        logger.debug(f"X.shape: {X.shape}")
         if getattr(estimator, "transform", None) is not None:
             low_data = estimator.transform(X)
         else:
             low_data = estimator.fit_transform(X)
-        logger.debug(f"low_data.shape: {low_data.shape}")
         new_kwargs = {**kwargs, **wrap_kw}
         score = func(high_data=X, low_data=low_data, **new_kwargs)
         return sign * score
