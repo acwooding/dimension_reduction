@@ -1,16 +1,16 @@
-import sys
 import hypothesis.strategies as st
 from hypothesis.extra.numpy import arrays
 from hypothesis import given
 import unittest
 import numpy as np
-import os
+from sklearn.base import BaseEstimator
+import inspect
 
 import src.quality_measures as qm
 from .logging import logger
 
-# old functions to test against while refactoring
 
+# old functions to test against while refactoring
 def old_centering_matrix(N):
     '''
     Returns the N x N centering matrix.
@@ -96,9 +96,15 @@ def old_point_untrustworthiness(high_distances=None, low_distances=None,
     return point_scores
 
 
+class test_estimator(BaseEstimator):
+    def fit(self, X):
+        self._return_value = X
+
+    def transform(self, X):
+        return self._return_value
+
+
 # Start of tests
-
-
 @given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
                                                    max_value=100)))
 def test_square_matrix_entries(array):
@@ -234,6 +240,139 @@ def test_old_new_point_untrustworthiness(high_distances, low_distances,
 
 
 @given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       st.integers(min_value=1, max_value=3))
+def test_trustworthiness_distances(high_distances, low_distances,
+                                   n_neighbors):
+    new = qm.trustworthiness(high_distances=high_distances,
+                             low_distances=low_distances,
+                             n_neighbors=n_neighbors)
+    old_point = old_point_untrustworthiness(high_distances=high_distances,
+                                            low_distances=low_distances,
+                                            n_neighbors=n_neighbors)
+    assert new == (1-sum(old_point))
+    assert new >= 0.0
+    assert new <= 1.0
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       st.integers(min_value=1, max_value=3))
+def test_trustworthiness_data(high_data, low_data, n_neighbors):
+    new = qm.trustworthiness(high_data=high_data,
+                             low_data=low_data,
+                             n_neighbors=n_neighbors)
+    old_point = old_point_untrustworthiness(high_data=high_data,
+                                            low_data=low_data,
+                                            n_neighbors=n_neighbors)
+    assert new == (1-sum(old_point))
+    assert new >= 0.0
+    assert new <= 1.0
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       st.integers(min_value=1, max_value=3))
+def test_trustworthiness_point_scores(high_distances, low_distances,
+                                      n_neighbors):
+    old_point = old_point_untrustworthiness(high_distances=high_distances,
+                                            low_distances=low_distances,
+                                            n_neighbors=n_neighbors)
+    new = qm.trustworthiness(point_scores=old_point)
+    assert new == (1-sum(old_point))
+    assert new >= 0.0
+    assert new <= 1.0
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       st.integers(min_value=1, max_value=3))
+def test_continuity_distances(high_distances, low_distances,
+                              n_neighbors):
+    new = qm.continuity(high_distances=high_distances,
+                        low_distances=low_distances,
+                        n_neighbors=n_neighbors)
+    assert new >= 0.0
+    assert new <= 1.0
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       st.integers(min_value=1, max_value=3))
+def test_continuity_data(high_data, low_data, n_neighbors):
+    new = qm.continuity(high_data=high_data,
+                        low_data=low_data,
+                        n_neighbors=n_neighbors)
+    assert new >= 0.0
+    assert new <= 1.0
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100)),
+       st.integers(min_value=1, max_value=3))
+def test_continuity_point_scores(high_distances, low_distances,
+                                 n_neighbors):
+    point = qm.point_discontinuity(high_distances=high_distances,
+                                   low_distances=low_distances,
+                                   n_neighbors=n_neighbors)
+    new = qm.continuity(point_scores=point)
+    assert new == (1-sum(point))
+    assert new >= 0.0
+    assert new <= 1.0
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100),
+              unique=True),
+       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+                                                   max_value=100),
+              unique=True),
+       arrays(np.bool, (3, 1)),
+       st.integers(min_value=1, max_value=3))
+def test_scorers(hd, ld, target, n_neighbors):
+    key_l = qm.available_quality_measures().keys()
+    high_low_l = ["continuity", "stress", "strain", "trustworthiness"]
+    greater_is_better = ["continuity", "trustworthiness"]
+    estimator = test_estimator()
+    estimator.fit(ld)
+    for key in key_l:
+        logger.debug(key)
+        measure = qm.available_quality_measures()[key]
+        scorer = qm.available_scorers()[key]
+        if key in high_low_l:
+            if 'n_neighbors' in inspect.getfullargspec(measure).args:
+                m = measure(high_data=hd, low_data=ld, n_neighbors=n_neighbors)
+                s = scorer(estimator, hd, n_neighbors=n_neighbors)
+            else:
+                m = measure(high_data=hd, low_data=ld)
+                s = scorer(estimator, hd)
+        elif key == '1nn-error':
+            m = measure(data=ld, classes=target)
+            s = scorer(estimator, hd, y=target)
+        else:
+            logger.debug("Untested measure:{key}. Add me to test_scorers")
+            assert False
+        logger.debug(f"measure:{m}, scorer:{s}")
+        if m != 0 and s!=0:
+            assert np.isclose(m/s, 1.0) or np.isclose(m/s, -1.0)
+        else:
+            assert s == m
+
+
+
+@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
                                                    max_value=100)))
 def test_rank_matrix_compatibility(matrix):
     assert (qm.slower_rank_matrix(matrix) == qm.rank_matrix(matrix)).all()
@@ -258,6 +397,10 @@ class TestEncoding(unittest.TestCase):
             qm.pairwise_distance_differences(low_data=matrix)
         with self.assertRaises(ValueError):
             qm.pairwise_distance_differences(low_distances=matrix)
+
+    def test_point_untrustworthiness_input(self):
+        with self.assertRaises(ValueError):
+            qm.point_untrustworthiness()
 
     @given(st.integers(min_value=1, max_value=100))
     def test_zero_input_strain(self, N):
