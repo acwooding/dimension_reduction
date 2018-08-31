@@ -31,7 +31,6 @@
     },
     "score": "continuity",
     "score_params": {
-      "greater_is_better": true,
       "metric": "euclidean",
       "n_neighbors": 12
     }
@@ -68,7 +67,6 @@
     },
     "score": "stress",
     "score_params": {
-      "greater_is_better": false,
       "metric": "euclidean"
     }
   },
@@ -104,7 +102,6 @@
     },
     "score": "trustworthiness",
     "score_params": {
-      "greater_is_better": true,
       "metric": "euclidean",
       "n_neighbors": 12
     }

@@ -5,6 +5,7 @@ import joblib
 import os
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
+from functools import partial
 
 import numpy as np
 import pandas as pd
@@ -14,14 +15,14 @@ from ..paths import model_path, trained_model_path
 from ..data import datasets
 from ..utils import save_json
 from .. import quality_measures as qm
-from . import dr
-from . import meta
-from . import train
+from .train import save_model
+from .dr import available_algorithms
+from .meta import available_meta_estimators
 
 @click.command()
 @click.argument('model_list')
 @click.option('--output_file', '-o', nargs=1, type=str)
-@click.option('--hash-type', '-H', type=click.Choice(['md5', 'sha1']))
+@click.option('--hash-type', '-H', type=click.Choice(['md5', 'sha1']), default='sha1')
 def main(model_list, output_file='experiments.json', hash_type='sha1'):
     """Trains models speficied in the supplied `model_list` file
 
@@ -65,11 +66,11 @@ def main(model_list, output_file='experiments.json', hash_type='sha1'):
     with open(model_path / model_list) as f:
         training_dicts = json.load(f)
 
-    quality_measures = qm.available_quality_measures()
+    quality_measures = qm.available_scorers()
     dataset_list = datasets.available_datasets()
 
-    dr_algorithm_list = dr.available_algorithms()
-    meta_est_list = meta.available_meta_estimators()
+    dr_algorithm_list = available_algorithms()
+    meta_est_list = available_meta_estimators()
 
     metadata_dict = {}
     saved_meta = {}
@@ -101,7 +102,7 @@ def main(model_list, output_file='experiments.json', hash_type='sha1'):
         ds_opts = td.get('dataset_params', {})
         ds = datasets.load_dataset(ds_name, **ds_opts)
         td['data_hash'] = joblib.hash(ds.data, hash_name=hash_type)
-        td['target_hash'] = joblib.hash(ds.data, hash_name=hash_type)
+        td['target_hash'] = joblib.hash(ds.target, hash_name=hash_type)
 
         alg_name = td['algorithm']
         alg_opts = td.get('algorithm_params', {})
@@ -110,7 +111,7 @@ def main(model_list, output_file='experiments.json', hash_type='sha1'):
         score_name = td.get('score', None)
         score_params = td.get('score_params', {})
         assert score_name in quality_measures, f'Unknown Score: {score_name}'
-        score = qm.make_hi_lo_scorer(quality_measures[score_name], **score_params)
+        score = partial(quality_measures[score_name], **score_params)
 
         meta_name = td.get('meta', None)
         meta_opts = td.get('meta_params', {})
@@ -120,13 +121,13 @@ def main(model_list, output_file='experiments.json', hash_type='sha1'):
         if meta_name == 'grid_search':
             logger.debug(f'Grid-Searching {model_key}')
             grid_search = meta_alg(alg, alg_opts, scoring=score, **meta_opts)
-            grid_search.fit(ds.data)#, y=ds.target)
+            grid_search.fit(ds.data, y=ds.target)
 
             #save off the results from the grid search
             best_est = grid_search.best_estimator_ # save this off  as k.model
             td['algorithm_params'] = best_est.get_params()
 
-            saved_meta[model_key] = train.save_model(model_name=model_key, model=best_est, metadata=td)
+            saved_meta[model_key] = save_model(model_name=model_key, model=best_est, metadata=td)
 
             cv_results = pd.DataFrame(grid_search.cv_results_).T # save this off as k.csv
             cv_results.index.name = 'grid_search_results'
@@ -137,7 +138,7 @@ def main(model_list, output_file='experiments.json', hash_type='sha1'):
             # Apply parameters straight to the estimator
             alg.set_params(**alg_opts)
             alg.fit(ds.data)
-            saved_meta[model_key] = train.save_model(model_name=model_key, model=alg, metadata=td)
+            saved_meta[model_key] = save_model(model_name=model_key, model=alg, metadata=td)
 
     save_json(model_path / output_file, saved_meta)
 

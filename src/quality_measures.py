@@ -2,7 +2,8 @@ import numpy as np
 from sklearn.metrics import pairwise_distances as sk_pairwise_distances
 from sklearn.neighbors import NearestNeighbors
 
-from .logging import logger
+# from .logging import logger
+
 
 # Helper functions
 def square_matrix_entries(matrix):
@@ -480,10 +481,44 @@ def generalized_1nn_error(data=None, classes=None, point_error=None,
     return error
 
 
-def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
-    """Make a sklearn-style scoring function for measures taking high/low data representations.
+def generalized_1nn_error_scorer(estimator, X, y=None, metric='euclidean'):
+    '''
+    Given data, X, an estimator and associated classes, y, (for each row),
+    return the proportion of datapoints whose nearest neighbor
+    does not have the same class as it does.
 
-    Assumes the wrapped function expects `high_data` and `low_data` as parameters.
+    Note: This returns the generalized 1-nn classifier error times -1, as
+    scorers get used in such a way that "greater is better".
+
+    Parameters
+    ----------
+    estimator: sklearn estimator with a transform/fit_transform method
+    X: np.array
+    y: 1d np.array
+
+    metric: an sklearn metric to use on the data to find nearest neighbors
+
+    Returns
+    -------
+    -1 * generalized_1nn_error: (float)
+    '''
+    if getattr(estimator, "transform", None) is not None:
+        data = estimator.transform(X)
+    else:
+        data = estimator.fit_transform(X)
+    point_error = point_generalized_1nn_error(data=data,
+                                              classes=y,
+                                              metric=metric)
+    error = np.sum(point_error)/len(point_error)
+    return -1 * error
+
+
+def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
+    """Make a sklearn-style scoring function for measures taking high/low data
+    representations.
+
+    Assumes the wrapped function expects `high_data` and `low_data` as
+    parameters.
 
     greater_is_better : boolean, default=True
         Whether `func` is a score function (default), meaning high is good,
@@ -491,6 +526,7 @@ def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
         scorer object will sign-flip the outcome of the `func`.
     """
     sign = 1 if greater_is_better else -1
+
     def wrapped_func(estimator, X, y=None, **wrap_kw):
         if getattr(estimator, "transform", None) is not None:
             low_data = estimator.transform(X)
@@ -527,6 +563,7 @@ def available_quality_measures():
     """
     return DR_MEASURES
 
+
 DR_MEASURES = {
     "1nn-error": generalized_1nn_error,
 #    "adj-kendall-tau":None,
@@ -536,4 +573,50 @@ DR_MEASURES = {
     "stress": stress,
     "strain": strain,
     "trustworthiness": trustworthiness,
+}
+
+
+def available_scorers():
+    """Valid scorers based on quality measures for evaluating
+    dimension reductions.
+
+    This function simply returns the valid scorer. As per the
+    sklearn API, a scorer is a function that can be called with
+    parameters (estimator, X, y), where estimator is the model
+    that should be evaluated, X is data to be operated on,
+    and y is the ground truth target for X (in the supervised case)
+    or None (in the unsupervised case).
+
+    It exists to allow for a description of the mapping for
+    each of the valid strings.
+
+    The valid scorers, and the functions they map to, are:
+
+    ============     ====================================
+    metric           Function
+    ============     ====================================
+    '1nn-error'
+    'adj-kendall-tau'
+    'continuity'
+    'jaccard'
+    'quality'
+    'stress'
+    'strain'
+    'trustworthiness'
+    ============     ====================================
+
+    """
+    return DR_SCORERS
+
+
+DR_SCORERS = {
+    "1nn-error": generalized_1nn_error_scorer,
+#    "adj-kendall-tau":None,
+    "continuity": make_hi_lo_scorer(continuity, greater_is_better=True),
+#    "jaccard":None,
+#    "quality":None,
+    "stress": make_hi_lo_scorer(stress, greater_is_better=False),
+    "strain": make_hi_lo_scorer(strain, greater_is_better=False),
+    "trustworthiness": make_hi_lo_scorer(trustworthiness,
+                                         greater_is_better=True),
 }
