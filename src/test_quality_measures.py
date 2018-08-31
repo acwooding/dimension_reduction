@@ -1,13 +1,14 @@
 import hypothesis.strategies as st
 from hypothesis.extra.numpy import arrays
-from hypothesis import given
+from hypothesis import given, note
 import unittest
 import numpy as np
 from sklearn.base import BaseEstimator
 import inspect
+import random
 
 import src.quality_measures as qm
-from .logging import logger
+#from .logging import logger
 
 
 # old functions to test against while refactoring
@@ -333,18 +334,20 @@ def test_continuity_point_scores(high_distances, low_distances,
     assert new <= 1.0
 
 
-@given(arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+@given(arrays(np.float, (5, 5), elements=st.floats(min_value=-100,
                                                    max_value=100),
               unique=True),
-       arrays(np.float, (3, 3), elements=st.floats(min_value=-100,
+       arrays(np.float, (5, 5), elements=st.floats(min_value=-100,
                                                    max_value=100),
               unique=True),
-       arrays(np.bool, (3, 1)),
+       arrays(np.bool, (5, 1)),
        st.integers(min_value=1, max_value=3))
 def test_scorers(hd, ld, target, n_neighbors):
     key_l = qm.available_quality_measures().keys()
-    high_low_l = ["continuity", "stress", "strain", "trustworthiness"]
-    greater_is_better = ["continuity", "trustworthiness"]
+    high_low_l = ["continuity", "stress", "strain", "trustworthiness",
+                  "nn-jaccard", "nn-adapted-ktau"]
+    greater_is_better = ["continuity", "trustworthiness", "nn-jaccard",
+                         "nn-adapted-ktau"]
     estimator = test_estimator()
     estimator.fit(ld)
     for key in key_l:
@@ -352,7 +355,7 @@ def test_scorers(hd, ld, target, n_neighbors):
             val = 1.0
         else:
             val = -1.0
-        logger.debug(key)
+        note(key)
         measure = qm.available_quality_measures()[key]
         scorer = qm.available_scorers()[key]
         if key in high_low_l:
@@ -366,9 +369,9 @@ def test_scorers(hd, ld, target, n_neighbors):
             m = measure(data=ld, classes=target)
             s = scorer(estimator, hd, y=target)
         else:
-            logger.debug("Untested measure:{key}. Add me to test_scorers")
+            note(f"Untested measure:{key}. Add me to test_scorers")
             assert False
-        logger.debug(f"measure:{m}, scorer:{s}")
+        note(f"measure:{m}, scorer:{s}")
         if m != 0 and s!=0:
             assert np.isclose(m/s, val)
         else:
@@ -380,6 +383,113 @@ def test_scorers(hd, ld, target, n_neighbors):
                                                    max_value=100)))
 def test_rank_matrix_compatibility(matrix):
     assert (qm.slower_rank_matrix(matrix) == qm.rank_matrix(matrix)).all()
+
+
+@given(st.data())
+def test_jaccard_text(data):
+    set1 = data.draw(st.sets(elements=st.text(), max_size=100))
+    overlap_size = data.draw(st.integers(min_value=0, max_value=len(set1)))
+    if set1:
+        set2 = set(random.sample(set1, overlap_size))
+    else:
+        set2 = set([])
+    set2 = set2.union(data.draw(st.sets(elements=st.text(), max_size=100)))
+    if set1 and set2:
+        score = len(set1.intersection(set2))/len(set1.union(set2))*1.0
+    else:
+        score = 0
+    note("{}, {}".format(qm.jaccard(set1, set2), score))
+    assert(qm.jaccard(set1, set2) == score)
+    assert(score <= 1)
+    assert(score >= 0)
+
+
+@given(st.data())
+def test_jaccard_integers(data):
+    set1 = data.draw(st.sets(elements=st.integers(), min_size=1))
+    overlap_size = data.draw(st.integers(min_value=0, max_value=len(set1)))
+    if set1:
+        set2 = set(random.sample(set1, overlap_size))
+    else:
+        set2 = set([])
+    set2 = set2.union(data.draw(st.sets(elements=st.integers(), min_size=1)))
+    score = len(set1.intersection(set2))/len(set1.union(set2))*1.0
+    note("{}, {}".format(qm.jaccard(set1, set2), score))
+    assert(qm.jaccard(set1, set2) == score)
+    assert(score <= 1)
+    assert(score >= 0)
+
+
+@given(st.data())
+def test_adaptedKendallTau_integers(data):
+    list1 = data.draw(st.lists(elements=st.integers(), unique=True))
+
+    # check akt score with myself is 1
+    if list1:
+        self_score = qm.adaptedKendallTau(list1, list1)
+        note("akt score of list with itself: {}".format(self_score))
+        note(list1)
+        assert(self_score == 1)
+
+    # check akt score is always between 0 and 1
+    overlap_size = data.draw(st.integers(min_value=0, max_value=len(list1)))
+    if list1 and overlap_size:
+        list2 = random.sample(list1, overlap_size)
+        min_value = max(list1) + 1
+    else:
+        list2 = []
+        min_value = None
+    list2 = list2 + data.draw(st.lists(elements=st.integers(min_value=min_value),
+                                       unique=True))
+
+    akt_score = qm.adaptedKendallTau(list1, list2)
+    note(akt_score)
+    assert(akt_score <= 1)
+    assert(akt_score >= 0)
+
+
+@given(st.data())
+def test_akt_vs_jaccard(data):
+    list1 = data.draw(st.lists(elements=st.integers(), unique=True))
+
+    # top elements from list 1 are the ones that that overlap with list 2,
+    # akt >=jac only overlap on up to %90 of the elements
+    overlap_size = data.draw(st.integers(min_value=0,
+                                         max_value=int(len(list1)*.8)))
+
+    if list1 and overlap_size:
+        list2 = list1[:overlap_size]
+        random.shuffle(list2)
+        min_value = max(list1) + 1
+    elif not list1:
+        list2 = []
+        min_value = None
+    else:
+        list2 = []
+        min_value = max(list1) + 1
+
+    list2 = list2 + data.draw(st.lists(elements=st.integers(min_value=min_value),
+                                       unique=True))
+    note((list1, list2, list1 == list2))
+
+    jac_score = qm.jaccard(set(list1), set(list2))
+    akt_score = qm.adaptedKendallTau(list1, list2)
+    if (overlap_size > 0):
+        assert(akt_score >= jac_score)
+    else:
+        assert(akt_score <= jac_score)
+
+    # check that shuffling elements in the same list results in an
+    # akt_score of <= 1 and jac score of 1
+    list3 = list2
+    random.shuffle(list3)
+    jac_score = qm.jaccard(set(list3), set(list2))
+    akt_score = qm.adaptedKendallTau(list3, list2)
+    assert(akt_score <= jac_score)
+    if list2:
+        assert(jac_score == 1)
+    else:
+        assert(jac_score == 0)
 
 
 class TestEncoding(unittest.TestCase):
@@ -417,6 +527,7 @@ class TestEncoding(unittest.TestCase):
         matrix = np.zeros((N, N))
         with self.assertRaises(ValueError):
             qm.point_strain(high_distances=matrix, low_distances=matrix)
+
 
 
 if __name__ == '__main__':
