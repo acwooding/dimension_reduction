@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.metrics import pairwise_distances as sk_pairwise_distances
 from sklearn.neighbors import NearestNeighbors
+from itertools import combinations as comb
+from functools import partial
 
 # from .logging import logger
 
@@ -79,6 +81,95 @@ def pairwise_distance_differences(high_distances=None, low_distances=None,
     difference_distances = high_distances-low_distances
 
     return high_distances, low_distances, difference_distances
+
+
+def jaccard(A, B):
+    '''
+    Jaccard similarity of two sets.
+
+    Parameters
+    ----------
+    A, B: (sets)
+    Returns
+    -------
+    similarity in [0, 1]
+    '''
+    A = set(A)
+    B = set(B)
+
+    if A and B:
+        return len(A.intersection(B))/len(A.union(B))
+    else:
+        return 0
+
+
+def adaptedKendallTau(X, Y):
+    '''
+    Parameters
+    ----------
+    X, Y:
+        2 lists X and Y of arbitrary length, consisting of unique elements (ie.
+        X and Y represent posets).
+    Returns
+    -------
+    similarity in [0,1]
+    '''
+    X = list(X)
+    Y = list(Y)
+    if not X or not Y:
+        return 0
+    elif len(set(X)) != len(X) or len(set(Y)) != len(Y):
+        raise ValueError("There are repeated elements in X or Y")
+    else:
+        # intersection - list to keep the order as in X
+        SI = [x for x in X if x in Y]
+        # in X only
+        SX = set(X).difference(SI)
+        # in Y only
+        SY = set(Y).difference(SI)
+        tau = 0
+        # SI: pairs in intersection
+        length = len(SI)
+        y = [Y.index(z) for z in SI]
+        s = np.sum([a < b for a, b in comb(y, 2)])
+        # pos-neg pairs a la Kendall-tau.
+        tau += 2*s - length*(length-1) / 2
+        # SX, resp. SY and SI: one element in intersection
+        x = [X.index(z) for z in SX]
+        y = [Y.index(z) for z in SY]
+        i = [X.index(z) for z in SI]
+        s = 2*np.sum([a > b for a in x for b in i]) - len(x)*len(i)
+        tau += s
+        s = 2*np.sum([a > b for a in y for b in i]) - len(y)*len(i)
+        tau += s
+        # the rest
+        tau -= len(SX)*len(SY)
+        tau += length*(length+1)/2
+        tau /= (len(X)*len(Y))
+        return ((tau+1)/2)
+
+
+def list_similarity(label, list1, list2, how='jaccard'):
+    """
+    Compute similarity score of two lists.
+    Parameters
+    ----------
+    label:
+        name of the point
+    list1, list2:
+        lists of k-nearest neighbors of label
+    how: {'jaccard', 'adapted-ktau'}
+        similarity score method
+
+    Returns: (label, score)
+    """
+    if how == 'jaccard':
+        score = jaccard(list1, list2)
+    elif how == 'adapted-ktau':
+        score = adaptedKendallTau(list1, list2)
+    else:
+        raise ValueError("Unknown method: {}".format(how))
+    return label, score
 
 
 # Stress
@@ -513,6 +604,56 @@ def generalized_1nn_error_scorer(estimator, X, y=None, metric='euclidean'):
     return -1 * error
 
 
+def point_nn_comparison(high_data=None, low_data=None,
+                        high_distances=None, low_distances=None,
+                        metric='euclidean', n_neighbors=20,
+                        *, comparison_function):
+    if high_distances is not None:
+        nn = NearestNeighbors(n_neighbors=n_neighbors,
+                              metric='precomputed').fit(high_distances)
+        _, high_indices = nn.kneighbors()
+    else:
+        nn = NearestNeighbors(n_neighbors=n_neighbors,
+                              metric=metric).fit(high_data)
+        _, high_indices = nn.kneighbors()
+    if low_distances is not None:
+        nn = NearestNeighbors(n_neighbors=n_neighbors,
+                              metric='precomputed').fit(low_distances)
+        _, low_indices = nn.kneighbors()
+    else:
+        nn = NearestNeighbors(n_neighbors=n_neighbors,
+                              metric=metric).fit(low_data)
+        _, low_indices = nn.kneighbors()
+
+    point_score = []
+    for i, nbrs in enumerate(high_indices):
+        _, score = list_similarity(i, nbrs, low_indices[i],
+                                   how=comparison_function)
+        point_score.append(score)
+    return point_score
+
+
+def nn_comparison(high_data=None, low_data=None, metric='euclidean',
+                  high_distances=None, low_distances=None,
+                  n_neighbors=20, point_score=None, aggregate_function='mean',
+                  *, comparison_function):
+    if point_score is None:
+        pt = point_nn_comparison(high_data=high_data,
+                                 low_data=low_data,
+                                 high_distances=high_distances,
+                                 low_distances=low_distances,
+                                 metric=metric,
+                                 n_neighbors=n_neighbors,
+                                 comparison_function=comparison_function)
+    else:
+        pt = point_score
+    if aggregate_function == 'mean':
+        score = np.mean(pt)
+    elif aggregate_function == 'median':
+        score = np.median(pt)
+    return score
+
+
 def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
     """Make a sklearn-style scoring function for measures taking high/low data
     representations.
@@ -566,9 +707,11 @@ def available_quality_measures():
 
 DR_MEASURES = {
     "1nn-error": generalized_1nn_error,
-#    "adj-kendall-tau":None,
+    "nn-adapted-ktau": partial(nn_comparison,
+                                  comparison_function='adapted-ktau'),
     "continuity": continuity,
-#    "jaccard":None,
+    "nn-jaccard": partial(nn_comparison,
+                          comparison_function='jaccard'),
 #    "quality":None,
     "stress": stress,
     "strain": strain,
@@ -611,9 +754,13 @@ def available_scorers():
 
 DR_SCORERS = {
     "1nn-error": generalized_1nn_error_scorer,
-#    "adj-kendall-tau":None,
+    "nn-adapted-ktau": make_hi_lo_scorer(partial(nn_comparison,
+                                                 comparison_function='adapted-ktau'),
+                                         greater_is_better=True),
     "continuity": make_hi_lo_scorer(continuity, greater_is_better=True),
-#    "jaccard":None,
+    "nn-jaccard": make_hi_lo_scorer(partial(nn_comparison,
+                                            comparison_function='jaccard'),
+                                    greater_is_better=True),
 #    "quality":None,
     "stress": make_hi_lo_scorer(stress, greater_is_better=False),
     "strain": make_hi_lo_scorer(strain, greater_is_better=False),
