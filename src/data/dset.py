@@ -113,6 +113,8 @@ class Dataset(Bunch):
 
         if data_path is None:
             data_path = processed_data_path
+        else:
+            data_path = pathlib.Path(data_path)
 
         if metadata_only:
             metadata_fq = data_path / f'{file_base}.metadata'

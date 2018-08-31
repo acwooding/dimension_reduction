@@ -48,8 +48,8 @@ train: src/data/datasets.json models/experiment_models.json
 	$(PYTHON_INTERPRETER) -m src.models.train_model experiment_models.json
 
 ## Run Experiments / predict / transform
-predict: src/models/experiments.json
-	$(PYTHON_INTERPRETER) -m src.models.predict_model
+predict:
+	$(PYTHON_INTERPRETER) -m src.models.predict_model predict_list.json
 
 ## Run all Unit Tests and Doctests
 test:
@@ -113,16 +113,16 @@ endif
 # Inspired by <http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html>
 # sed script explained:
 # /^##/:
-# 	* save line in hold space
-# 	* purge line
-# 	* Loop:
-# 		* append newline + line to hold space
-# 		* go to next line
-# 		* if line starts with doc comment, strip comment character off and loop
-# 	* remove target prerequisites
-# 	* append hold space (+ newline) to line
-# 	* replace newline plus comments by `---`
-# 	* print line
+#	* save line in hold space
+#	* purge line
+#	* Loop:
+#		* append newline + line to hold space
+#		* go to next line
+#		* if line starts with doc comment, strip comment character off and loop
+#	* remove target prerequisites
+#	* append hold space (+ newline) to line
+#	* replace newline plus comments by `---`
+#	* print line
 # Separate expressions are necessary because labels cannot be delimited by
 # semicolon; see <http://stackoverflow.com/a/11799865/1968>
 .PHONY: show-help
