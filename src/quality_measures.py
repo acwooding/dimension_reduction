@@ -620,6 +620,20 @@ def point_nn_comparison(high_data=None, low_data=None,
     Returns
     -------
     point_score: 1d array of size n_points
+
+    >>> a = np.array([[10, 16, 11],\
+       [10, 10,  4],\
+       [ 9,  5, 13],\
+       [ 0, 14,  0],\
+       [ 4, 10, 14]])
+    >>> b = np.array([[8, 1],\
+       [9, 0],\
+       [3, 7],\
+       [1, 2],\
+       [1, 6]])
+    >>> point_nn_comparison(high_data=a, low_data=b, n_neighbors=3,\
+    comparison_function='jaccard')
+    [0.5, 1.0, 0.5, 0.5, 0.5]
     """
     if high_distances is not None:
         nn = NearestNeighbors(n_neighbors=n_neighbors,
@@ -665,6 +679,20 @@ def nn_comparison(high_data=None, low_data=None, metric='euclidean',
     Returns
     -------
     score: nearest neighbors similarity score
+
+    >>> a = np.array([[10, 16, 11],\
+       [10, 10,  4],\
+       [ 9,  5, 13],\
+       [ 0, 14,  0],\
+       [ 4, 10, 14]])
+    >>> b = np.array([[8, 1],\
+       [9, 0],\
+       [3, 7],\
+       [1, 2],\
+       [1, 6]])
+    >>> nn_comparison(high_data=a, low_data=b, n_neighbors=3,\
+    comparison_function='jaccard')
+    0.6
     """
     if point_score is None:
         pt = point_nn_comparison(high_data=high_data,
