@@ -608,6 +608,19 @@ def point_nn_comparison(high_data=None, low_data=None,
                         high_distances=None, low_distances=None,
                         metric='euclidean', n_neighbors=20,
                         *, comparison_function):
+    """
+    Comparison of similarity of the nearest neighbors sets of size n_neighbors
+    between the high_data and low_data (size [n_points, n_features]).
+    Optionally, give distance matrices instead of data (size
+    [n_points, n_points]).
+
+    Similarity of nearest neighbors is determined using the speficied
+    `comparison_function` (one of 'jaccard' or 'adapted-ktau').
+
+    Returns
+    -------
+    point_score: 1d array of size n_points
+    """
     if high_distances is not None:
         nn = NearestNeighbors(n_neighbors=n_neighbors,
                               metric='precomputed').fit(high_distances)
@@ -637,6 +650,22 @@ def nn_comparison(high_data=None, low_data=None, metric='euclidean',
                   high_distances=None, low_distances=None,
                   n_neighbors=20, point_score=None, aggregate_function='mean',
                   *, comparison_function):
+    """
+    Comparison of similarity of the nearest neighbors sets of size n_neighbors
+    between the high_data and low_data (size [n_points, n_features]).
+    Optionally, give distance matrices instead of data (size
+    [n_points, n_points]).
+
+    Similarity of nearest neighbors is determined using the speficied
+    `comparison_function` (one of 'jaccard' or 'adapted-ktau').
+
+    The point-wise neighbor similarity score is aggregated using the specified
+    `aggregate_function` (currently one of 'mean' or 'median').
+
+    Returns
+    -------
+    score: nearest neighbors similarity score
+    """
     if point_score is None:
         pt = point_nn_comparison(high_data=high_data,
                                  low_data=low_data,
