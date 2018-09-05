@@ -1,5 +1,5 @@
 [![CircleCI](https://circleci.com/gh/acwooding/dimension_reduction.svg?style=svg)](https://circleci.com/gh/acwooding/dimension_reduction)
-[![Coverage Status](https://coveralls.io/repos/github/acwooding/dimension_reduction/badge.svg?branch=coveralls)](https://coveralls.io/github/acwooding/dimension_reduction?branch=coveralls)
+[![Coverage Status](https://coveralls.io/repos/github/acwooding/dimension_reduction/badge.svg?branch=master)](https://coveralls.io/github/acwooding/dimension_reduction?branch=master)
 
 Python Dimension Reduction Playground
 =====================================
