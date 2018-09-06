@@ -9,7 +9,8 @@ from ..paths import model_output_path
 from ..utils import record_time_interval
 from .train import load_model
 
-__all__ = ['run_model']
+__all__ = ['run_model',
+           'load_prediction']
 
 
 def run_model(dataset_opts=None,
@@ -71,6 +72,7 @@ def run_model(dataset_opts=None,
     # add experiment metadata
     experiment = {
         'model_name': model_name,
+        'model_metadata': model_meta,
         'dataset_name': dataset_name,
         'dataset_opts': dataset_opts,
         'run_number': run_number,
@@ -114,3 +116,37 @@ def run_model(dataset_opts=None,
                           descr_txt=experiment_info)
     new_dataset.dump(file_base=file_base, data_path=output_path, force=True)
     return new_dataset
+
+
+def load_prediction(predict_name=None, metadata_only=False, predict_path=None):
+    """Load a prediction (or prediction metadata)
+
+    Parameters
+    ----------
+    metadata_only: boolean
+        If True, just return the prediction metadata.
+    predict_path:
+    predict_name:
+
+    Returns
+    -------
+    If `metadata_only` is True:
+
+        dict containing predict_metadata
+
+    else:
+
+        The tuple (predict, predict_metadata)
+    """
+    if predict_name is None:
+        raise Exception("predict_name must be specified")
+    if predict_path is None:
+        predict_path = model_output_path
+    else:
+        predict_path = pathlib.Path(predict_path)
+
+    fq_predict = predict_path / f'{predict_name}'
+
+    predict = Dataset.load(fq_predict, metadata_only=metadata_only)
+
+    return predict
