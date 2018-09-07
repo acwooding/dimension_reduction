@@ -518,7 +518,7 @@ def continuity(high_distances=None, low_distances=None,
     return 1 - sum(pt)
 
 
-def point_generalized_1nn_error(*, data, classes, metric='euclidean'):
+def point_generalized_1nn_error(*, low_data, classes, metric='euclidean'):
     '''
     Given data and associated classes (for each row), return an
     array with entry 0 if the row's nearest neighbor has the same class
@@ -534,8 +534,8 @@ def point_generalized_1nn_error(*, data, classes, metric='euclidean'):
     -------
     point_generalized_1nn_error: 1d np.array
     '''
-    nbrs = NearestNeighbors(n_neighbors=2, metric=metric).fit(data)
-    _, indices = nbrs.kneighbors(data)
+    nbrs = NearestNeighbors(n_neighbors=2, metric=metric).fit(low_data)
+    _, indices = nbrs.kneighbors(low_data)
     error = []
     for a, b in indices:
         if classes[a] == classes[b]:
@@ -545,7 +545,7 @@ def point_generalized_1nn_error(*, data, classes, metric='euclidean'):
     return np.array(error)
 
 
-def generalized_1nn_error(data=None, classes=None, point_error=None,
+def generalized_1nn_error(low_data=None, classes=None, point_error=None,
                           metric='euclidean'):
     '''
     Given either data and associated classes (for each row), or
@@ -554,7 +554,7 @@ def generalized_1nn_error(data=None, classes=None, point_error=None,
 
     Parameters
     ----------
-    data: np.array
+    low_data: np.array
     classes: 1d np.array
     point_error: 1d np.array
         output from point_generalized_1nn_error
@@ -565,7 +565,7 @@ def generalized_1nn_error(data=None, classes=None, point_error=None,
     generalized_1nn_error: (float)
     '''
     if point_error is None:
-        point_error = point_generalized_1nn_error(data=data,
+        point_error = point_generalized_1nn_error(low_data=low_data,
                                                   classes=classes,
                                                   metric=metric)
     error = np.sum(point_error)/len(point_error)
@@ -736,7 +736,7 @@ def make_hi_lo_scorer(func, greater_is_better=True, **kwargs):
     return wrapped_func
 
 
-def available_quality_measures():
+def available_quality_measures(pointwise=False):
     """Valid quality measures for evaluating dimension reductions.
 
     This function simply returns the valid quality metrics.
@@ -759,7 +759,10 @@ def available_quality_measures():
     ============     ====================================
 
     """
-    return DR_MEASURES
+    if pointwise:
+        return DR_POINT_MEASURES
+    else:
+        return DR_MEASURES
 
 
 DR_MEASURES = {
@@ -773,6 +776,19 @@ DR_MEASURES = {
     "stress": stress,
     "strain": strain,
     "trustworthiness": trustworthiness,
+}
+
+DR_POINT_MEASURES = {
+    "1nn-error": point_generalized_1nn_error,
+    "nn-adapted-ktau": partial(point_nn_comparison,
+                               comparison_function='adapted-ktau'),
+    "continuity": point_discontinuity,
+    "nn-jaccard": partial(point_nn_comparison,
+                          comparison_function='jaccard'),
+#    "quality":None,
+    "stress": point_stress,
+    "strain": point_strain,
+    "trustworthiness": point_untrustworthiness,
 }
 
 
