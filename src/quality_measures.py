@@ -597,7 +597,7 @@ def generalized_1nn_error_scorer(estimator, X, y=None, metric='euclidean'):
         data = estimator.transform(X)
     else:
         data = estimator.fit_transform(X)
-    point_error = point_generalized_1nn_error(data=data,
+    point_error = point_generalized_1nn_error(low_data=data,
                                               classes=y,
                                               metric=metric)
     error = np.sum(point_error)/len(point_error)

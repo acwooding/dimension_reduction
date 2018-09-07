@@ -366,7 +366,7 @@ def test_scorers(hd, ld, target, n_neighbors):
                 m = measure(high_data=hd, low_data=ld)
                 s = scorer(estimator, hd)
         elif key == '1nn-error':
-            m = measure(data=ld, classes=target)
+            m = measure(low_data=ld, classes=target)
             s = scorer(estimator, hd, y=target)
         else:
             note(f"Untested measure:{key}. Add me to test_scorers")
