@@ -2,8 +2,9 @@ import time
 import numpy as np
 import json
 from .logging import logger
-# Timing and Performance
 
+
+# Timing and Performance
 def timing_info(method):
     def wrapper(*args, **kw):
         start_time = time.time()
@@ -15,6 +16,7 @@ def timing_info(method):
         return result
 
     return wrapper
+
 
 def record_time_interval(section, start_time, line_break=False):
     """Record a time interval since the last timestamp"""
@@ -31,12 +33,14 @@ def record_time_interval(section, start_time, line_break=False):
         logger.info("PROCESS_TIME:{:>36}    {} {}".format(section, round(delta, 1), units))
     return end_time
 
+
 def normalize_numpy_dict(d):
     ret = d.copy()
     for k, v in ret.items():
         if isinstance(v, np.generic):
             ret[k] = np.asscalar(v)
     return ret
+
 
 def save_json(filename, obj):
     with open(filename, 'w') as fw:

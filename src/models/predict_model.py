@@ -32,8 +32,17 @@ def main(model_list, output_file='predictions.json', hash_type='sha1'):
     with open(model_path / model_list) as f:
         predict_list = json.load(f)
 
+    saved_meta = {}
+    metadata_keys = ['dataset_name', 'descr', 'hash_type', 'data_hash', 'target_hash', 'experiment']
     for exp in predict_list:
-        run_model(**exp)
+        ds = run_model(**exp)
+        name = ds.metadata['dataset_name']
+        metadata = {}
+        for key in metadata_keys:
+            metadata[key] = ds.metadata[key]
+            saved_meta[name] = metadata
+
+    save_json(model_path / output_file, saved_meta)
 
 if __name__ == '__main__':
 
